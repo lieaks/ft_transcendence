@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  frontend:
+    networks:
+        - frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - 8080:8080
+
+  backend:
+    networks:
+        - frontend
+        - backend
+    restart: unless-stopped
+    depends_on:
+      - db
+    expose:
+      - 3000:3000
+
+  postgresql:
+   # we should try to use a ready made image for postgresql 
+    networks:
+        - backend
+    restart: unless-stopped
+    expose:
+      - 5432:5432
+
+  pgadmin:
+    # install pgadmin
+    restart: unless-stopped
+    networks:
+      - backend
+
+networks:
+    - backend
+    - frontend
