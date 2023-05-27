@@ -3,9 +3,33 @@
 </script>
 
 <template>
-	<nav>
-		<RouterLink to="/">Home</RouterLink>
-		<RouterLink to="/game">Game</RouterLink>
-	</nav>
-	<RouterView />
+	<header class="p-4">
+		<nav class="flex justify-center gap-4 text-white text-2xl">
+			<RouterLink to="/">Home</RouterLink>
+			<RouterLink to="/game">Game</RouterLink>
+			<RouterLink to="/">Chat</RouterLink>
+			<RouterLink to="/">Friends</RouterLink>
+		</nav>
+		<RouterView />
+	</header>
 </template>
+
+<style>
+
+/* To debug */
+/* * {
+	border: 1px solid red;
+} */
+
+a {
+	transition: color 0.4s;
+}
+
+a:hover {
+	color: #4fd1c5;
+}
+
+body {
+	background-color: #1a202c;
+}
+</style>
