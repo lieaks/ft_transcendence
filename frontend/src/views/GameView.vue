@@ -3,5 +3,12 @@
 </script>
 
 <template>
-	<h1 class="text-white text-1xl">Best game Ever !</h1>
+	<h1>Game</h1>
+	<img src="../assets/basic_map/Board.png" alt="Board" />
 </template>
+  
+<style>
+	* {
+		border: 1px solid red;
+	}
+</style>
