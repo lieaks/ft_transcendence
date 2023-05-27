@@ -11,11 +11,10 @@
 	</div>
 	<div class="w-2/3 mx-auto relative">
 		<img src="../assets/basic_map/Board.png" alt="Board" class="w-full" />
+		<img src="../assets/basic_map/redBall.png" alt="Ball" class="absolute inset-1/2 transform -translate-x-1/2" />
 		<img src="../assets/basic_map/Player1.png" alt="Player1" class="absolute left-0 top-1/2 transform -translate-y-1/2" />
 		<img src="../assets/basic_map/Player2.png" alt="Player2" class="absolute right-0 top-1/2 transform -translate-y-1/2" />
 	</div>
-
-	<img src="../assets/basic_map/redBall.png" alt="Ball" class="absolute inset-1/2 transform -translate-x-1/2 -translate-y-1/2" />
 </template>
   
 <style>
