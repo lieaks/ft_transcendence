@@ -16,6 +16,6 @@ import Header from './components/Header.vue'
 } */
 
 body {
-	background-color: #1a202c;
+	@apply bg-slate-800;
 }
 </style>
