@@ -5,7 +5,6 @@
 <template>
 	<!-- <h1>Game</h1> -->
 
-	<!-- Create a flexbox to put 2 scorebar, centered, in the top of the board -->
 	<div class="flex justify-center">
 		<img src="../assets/basic_map/ScoreBarP1.png" alt="ScoreBar" class="transform -scale-x-100" />
 		<img src="../assets/basic_map/ScoreBarP2.png" alt="ScoreBar" />
