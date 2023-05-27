@@ -28,7 +28,7 @@ services:
     expose:
       - 5432:5432
 
-  # pgadmin or prisma studio to manage the db in a web inferface
+  # prisma studio to manage the db in a web inferface
 
 networks:
     - backend
