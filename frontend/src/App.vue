@@ -7,6 +7,8 @@
 		<nav class="flex justify-center gap-4 text-white text-2xl">
 			<RouterLink to="/">Home</RouterLink>
 			<RouterLink to="/game">Game</RouterLink>
+			<RouterLink to="/">Chat</RouterLink>
+			<RouterLink to="/">Friends</RouterLink>
 		</nav>
 		<RouterView />
 	</header>

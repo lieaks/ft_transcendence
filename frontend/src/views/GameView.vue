@@ -3,5 +3,5 @@
 </script>
 
 <template>
-	<h1>Best game Ever !</h1>
+	<h1 class="text-white text-1xl">Best game Ever !</h1>
 </template>
