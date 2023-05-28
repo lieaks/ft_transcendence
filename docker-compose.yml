@@ -2,34 +2,47 @@ version: '3.8'
 
 services:
   frontend:
+    container_name: frontend
+    build: ./frontend/
     networks:
         - frontend
     restart: unless-stopped
     depends_on:
       - backend
     ports:
-      - 8080:8080
+      - 8000:8000
+    volumes:
+      - ./frontend/:/var/www/html/app
 
   backend:
+    container_name: backend
+    build: ./backend/
     networks:
         - frontend
         - backend
     restart: unless-stopped
     depends_on:
-      - db
+      - postgresql
     expose:
       - 3000:3000
 
   postgresql:
-   # we should try to use a ready made image for postgresql 
+    container_name: postgresql
+    image: postgres
     networks:
         - backend
     restart: unless-stopped
-    expose:
+    ports:
       - 5432:5432
+    env_file:
+      - .env
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
   # prisma studio to manage the db in a web inferface
 
 networks:
-    - backend
-    - frontend
+  backend:
+    driver: bridge
+  frontend:
+    driver: bridge
