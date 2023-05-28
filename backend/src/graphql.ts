@@ -8,14 +8,13 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export interface IQuery {
-    __typename?: 'IQuery';
-    Users(): Nullable<Nullable<User>[]> | Promise<Nullable<Nullable<User>[]>>;
-    User(id: number): Nullable<User> | Promise<Nullable<User>>;
+export abstract class IQuery {
+    abstract Users(): Nullable<Nullable<User>[]> | Promise<Nullable<Nullable<User>[]>>;
+
+    abstract User(id: number): Nullable<User> | Promise<Nullable<User>>;
 }
 
-export interface User {
-    __typename?: 'User';
+export class User {
     id: number;
     name: string;
 }
