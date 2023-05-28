@@ -1,0 +1,68 @@
+type User {
+	id: String!
+	name: String!
+	avatar: String
+	# password: String!
+	ladderRanking: Int!
+	experience: Float!
+	createdAt: String!
+	wins: Int!
+	losses: Int!
+	gameHistory: [Game!]!
+	# friends: [User!]! @relation(name: "friends")
+	# friendOf: [User!]! @relation(name: "friends")
+	friends: [User!]!
+	friendOf: [User!]!
+}
+
+type Game {
+	id: String!
+	players: [User!]!
+	winnerId: String
+	createdAt: String!
+	finishedAt: String
+}
+
+type Query {
+	getUser(id: String!): User
+	getUserByName(name: String!): User
+	getUsers(id: [String!]): [User]
+	getAllUsers: [User!]!
+	getGame(id: String!): Game
+}
+
+type Mutation {
+	# User mutations
+	createUser(input: CreateUserInput!): User!
+	updateUser(id: String!, input: UpdateUserInput!): User!
+
+	# Game mutations
+	createGame(input: CreateGameInput!): Game!
+	inviteUserToGame(userId: String!): Game!
+
+	# User fields mutations
+	updateUserName(id: String!, name: String!): User!
+	updateUserAvatar(id: String!, avatar: String!): User!
+	# updateUserPassword(id: String!, password: String!): User!
+
+	# enable 2FA
+	enable2FA(id: String!): String!
+	disable2FA(id: String!): Boolean!
+}
+
+input CreateUserInput {
+	name: String!
+	avatar: String
+	# password: String!
+}
+
+input UpdateUserInput {
+	name: String
+	avatar: String
+	friends: [String!]
+	# password: String
+}
+
+input CreateGameInput {
+	players: [String!]!
+}
