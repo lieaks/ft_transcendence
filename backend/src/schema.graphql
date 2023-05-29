@@ -37,17 +37,18 @@ type Mutation {
 	updateUser(id: String!, input: UpdateUserInput!): User!
 
 	# Game mutations
-	createGame(input: CreateGameInput!): Game!
-	inviteUserToGame(userId: String!): Game!
+	createGame(userId: String!, enemyUserId: String!): Game!
 
 	# User fields mutations
-	updateUserName(id: String!, name: String!): User!
-	updateUserAvatar(id: String!, avatar: String!): User!
+	# updateUserName(id: String!, name: String!): User!
+	# updateUserAvatar(id: String!, avatar: String!): User!
 	# updateUserPassword(id: String!, password: String!): User!
+	# addFriend(id: String!, friendId: String!): User!
+	# removeFriend(id: String!, friendId: String!): User!
 
 	# enable 2FA
 	enable2FA(id: String!): String!
-	disable2FA(id: String!): Boolean!
+	disable2FA(id: String!)
 }
 
 input CreateUserInput {
@@ -60,9 +61,4 @@ input UpdateUserInput {
 	name: String
 	avatar: String
 	friends: [String!]
-	# password: String
-}
-
-input CreateGameInput {
-	players: [String!]!
 }
