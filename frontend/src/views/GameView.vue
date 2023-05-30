@@ -1,24 +1,34 @@
 <script setup lang="ts">
-// Import
+import { onMounted, ref } from 'vue'
+
+const pongCanvas = ref<HTMLCanvasElement | null>(null);
+
+onMounted(() => {
+  const canvas = pongCanvas.value;
+  if (!canvas) return;
+
+  const context = canvas.getContext('2d');
+  if (!context) return;
+
+  const ball = {
+    x: canvas.width / 2,
+    y: canvas.height / 2,
+    radius: 10,
+    color: 'white'
+  };
+
+  function drawBall() {
+    context!.beginPath();
+    context!.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+    context!.fillStyle = ball.color;
+    context!.fill();
+    context!.closePath();
+  }
+
+  drawBall();
+});
 </script>
 
 <template>
-	<!-- <h1>Game</h1> -->
-
-	<div class="flex justify-center">
-		<img src="../assets/basic_map/ScoreBarP1.png" alt="ScoreBar" class="transform -scale-x-100 w-1/5" />
-		<img src="../assets/basic_map/ScoreBarP2.png" alt="ScoreBar" class="w-1/5" />
-	</div>
-	<div class="w-2/3 mx-auto relative">
-		<img src="../assets/basic_map/Board.png" alt="Board" class="w-full" />
-		<img src="../assets/basic_map/redBall.png" alt="Ball" class="absolute inset-1/2 transform -translate-x-1/2" />
-		<img src="../assets/basic_map/Player1.png" alt="Player1" class="absolute left-0 top-1/2 transform -translate-y-1/2" />
-		<img src="../assets/basic_map/Player2.png" alt="Player2" class="absolute right-0 top-1/2 transform -translate-y-1/2" />
-	</div>
+  <canvas ref="pongCanvas" width="800" height="600"></canvas>
 </template>
-  
-<style>
-	/* * {
-		border: 1px solid red;
-	} */
-</style>
