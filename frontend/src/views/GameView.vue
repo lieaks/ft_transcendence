@@ -30,5 +30,5 @@ onMounted(() => {
 </script>
 
 <template>
-  <canvas ref="pongCanvas" width="800" height="600"></canvas>
+  <canvas ref="pongCanvas" width="800" height="600" class="mx-auto bg-black"></canvas>
 </template>
