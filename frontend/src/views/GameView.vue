@@ -17,19 +17,24 @@ onMounted(() => {
 		color: 'white'
 	};
 
-	const rightPaddle = {
-		x: canvas.width - 40,
-		y: canvas.height / 2 - 75,
+	const paddle = {
 		width: 20,
-		height: 150,
+		height: 175,
+	}
+
+	const rightPaddle = {
+		x: canvas.width - 20 - paddle.width,
+		y: canvas.height / 2 - paddle.height / 2,
+		width: paddle.width,
+		height: paddle.height,
 		color: 'white'
 	};
 
 	const leftPaddle = {
 		x: 20,
-		y: canvas.height / 2 - 75,
-		width: 20,
-		height: 150,
+		y: canvas.height / 2 - paddle.height / 2,
+		width: paddle.width,
+		height: paddle.height,
 		color: 'red'
 	};
 
