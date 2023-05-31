@@ -25,10 +25,27 @@ onMounted(() => {
     context!.closePath();
   }
 
-  drawBall();
+  function render() {
+	context!.clearRect(0, 0, canvas!.width, canvas!.height);
+	drawBall();
+	requestAnimationFrame(render);
+  }
+
 });
 </script>
 
 <template>
-  <canvas ref="pongCanvas" width="800" height="600" class="mx-auto bg-black"></canvas>
+	<canvas ref="pongCanvas" width="1600" height="800" class="mx-auto bg-black"></canvas>
 </template>
+
+<style scoped>
+	/* Debug border */
+	* {
+		border: 1px solid red;
+	}
+	canvas {
+		width: 100vw;
+		height: auto;
+		max-width: 1600px;
+	}
+</style>
