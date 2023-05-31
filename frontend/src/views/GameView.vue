@@ -16,7 +16,7 @@ onMounted(() => {
 	const paddle = {
 		width: 20,
 		height: 175,
-		speed: 10
+		speed: 17
 	}
 
 	const leftPaddle = new Paddle(canvas.width - 20 - paddle.width,
