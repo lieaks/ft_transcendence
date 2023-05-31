@@ -23,14 +23,14 @@ onMounted(() => {
 		canvas.height / 2 - paddle.height / 2,
 		paddle.width, paddle.height,
 		paddle.speed,
-		'white'
+		'blue'
 	);
 
 	const rightPaddle = new Paddle(20,
 		canvas.height / 2 - paddle.height / 2,
 		paddle.width, paddle.height,
 		paddle.speed,
-		'white'
+		'red'
 	);
 
 	const game = new Game(canvas, ball, leftPaddle, rightPaddle);
