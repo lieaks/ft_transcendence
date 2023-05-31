@@ -64,17 +64,17 @@ onMounted(() => {
 	}
 
 	function updateRightPaddlePosition(key: string) {
-        if (key === 'i' && rightPaddle.y > 0) {
+        if (key === 'i' && rightPaddle.y > 15) {
             rightPaddle.y -= paddle.speed;
-        } else if (key === 'k' && rightPaddle.y + rightPaddle.height < canvas!.height) {
+        } else if (key === 'k' && rightPaddle.y + rightPaddle.height < canvas!.height - 15) {
             rightPaddle.y += paddle.speed;
         }
     }
 
     function updateLeftPaddlePosition(key: string) {
-        if (key === 'w' && leftPaddle.y > 0) {
+        if (key === 'w' && leftPaddle.y > 15) {
             leftPaddle.y -= paddle.speed;
-        } else if (key === 's' && leftPaddle.y + leftPaddle.height < canvas!.height) {
+        } else if (key === 's' && leftPaddle.y + leftPaddle.height < canvas!.height - 15) {
             leftPaddle.y += paddle.speed;
         }
     }
