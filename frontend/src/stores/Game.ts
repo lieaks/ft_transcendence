@@ -44,11 +44,11 @@ export class Game {
 	 * @returns Nothing.
 	 */
     updateRightPaddlePosition(key: string) {
-        this.rightPaddle.updatePosition(key, this.canvas.height);
+        this.rightPaddle.updateRightPaddlePosition(key, this.canvas.height);
     }
 
     updateLeftPaddlePosition(key: string) {
-        this.leftPaddle.updatePosition(key, this.canvas.height);
+        this.leftPaddle.updateLeftPaddlePosition(key, this.canvas.height);
     }
 
 	/**

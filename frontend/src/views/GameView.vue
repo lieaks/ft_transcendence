@@ -1,102 +1,46 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
+import { Ball } from '../stores/Ball';
+import { Paddle } from '../stores/Paddle';
+import { Game } from '../stores/Game';
 
 const pongCanvas = ref<HTMLCanvasElement | null>(null);
 
 onMounted(() => {
+
 	const canvas = pongCanvas.value;
 	if (!canvas) return;
 
-	const context = canvas.getContext('2d');
-	if (!context) return;
-
-	const ball = {
-		x: canvas.width / 2,
-		y: canvas.height / 2,
-		radius: 10,
-		color: 'white'
-	};
-
+	const ball = new Ball(canvas.width / 2, canvas.height / 2, 10, 'white');
 	const paddle = {
 		width: 20,
 		height: 175,
 		speed: 10
 	}
-
-	const rightPaddle = {
-		x: canvas.width - 20 - paddle.width,
-		y: canvas.height / 2 - paddle.height / 2,
-		width: paddle.width,
-		height: paddle.height,
-		color: 'red'
-	};
-
-	const leftPaddle = {
-		x: 20,
-		y: canvas.height / 2 - paddle.height / 2,
-		width: paddle.width,
-		height: paddle.height,
-		color: 'blue'
-	};
-
-	function drawBall() {
-		context!.beginPath();
-		context!.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-		context!.fillStyle = ball.color;
-		context!.fill();
-		context!.closePath();
-	}
-
-	function drawRightPaddle() {
-		context!.beginPath();
-		context!.rect(rightPaddle.x, rightPaddle.y, rightPaddle.width, rightPaddle.height);
-		context!.fillStyle = rightPaddle.color;
-		context!.fill();
-		context!.closePath();
-	}
-
-	function drawLeftPaddle() {
-		context!.beginPath();
-		context!.rect(leftPaddle.x, leftPaddle.y, leftPaddle.width, leftPaddle.height);
-		context!.fillStyle = leftPaddle.color;
-		context!.fill();
-		context!.closePath();
-	}
-
-	function updateRightPaddlePosition(key: string) {
-        if (key === 'i' && rightPaddle.y > 15) {
-            rightPaddle.y -= paddle.speed;
-        } else if (key === 'k' && rightPaddle.y + rightPaddle.height < canvas!.height - 15) {
-            rightPaddle.y += paddle.speed;
-        }
-    }
-
-    function updateLeftPaddlePosition(key: string) {
-        if (key === 'w' && leftPaddle.y > 15) {
-            leftPaddle.y -= paddle.speed;
-        } else if (key === 's' && leftPaddle.y + leftPaddle.height < canvas!.height - 15) {
-            leftPaddle.y += paddle.speed;
-        }
-    }
-
-    function render() {
-        context!.clearRect(0, 0, canvas!.width, canvas!.height);
-        drawBall();
-        drawRightPaddle();
-        drawLeftPaddle();
-        requestAnimationFrame(render);
-    }
+	const leftPaddle = new Paddle(canvas.width - 20 - paddle.width,
+									canvas.height / 2 - paddle.height / 2,
+									paddle.width, paddle.height,
+									paddle.speed,
+									'white'
+								);
+	const rightPaddle = new Paddle(20,
+									canvas.height / 2 - paddle.height / 2,
+									paddle.width, paddle.height,
+									paddle.speed,
+									'white'
+								);
+	const game = new Game(canvas, ball, leftPaddle, rightPaddle);
 
     window.addEventListener('keydown', (event) => {
 		if (event.key === 'w' || event.key === 's') {
-			updateLeftPaddlePosition(event.key);
+			game.updateLeftPaddlePosition(event.key);
 		}
         if (event.key === 'i' || event.key === 'k') {
-            updateRightPaddlePosition(event.key);
+            game.updateRightPaddlePosition(event.key);
         }
     });
 
-	render();
+	game.render();
 });
 </script>
 

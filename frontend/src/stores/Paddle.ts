@@ -42,16 +42,24 @@ export class Paddle {
     }
 
 	/**
-	 * Updates the position of the paddle.
+	 * Updates the position of the paddles.
 	 * @param key The key that was pressed.
 	 * @param canvasHeight The height of the canvas.
 	 * @returns Nothing.
 	 */
-    updatePosition(key: string, canvasHeight: number) {
-        if (key === 'w' && this.y > 15) {
-            this.y -= this.speed;
-        } else if (key === 's' && this.y + this.height < canvasHeight - 15) {
-            this.y += this.speed;
-        }
-    }
+	updateRightPaddlePosition(key: string, canvasHeight: number) {
+		if (key === 'i' && this.y > 15) {
+			this.y -= this.speed;
+		} else if (key === 'k' && this.y + this.height < canvasHeight - 15) {
+			this.y += this.speed;
+		}
+	}
+
+	updateLeftPaddlePosition(key: string, canvasHeight: number) {
+		if (key === 'w' && this.y > 15) {
+			this.y -= this.speed;
+		} else if (key === 's' && this.y + this.height < canvasHeight - 15) {
+			this.y += this.speed;
+		}
+	}
 }
