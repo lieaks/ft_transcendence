@@ -12,23 +12,27 @@ onMounted(() => {
 	if (!canvas) return;
 
 	const ball = new Ball(canvas.width / 2, canvas.height / 2, 10, 'white');
+
 	const paddle = {
 		width: 20,
 		height: 175,
 		speed: 10
 	}
+
 	const leftPaddle = new Paddle(canvas.width - 20 - paddle.width,
-									canvas.height / 2 - paddle.height / 2,
-									paddle.width, paddle.height,
-									paddle.speed,
-									'white'
-								);
+		canvas.height / 2 - paddle.height / 2,
+		paddle.width, paddle.height,
+		paddle.speed,
+		'white'
+	);
+
 	const rightPaddle = new Paddle(20,
-									canvas.height / 2 - paddle.height / 2,
-									paddle.width, paddle.height,
-									paddle.speed,
-									'white'
-								);
+		canvas.height / 2 - paddle.height / 2,
+		paddle.width, paddle.height,
+		paddle.speed,
+		'white'
+	);
+
 	const game = new Game(canvas, ball, leftPaddle, rightPaddle);
 
     window.addEventListener('keydown', (event) => {

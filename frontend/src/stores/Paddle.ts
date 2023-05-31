@@ -8,7 +8,6 @@ export class Paddle {
     height: number;
     speed: number;
     color: string;
-
 	/**
 	 * Creates a new paddle object.
 	 * @param x The coordinate of the paddle on the x-axis.
