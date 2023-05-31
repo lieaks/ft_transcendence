@@ -20,6 +20,7 @@ onMounted(() => {
 	const paddle = {
 		width: 20,
 		height: 175,
+		speed: 10
 	}
 
 	const rightPaddle = {
@@ -27,7 +28,7 @@ onMounted(() => {
 		y: canvas.height / 2 - paddle.height / 2,
 		width: paddle.width,
 		height: paddle.height,
-		color: 'white'
+		color: 'red'
 	};
 
 	const leftPaddle = {
@@ -35,7 +36,7 @@ onMounted(() => {
 		y: canvas.height / 2 - paddle.height / 2,
 		width: paddle.width,
 		height: paddle.height,
-		color: 'red'
+		color: 'blue'
 	};
 
 	function drawBall() {
@@ -62,13 +63,38 @@ onMounted(() => {
 		context!.closePath();
 	}
 
-	function render() {
-		context!.clearRect(0, 0, canvas!.width, canvas!.height);
-		drawBall();
-		drawRightPaddle();
-		drawLeftPaddle();
-		requestAnimationFrame(render);
-	}
+	function updateRightPaddlePosition(key: string) {
+        if (key === 'i' && rightPaddle.y > 0) {
+            rightPaddle.y -= paddle.speed;
+        } else if (key === 'k' && rightPaddle.y + rightPaddle.height < canvas!.height) {
+            rightPaddle.y += paddle.speed;
+        }
+    }
+
+    function updateLeftPaddlePosition(key: string) {
+        if (key === 'w' && leftPaddle.y > 0) {
+            leftPaddle.y -= paddle.speed;
+        } else if (key === 's' && leftPaddle.y + leftPaddle.height < canvas!.height) {
+            leftPaddle.y += paddle.speed;
+        }
+    }
+
+    function render() {
+        context!.clearRect(0, 0, canvas!.width, canvas!.height);
+        drawBall();
+        drawRightPaddle();
+        drawLeftPaddle();
+        requestAnimationFrame(render);
+    }
+
+    window.addEventListener('keydown', (event) => {
+		if (event.key === 'w' || event.key === 's') {
+			updateLeftPaddlePosition(event.key);
+		}
+        if (event.key === 'i' || event.key === 'k') {
+            updateRightPaddlePosition(event.key);
+        }
+    });
 
 	render();
 });
@@ -80,9 +106,9 @@ onMounted(() => {
 
 <style scoped>
 	/* Debug border */
-	* {
+	/* * {
 		border: 1px solid red;
-	}
+	} */
 	canvas {
 		width: 100vw;
 		height: auto;
