@@ -72,6 +72,10 @@ export class Game {
         this.leftPaddle.updateLeftPaddlePosition(key, this.canvas.height);
     }
 
+	updateBallPosition() {
+		this.ball.move(this.context, this.rightPaddle, this.leftPaddle, this.rightScore, this.leftScore);
+	}
+
 	/**
 	 * Updates the position of the ball.
 	 * @returns Nothing.

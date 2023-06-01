@@ -49,6 +49,7 @@ onMounted(() => {
     });
 
 	function gameLoop() {
+		game.updateBallPosition();
 		game.render();
 		requestAnimationFrame(gameLoop);
 	}
