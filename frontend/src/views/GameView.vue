@@ -48,7 +48,11 @@ onMounted(() => {
         }
     });
 
-	game.render();
+	function gameLoop() {
+		game.render();
+		requestAnimationFrame(gameLoop);
+	}
+	gameLoop();
 });
 </script>
 
