@@ -3,6 +3,7 @@ import { onMounted, ref } from 'vue'
 import { Ball } from '../stores/Ball';
 import { Paddle } from '../stores/Paddle';
 import { Game } from '../stores/Game';
+import { Scoreboard } from '@/stores/Scoreboard';
 
 const pongCanvas = ref<HTMLCanvasElement | null>(null);
 
@@ -33,7 +34,10 @@ onMounted(() => {
 		'red'
 	);
 
-	const game = new Game(canvas, ball, leftPaddle, rightPaddle);
+	const leftScore = new Scoreboard(0, canvas.width / 2 - 100, 100, 'white', "40px Arial");
+	const rightScore = new Scoreboard(0, canvas.width / 2 + 100, 100, 'white', "40px Arial");
+
+	const game = new Game(canvas, ball, leftPaddle, rightPaddle, leftScore, rightScore);
 
     window.addEventListener('keydown', (event) => {
 		if (event.key === 'w' || event.key === 's') {

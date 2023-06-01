@@ -1,5 +1,6 @@
 import { Ball } from './Ball';
 import { Paddle } from './Paddle';
+import type { Scoreboard } from './Scoreboard';
 
 /**
  * Represents the game.
@@ -10,6 +11,8 @@ export class Game {
     ball: Ball;
     rightPaddle: Paddle;
     leftPaddle: Paddle;
+	rightScore: Scoreboard;
+	leftScore: Scoreboard;
 
 	/**
 	 * Creates a new game object.
@@ -19,12 +22,14 @@ export class Game {
 	 * @param leftPaddle The left paddle object.
 	 * @returns A new game object.
 	 */
-    constructor(canvas: HTMLCanvasElement, ball: Ball, rightPaddle: Paddle, leftPaddle: Paddle) {
+    constructor(canvas: HTMLCanvasElement, ball: Ball, rightPaddle: Paddle, leftPaddle: Paddle, rightScore: Scoreboard, leftScore: Scoreboard) {
         this.canvas = canvas;
         this.context = canvas.getContext('2d')!;
         this.ball = ball;
         this.rightPaddle = rightPaddle;
         this.leftPaddle = leftPaddle;
+		this.rightScore = rightScore;
+		this.leftScore = leftScore;
     }
 
 	/**
@@ -36,6 +41,8 @@ export class Game {
         this.ball.draw(this.context);
         this.rightPaddle.draw(this.context);
         this.leftPaddle.draw(this.context);
+		this.rightScore.draw(this.context);
+		this.leftScore.draw(this.context);
     }
 
 	/**
