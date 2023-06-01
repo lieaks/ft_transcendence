@@ -48,7 +48,8 @@ type Mutation {
 
 	# enable 2FA
 	enable2FA(id: String!): String!
-	disable2FA(id: String!)
+	disable2FA(id: String!): Boolean!
+	verify2FA(id: String!, code: String!): Boolean!
 }
 
 input CreateUserInput {

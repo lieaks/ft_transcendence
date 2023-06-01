@@ -19,10 +19,6 @@ export interface UpdateUserInput {
     friends?: Nullable<string[]>;
 }
 
-export interface CreateGameInput {
-    players: string[];
-}
-
 export interface User {
     __typename?: 'User';
     id: string;
@@ -31,7 +27,6 @@ export interface User {
     ladderRanking: number;
     experience: number;
     createdAt: string;
-    doubleAuthToken?: Nullable<string>;
     wins: number;
     losses: number;
     gameHistory: Game[];
@@ -61,12 +56,10 @@ export interface IMutation {
     __typename?: 'IMutation';
     createUser(input: CreateUserInput): User | Promise<User>;
     updateUser(id: string, input: UpdateUserInput): User | Promise<User>;
-    createGame(input: CreateGameInput): Game | Promise<Game>;
-    inviteUserToGame(userId: string): Game | Promise<Game>;
-    updateUserName(id: string, name: string): User | Promise<User>;
-    updateUserAvatar(id: string, avatar: string): User | Promise<User>;
+    createGame(userId: string, enemyUserId: string): Game | Promise<Game>;
     enable2FA(id: string): string | Promise<string>;
     disable2FA(id: string): boolean | Promise<boolean>;
+    verify2FA(id: string, code: string): boolean | Promise<boolean>;
 }
 
 type Nullable<T> = T | null;
