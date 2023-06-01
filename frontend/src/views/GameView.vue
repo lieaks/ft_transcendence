@@ -34,8 +34,8 @@ onMounted(() => {
 		'red'
 	);
 
-	const leftScore = new Scoreboard(0, canvas.width / 2 - 100, 100, 'white', "40px Arial");
-	const rightScore = new Scoreboard(0, canvas.width / 2 + 100, 100, 'white', "40px Arial");
+	const leftScore = new Scoreboard(0, canvas.width / 2 - 100, 75, 'white', "40px Arial");
+	const rightScore = new Scoreboard(0, canvas.width / 2 + 100, 75, 'white', "40px Arial");
 
 	const game = new Game(canvas, ball, leftPaddle, rightPaddle, leftScore, rightScore);
 

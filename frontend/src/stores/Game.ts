@@ -38,12 +38,26 @@ export class Game {
 	 */
     draw() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+		this.drawNet();
         this.ball.draw(this.context);
         this.rightPaddle.draw(this.context);
         this.leftPaddle.draw(this.context);
 		this.rightScore.draw(this.context);
 		this.leftScore.draw(this.context);
     }
+
+	// Draw the line in the middle of the canvas 
+	/**
+	 * Draws the net on the canvas.
+	 */
+	drawNet() {
+		this.context.beginPath();
+		this.context.setLineDash([15, 15]);
+		this.context.moveTo(this.canvas.width / 2, 0);
+		this.context.lineTo(this.canvas.width / 2, this.canvas.height);
+		this.context.strokeStyle = '#FFF';
+		this.context.stroke();
+	}
 
 	/**
 	 * Updates the position of the paddles.
