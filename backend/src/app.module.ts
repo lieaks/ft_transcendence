@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppService } from './app.service';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
@@ -7,6 +6,7 @@ import { join } from 'path';
 import { UsersResolver } from './users/users.resolver';
 import { GamesResolver } from './games/games.resolver';
 import { HealthController } from './health/health.controller';
+import { PrismaService } from './prisma/prisma.service';
 
 @Module({
   imports: [
@@ -25,6 +25,6 @@ import { HealthController } from './health/health.controller';
     }),
   ],
   controllers: [HealthController],
-  providers: [AppService, UsersResolver, GamesResolver],
+  providers: [UsersResolver, GamesResolver, PrismaService],
 })
 export class AppModule {}
