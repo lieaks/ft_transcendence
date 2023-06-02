@@ -7,6 +7,8 @@ import { UsersResolver } from './users/users.resolver';
 import { GamesResolver } from './games/games.resolver';
 import { HealthController } from './health/health.controller';
 import { PrismaService } from './prisma/prisma.service';
+import { UsersModule } from './users/users.module';
+import { GamesModule } from './games/games.module';
 
 @Module({
   imports: [
@@ -23,6 +25,8 @@ import { PrismaService } from './prisma/prisma.service';
 	  playground: false,
 	  plugins: [ApolloServerPluginLandingPageLocalDefault()],
     }),
+    UsersModule,
+    GamesModule,
   ],
   controllers: [HealthController],
   providers: [UsersResolver, GamesResolver, PrismaService],
