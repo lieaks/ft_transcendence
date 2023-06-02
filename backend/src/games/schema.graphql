@@ -1,0 +1,15 @@
+type Game {
+	id: String!
+	players: [User!]!
+	winnerId: String
+	createdAt: String!
+	finishedAt: String
+}
+
+type Query {
+	game(id: String!): Game
+}
+
+type Mutation {
+	createGame(userId: String!, enemyUserId: String!): Game!
+}

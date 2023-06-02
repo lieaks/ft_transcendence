@@ -1,0 +1,42 @@
+type User {
+	id: String!
+	name: String!
+	avatar: String
+	ladderRanking: Int!
+	experience: Float!
+	createdAt: String!
+	wins: Int!
+	losses: Int!
+	gameHistory: [Game!]
+	# friends: [User!]! @relation(name: "friends")
+	# friendOf: [User!]! @relation(name: "friends")
+	friends: [User!]
+	friendOf: [User!]
+}
+
+type Query {
+	user(id: String!): User
+	userName(name: String!): User
+	users(id: [String!]): [User]
+	allUsers: [User!]!
+}
+
+type Mutation {
+	createUser(input: CreateUserInput!): User!
+	updateUser(id: String!, input: UpdateUserInput!): User!
+
+	enable2FA(id: String!): String!
+	disable2FA(id: String!): Boolean!
+	verify2FA(id: String!, code: String!): Boolean!
+}
+
+input CreateUserInput {
+	name: String!
+	avatar: String
+}
+
+input UpdateUserInput {
+	name: String
+	avatar: String
+	friends: [String!]
+}
