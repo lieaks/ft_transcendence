@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
@@ -7,6 +6,7 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
 import { join } from 'path';
 import { UsersResolver } from './users/users.resolver';
 import { GamesResolver } from './games/games.resolver';
+import { HealthController } from './health/health.controller';
 
 @Module({
   imports: [
@@ -24,7 +24,7 @@ import { GamesResolver } from './games/games.resolver';
 	  plugins: [ApolloServerPluginLandingPageLocalDefault()],
     }),
   ],
-  controllers: [AppController],
+  controllers: [HealthController],
   providers: [AppService, UsersResolver, GamesResolver],
 })
 export class AppModule {}
