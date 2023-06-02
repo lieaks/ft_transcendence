@@ -1,18 +1,31 @@
 version: '3.8'
 
 services:
-  frontend:
-    container_name: frontend
-    build: ./frontend/
-    networks:
-        - frontend
-    restart: unless-stopped
-    depends_on:
-      - backend
+  nginx:
+    container_name: nginx
+    image: nginx:alpine
     ports:
-      - 8000:8000
+      - 8080:80
+    depends_on:
+      - vite-build
+      - backend
+      - postgres
     volumes:
-      - ./frontend/:/var/www/html/app
+      - vite-build:/usr/share/nginx/html
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  vite-build:
+    container_name: vite-build
+    build:
+      context: .
+      dockerfile: ./docker/vite-build.dockerfile
+    volumes:
+      - vite-build:/var/www/vitejs/dist
 
   backend:
     container_name: backend
@@ -34,6 +47,11 @@ services:
       POSTGRES_HOST: ${POSTGRES_HOST}
     ports:
       - 3000:3000
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   postgres:
     container_name: postgres
@@ -82,3 +100,6 @@ networks:
     driver: bridge
   frontend:
     driver: bridge
+
+volumes:
+  vite-build:
