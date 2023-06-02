@@ -29,9 +29,9 @@ export interface User {
     createdAt: string;
     wins: number;
     losses: number;
-    gameHistory: Game[];
-    friends: User[];
-    friendOf: User[];
+    gameHistory?: Nullable<Game[]>;
+    friends?: Nullable<User[]>;
+    friendOf?: Nullable<User[]>;
 }
 
 export interface Game {
@@ -45,11 +45,11 @@ export interface Game {
 
 export interface IQuery {
     __typename?: 'IQuery';
-    getUser(id: string): Nullable<User> | Promise<Nullable<User>>;
-    getUserByName(name: string): Nullable<User> | Promise<Nullable<User>>;
-    getUsers(id?: Nullable<string[]>): Nullable<Nullable<User>[]> | Promise<Nullable<Nullable<User>[]>>;
-    getAllUsers(): User[] | Promise<User[]>;
-    getGame(id: string): Nullable<Game> | Promise<Nullable<Game>>;
+    user(id: string): Nullable<User> | Promise<Nullable<User>>;
+    userName(name: string): Nullable<User> | Promise<Nullable<User>>;
+    users(id?: Nullable<string[]>): Nullable<Nullable<User>[]> | Promise<Nullable<Nullable<User>[]>>;
+    allUsers(): User[] | Promise<User[]>;
+    game(id: string): Nullable<Game> | Promise<Nullable<Game>>;
 }
 
 export interface IMutation {

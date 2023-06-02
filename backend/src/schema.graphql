@@ -8,11 +8,11 @@ type User {
 	createdAt: String!
 	wins: Int!
 	losses: Int!
-	gameHistory: [Game!]!
+	gameHistory: [Game!]
 	# friends: [User!]! @relation(name: "friends")
 	# friendOf: [User!]! @relation(name: "friends")
-	friends: [User!]!
-	friendOf: [User!]!
+	friends: [User!]
+	friendOf: [User!]
 }
 
 type Game {
@@ -24,11 +24,11 @@ type Game {
 }
 
 type Query {
-	getUser(id: String!): User
-	getUserByName(name: String!): User
-	getUsers(id: [String!]): [User]
-	getAllUsers: [User!]!
-	getGame(id: String!): Game
+	user(id: String!): User
+	userName(name: String!): User
+	users(id: [String!]): [User]
+	allUsers: [User!]!
+	game(id: String!): Game
 }
 
 type Mutation {
