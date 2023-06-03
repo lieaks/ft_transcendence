@@ -94,6 +94,11 @@ services:
       POSTGRES_HOST: ${POSTGRES_HOST}
     networks:
         - backend
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5555/"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
 networks:
   backend:
