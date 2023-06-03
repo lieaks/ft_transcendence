@@ -28,6 +28,8 @@ export interface Game {
 export interface IQuery {
     __typename?: 'IQuery';
     game(id: string): Nullable<Game> | Promise<Nullable<Game>>;
+    ping(): Nullable<string> | Promise<Nullable<string>>;
+    chirel(): Nullable<string> | Promise<Nullable<string>>;
     user(id: string): Nullable<User> | Promise<Nullable<User>>;
     userByName(name: string): Nullable<User> | Promise<Nullable<User>>;
     usersByIds(ids: string[]): Nullable<Nullable<User>[]> | Promise<Nullable<Nullable<User>[]>>;
@@ -37,10 +39,20 @@ export interface IQuery {
 export interface IMutation {
     __typename?: 'IMutation';
     createGame(userId: string, enemyUserId: string): Game | Promise<Game>;
+<<<<<<< HEAD
     updateUser(input: UpdateUserInput): User | Promise<User>;
     submit2FA(token: string): boolean | Promise<boolean>;
     enable2FA(): string | Promise<string>;
     disable2FA(token: string): boolean | Promise<boolean>;
+=======
+    loveChirel(): Nullable<boolean> | Promise<Nullable<boolean>>;
+    notLoveChirel(): Nullable<boolean> | Promise<Nullable<boolean>>;
+    createUser(input: CreateUserInput): User | Promise<User>;
+    updateUser(id: string, input: UpdateUserInput): User | Promise<User>;
+    enable2FA(id: string): string | Promise<string>;
+    disable2FA(id: string): boolean | Promise<boolean>;
+    verify2FA(id: string, code: string): boolean | Promise<boolean>;
+>>>>>>> 04f80e6 (WIP implement sockets)
 }
 
 export interface User {

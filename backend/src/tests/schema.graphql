@@ -1,0 +1,12 @@
+# Query
+
+type Query {
+	ping: String
+	chirel: String
+}
+
+# Mutation
+type Mutation {
+	loveChirel: Boolean
+	notLoveChirel: Boolean
+}

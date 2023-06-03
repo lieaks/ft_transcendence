@@ -12,6 +12,10 @@ import { UsersModule } from './users/users.module';
 import { GamesModule } from './games/games.module';
 import { AuthModule } from './auth/auth.module';
 
+import { TestModule } from './tests/test.module';
+
+import { WebsocketsModule } from './websockets/websockets.module';
+
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -31,8 +35,10 @@ import { AuthModule } from './auth/auth.module';
     UsersModule,
     GamesModule,
     AuthModule,
+	TestModule,
+	WebsocketsModule,
   ],
   controllers: [HealthController],
-  providers: [UsersResolver, GamesResolver, PrismaService],
+  providers: [UsersResolver, GamesResolver, TestModule, PrismaService],
 })
 export class AppModule {}
