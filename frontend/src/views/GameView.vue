@@ -1,3 +1,7 @@
+<template>
+	<canvas ref="pongCanvas" width="1600" height="800" class="mx-auto bg-black"></canvas>
+</template>
+
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { Ball } from '../stores/Ball';
@@ -49,17 +53,12 @@ onMounted(() => {
     });
 
 	function gameLoop() {
-		// game.updateBallPosition();
 		game.render();
 		requestAnimationFrame(gameLoop);
 	}
 	gameLoop();
 });
 </script>
-
-<template>
-	<canvas ref="pongCanvas" width="1600" height="800" class="mx-auto bg-black"></canvas>
-</template>
 
 <style scoped>
 	/* Debug border */
