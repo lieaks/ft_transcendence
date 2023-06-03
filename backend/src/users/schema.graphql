@@ -3,7 +3,7 @@
 type User {
 	id: String!
 	name: String!
-	avatar: String
+	avatar: String!
 	ladderRanking: Int!
 	experience: Float!
 	createdAt: String!

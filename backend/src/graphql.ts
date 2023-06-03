@@ -51,7 +51,7 @@ export interface User {
     __typename?: 'User';
     id: string;
     name: string;
-    avatar?: Nullable<string>;
+    avatar: string;
     ladderRanking: number;
     experience: number;
     createdAt: string;
