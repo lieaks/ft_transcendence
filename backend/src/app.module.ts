@@ -36,7 +36,7 @@ import { WebsocketsModule } from './websockets/websockets.module';
     GamesModule,
     AuthModule,
 	TestModule,
-	WebsocketsModule,
+	// WebsocketsModule,
   ],
   controllers: [HealthController],
   providers: [UsersResolver, GamesResolver, TestModule, PrismaService],
