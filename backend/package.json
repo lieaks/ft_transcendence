@@ -28,6 +28,8 @@
     "@nestjs/platform-express": "^9.0.0",
     "@prisma/client": "^4.15.0",
     "graphql": "^16.6.0",
+    "graphql-scalar": "^0.1.0",
+    "graphql-scalars": "^1.22.1",
     "graphql-ws": "^5.13.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",

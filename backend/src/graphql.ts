@@ -23,18 +23,19 @@ export interface Game {
     __typename?: 'Game';
     id: string;
     players: User[];
-    winnerId?: Nullable<string>;
-    createdAt: string;
-    finishedAt?: Nullable<string>;
+    winner?: Nullable<User>;
+    looser?: Nullable<User>;
+    createdAt: DateTime;
+    finishedAt?: Nullable<DateTime>;
 }
 
 export interface IQuery {
     __typename?: 'IQuery';
     game(id: string): Nullable<Game> | Promise<Nullable<Game>>;
     user(id: string): Nullable<User> | Promise<Nullable<User>>;
-    userName(name: string): Nullable<User> | Promise<Nullable<User>>;
-    users(id?: Nullable<string[]>): Nullable<Nullable<User>[]> | Promise<Nullable<Nullable<User>[]>>;
-    allUsers(): User[] | Promise<User[]>;
+    userByName(name: string): Nullable<User> | Promise<Nullable<User>>;
+    usersByIds(id?: Nullable<string[]>): Nullable<Nullable<User>[]> | Promise<Nullable<Nullable<User>[]>>;
+    users(): User[] | Promise<User[]>;
 }
 
 export interface IMutation {
@@ -51,15 +52,19 @@ export interface User {
     __typename?: 'User';
     id: string;
     name: string;
-    avatar: string;
+    avatar: Byte;
     ladderRanking: number;
     experience: number;
-    createdAt: string;
-    wins: number;
-    losses: number;
+    createdAt: DateTime;
     gameHistory?: Nullable<Game[]>;
+    gamesWon?: Nullable<Nullable<Game>[]>;
+    gamesLost?: Nullable<Nullable<Game>[]>;
     friends?: Nullable<User[]>;
     friendOf?: Nullable<User[]>;
+    blocked?: Nullable<User[]>;
+    blockedOf?: Nullable<User[]>;
 }
 
+export type DateTime = any;
+export type Byte = any;
 type Nullable<T> = T | null;

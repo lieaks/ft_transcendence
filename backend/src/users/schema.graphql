@@ -19,9 +19,9 @@ type User {
 
 type Query {
 	user(id: String!): User
-	userName(name: String!): User
-	users(id: [String!]): [User]
-	allUsers: [User!]!
+	userByName(name: String!): User
+	usersByIds(id: [String!]): [User]
+	users: [User!]!
 }
 
 type Mutation {
