@@ -14,7 +14,7 @@ import { AuthModule } from './auth/auth.module';
 
 import { TestModule } from './tests/test.module';
 
-import { WebsocketsModule } from './websockets/websockets.module';
+import { GatewayModule } from './gateway/gateway.module';
 
 @Module({
   imports: [
@@ -36,6 +36,7 @@ import { WebsocketsModule } from './websockets/websockets.module';
     GamesModule,
     AuthModule,
 	TestModule,
+	GatewayModule
   ],
   controllers: [HealthController],
   providers: [UsersResolver, GamesResolver, TestModule, PrismaService],
