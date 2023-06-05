@@ -10,23 +10,23 @@ import { Game } from '../stores/Game';
 import { Scoreboard } from '@/stores/Scoreboard';
 
 // socket.io
-// import { io } from 'socket.io-client';
+import { io } from 'socket.io-client';
 
-// const socket = io('http://localhost:3000');
+const socket = io('http://localhost:3000');
 
-// socket.on('connect', () => {
-// 	console.log('connected');
-// });
+socket.on('connect', () => {
+	console.log('connected');
+});
 
-// socket.on('disconnect', () => {
-// 	console.log('disconnected');
-// });
+socket.on('disconnect', () => {
+	console.log('disconnected');
+});
 
-// socket.on('message', (message: string) => {
-// 	console.log(message);
-// });
+socket.on('message', (message: string) => {
+	console.log(message);
+});
 
-// socket.emit('message', 'Hello World!');
+socket.emit('message', 'Hello World!');
 const pongCanvas = ref<HTMLCanvasElement | null>(null);
 
 onMounted(() => {
