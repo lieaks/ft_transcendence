@@ -1,11 +1,13 @@
 # import User from "../users/schema.graphql"
+scalar DateTime
 
 type Game {
 	id: String!
 	players: [User!]!
-	winnerId: String
-	createdAt: String!
-	finishedAt: String
+	winner: User
+	looser: User
+	createdAt: DateTime!
+	finishedAt: DateTime
 }
 
 type Query {
