@@ -29,4 +29,12 @@ export class GamesResolver {
 		});
 		return game.players;
 	}
+
+	@Query('getCurrentGames')
+	async getCurrentGames(): Promise<Game[]> {
+		return this.PrismaService.game.findMany({
+			where: { finishedAt: null },
+			include: { players: true },
+		});
+	}
 }
