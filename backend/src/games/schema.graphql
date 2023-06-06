@@ -13,6 +13,7 @@ type Game {
 type Query {
 	games: [Game!]!
 	game(id: String!): Game!
+	getPlayersByGameId(id: String!): [User!]!
 }
 
 type Mutation {

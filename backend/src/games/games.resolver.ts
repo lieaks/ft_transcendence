@@ -1,5 +1,5 @@
 import { Resolver, Query, Args } from '@nestjs/graphql';
-import { Game } from 'src/graphql';
+import { Game, User } from 'src/graphql';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Resolver('Game')
@@ -8,11 +8,9 @@ export class GamesResolver {
 
 	@Query('games')
 	async games(): Promise<Game[]> {
-		const prismaGames = await this.PrismaService.game.findMany({
+		return this.PrismaService.game.findMany({
 			include: { players: true },
 		});
-		console.log(prismaGames);
-		return prismaGames;
 	}
 
 	@Query('game')
@@ -21,5 +19,14 @@ export class GamesResolver {
 			where: { id: id },
 			include: { players: true },
 		});
+	}
+
+	@Query('getPlayersByGameId')
+	async getPlayersByGameId(@Args('id') id: string): Promise<User[]> {
+		const game = await this.PrismaService.game.findUnique({
+			where: { id: id },
+			include: { players: true },
+		});
+		return game.players;
 	}
 }

@@ -29,6 +29,7 @@ export interface IQuery {
     __typename?: 'IQuery';
     games(): Game[] | Promise<Game[]>;
     game(id: string): Game | Promise<Game>;
+    getPlayersByGameId(id: string): User[] | Promise<User[]>;
     ping(): Nullable<string> | Promise<Nullable<string>>;
     chirel(): Nullable<string> | Promise<Nullable<string>>;
     user(id: string): Nullable<User> | Promise<Nullable<User>>;
