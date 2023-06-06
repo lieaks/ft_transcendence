@@ -30,13 +30,37 @@ export interface IQuery {
     games(): Game[] | Promise<Game[]>;
     game(id: string): Game | Promise<Game>;
     getPlayersByGameId(id: string): User[] | Promise<User[]>;
+<<<<<<< HEAD
     getCurrentGames(): Game[] | Promise<Game[]>;
     users(): User[] | Promise<User[]>;
     user(id: string): User | Promise<User>;
     ping(): Nullable<string> | Promise<Nullable<string>>;
     chirel(): Nullable<string> | Promise<Nullable<string>>;
+<<<<<<< HEAD
+=======
+=======
+    game(id: string): Nullable<Game> | Promise<Nullable<Game>>;
+    ping(): Nullable<string> | Promise<Nullable<string>>;
+    chirel(): Nullable<string> | Promise<Nullable<string>>;
+    user(id: string): Nullable<User> | Promise<Nullable<User>>;
+>>>>>>> 747ca03 (WIP implement sockets)
+=======
+    users(): User[] | Promise<User[]>;
+    user(id: string): User | Promise<User>;
+    ping(): Nullable<string> | Promise<Nullable<string>>;
+    chirel(): Nullable<string> | Promise<Nullable<string>>;
+>>>>>>> fe23d3f (Update schema)
+>>>>>>> 778c1f5 (Update schema)
     userByName(name: string): Nullable<User> | Promise<Nullable<User>>;
+<<<<<<< HEAD
     usersByIds(ids: string[]): Nullable<Nullable<User>[]> | Promise<Nullable<Nullable<User>[]>>;
+<<<<<<< HEAD
+=======
+    users(): User[] | Promise<User[]>;
+=======
+    usersByIds(id?: Nullable<string[]>): Nullable<Nullable<User>[]> | Promise<Nullable<Nullable<User>[]>>;
+>>>>>>> fcb584e (Update schema)
+>>>>>>> fe23d3f (Update schema)
 }
 
 export interface IMutation {
