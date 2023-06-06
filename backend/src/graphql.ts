@@ -30,12 +30,17 @@ export interface IQuery {
     games(): Game[] | Promise<Game[]>;
     game(id: string): Game | Promise<Game>;
     getPlayersByGameId(id: string): User[] | Promise<User[]>;
+    users(): User[] | Promise<User[]>;
+    user(id: string): User | Promise<User>;
     ping(): Nullable<string> | Promise<Nullable<string>>;
     chirel(): Nullable<string> | Promise<Nullable<string>>;
-    user(id: string): Nullable<User> | Promise<Nullable<User>>;
     userByName(name: string): Nullable<User> | Promise<Nullable<User>>;
+<<<<<<< HEAD
     usersByIds(ids: string[]): Nullable<Nullable<User>[]> | Promise<Nullable<Nullable<User>[]>>;
     users(): User[] | Promise<User[]>;
+=======
+    usersByIds(id?: Nullable<string[]>): Nullable<Nullable<User>[]> | Promise<Nullable<Nullable<User>[]>>;
+>>>>>>> fcb584e (Update schema)
 }
 
 export interface IMutation {
