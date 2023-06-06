@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
+import { ByteResolver, DateTimeResolver } from 'graphql-scalars';
 import { join } from 'path';
 import { UsersResolver } from './users/users.resolver';
 import { GamesResolver } from './games/games.resolver';
@@ -24,6 +25,7 @@ import { GamesModule } from './games/games.module';
 	  },
 	  playground: false,
 	  plugins: [ApolloServerPluginLandingPageLocalDefault()],
+	  resolvers: { DateTime: DateTimeResolver, Byte: ByteResolver },
     }),
     UsersModule,
     GamesModule,

@@ -14,22 +14,26 @@ model User {
   id              String   @id @default(uuid())
   name            String   @unique
   avatar          Bytes?
-  // password        String
   ladderRanking   Int      @default(0)
   experience      Float    @default(0)
   createdAt       DateTime @default(now())
   doubleAuthToken String?
-  wins            Int      @default(0)
-  losses          Int      @default(0)
-  gameHistory     Game[]
+  gameHistory     Game[]   @relation("players")
   friends         User[]   @relation("friends")
   friendOf        User[]   @relation("friends")
+  blocked         User[]   @relation("blocked")
+  blockedOf       User[]   @relation("blocked")
+  gamesWon        Game[]   @relation("winner")
+  gamesLost       Game[]   @relation("loser")
 }
 
 model Game {
   id         String    @id @default(uuid())
-  players    User[]
-  winnerId   String?
+  players    User[]    @relation("players")
+  winner     User      @relation("winner", fields: [winnerId], references: [id])
+  loser      User      @relation("loser", fields: [loserId], references: [id])
+  winnerId   String
+  loserId    String
   createdAt  DateTime  @default(now())
   finishedAt DateTime?
 }

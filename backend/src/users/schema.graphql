@@ -1,26 +1,27 @@
-#import Game from "../games/schema.graphql"
+scalar Byte
+scalar DateTime
 
 type User {
 	id: String!
 	name: String!
-	avatar: String!
+	avatar: Byte!
 	ladderRanking: Int!
 	experience: Float!
-	createdAt: String!
-	wins: Int!
-	losses: Int!
+	createdAt: DateTime!
 	gameHistory: [Game!]
-	# friends: [User!]! @relation(name: "friends")
-	# friendOf: [User!]! @relation(name: "friends")
+	gamesWon: [Game]
+	gamesLost: [Game]
 	friends: [User!]
 	friendOf: [User!]
+	blocked: [User!]
+	blockedOf: [User!]
 }
 
 type Query {
 	user(id: String!): User
-	userName(name: String!): User
-	users(id: [String!]): [User]
-	allUsers: [User!]!
+	userByName(name: String!): User
+	usersByIds(id: [String!]): [User]
+	users: [User!]!
 }
 
 type Mutation {
