@@ -11,7 +11,7 @@ export class UsersResolver {
 	async users(): Promise<gplUser[]> {
 		const prismaUser = this.PrismaService.user.findMany({});
 		console.log(await prismaUser);
-		
+		// TODO: debug why nested object are not here but in prisma studio
 		return prismaUser
 	}
 
