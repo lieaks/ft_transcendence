@@ -22,7 +22,7 @@ export interface UpdateUserInput {
 export interface Game {
     __typename?: 'Game';
     id: string;
-    players: User[];
+    players?: Nullable<User[]>;
     winner?: Nullable<User>;
     looser?: Nullable<User>;
     createdAt: DateTime;
@@ -34,7 +34,7 @@ export interface IQuery {
     game(id: string): Nullable<Game> | Promise<Nullable<Game>>;
     user(id: string): Nullable<User> | Promise<Nullable<User>>;
     userByName(name: string): Nullable<User> | Promise<Nullable<User>>;
-    usersByIds(id?: Nullable<string[]>): Nullable<Nullable<User>[]> | Promise<Nullable<Nullable<User>[]>>;
+    usersByIds(ids: string[]): Nullable<Nullable<User>[]> | Promise<Nullable<Nullable<User>[]>>;
     users(): User[] | Promise<User[]>;
 }
 
@@ -57,8 +57,8 @@ export interface User {
     experience: number;
     createdAt: DateTime;
     gameHistory?: Nullable<Game[]>;
-    gamesWon?: Nullable<Nullable<Game>[]>;
-    gamesLost?: Nullable<Nullable<Game>[]>;
+    gamesWon?: Nullable<Game[]>;
+    gamesLost?: Nullable<Game[]>;
     friends?: Nullable<User[]>;
     friendOf?: Nullable<User[]>;
     blocked?: Nullable<User[]>;

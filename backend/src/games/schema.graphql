@@ -3,7 +3,7 @@ scalar DateTime
 
 type Game {
 	id: String!
-	players: [User!]!
+	players: [User!]
 	winner: User
 	looser: User
 	createdAt: DateTime!

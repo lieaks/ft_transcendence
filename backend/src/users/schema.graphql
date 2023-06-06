@@ -9,8 +9,8 @@ type User {
 	experience: Float!
 	createdAt: DateTime!
 	gameHistory: [Game!]
-	gamesWon: [Game]
-	gamesLost: [Game]
+	gamesWon: [Game!]
+	gamesLost: [Game!]
 	friends: [User!]
 	friendOf: [User!]
 	blocked: [User!]
@@ -20,7 +20,7 @@ type User {
 type Query {
 	user(id: String!): User
 	userByName(name: String!): User
-	usersByIds(id: [String!]): [User]
+	usersByIds(ids: [String!]!): [User]
 	users: [User!]!
 }
 
