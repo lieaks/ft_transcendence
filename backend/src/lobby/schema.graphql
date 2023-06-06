@@ -1,0 +1,8 @@
+# import User from "../users/schema.graphql"
+
+# Query
+
+type Query {
+	users: [User!]!
+	user(id: ID!): User!
+}
