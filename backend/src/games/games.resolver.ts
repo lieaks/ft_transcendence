@@ -1,4 +1,4 @@
-import { Resolver, Query } from '@nestjs/graphql';
+import { Resolver, Query, Args } from '@nestjs/graphql';
 import { Game } from 'src/graphql';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -13,5 +13,13 @@ export class GamesResolver {
 		});
 		console.log(prismaGames);
 		return prismaGames;
+	}
+
+	@Query('game')
+	async game(@Args('id') id: string): Promise<Game> {
+		return this.PrismaService.game.findUnique({
+			where: { id: id },
+			include: { players: true },
+		});
 	}
 }
