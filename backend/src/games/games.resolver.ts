@@ -8,8 +8,10 @@ export class GamesResolver {
 
 	@Query('games')
 	async games(): Promise<Game[]> {
-		const prismaGames = this.PrismaService.game.findMany({});
-		console.log(await prismaGames);
+		const prismaGames = await this.PrismaService.game.findMany({
+			include: { players: true },
+		});
+		console.log(prismaGames);
 		return prismaGames;
 	}
 }

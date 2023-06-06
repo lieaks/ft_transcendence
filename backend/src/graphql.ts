@@ -27,7 +27,8 @@ export interface Game {
 
 export interface IQuery {
     __typename?: 'IQuery';
-    game(id: string): Nullable<Game> | Promise<Nullable<Game>>;
+    games(): Game[] | Promise<Game[]>;
+    game(id: string): Game | Promise<Game>;
     ping(): Nullable<string> | Promise<Nullable<string>>;
     chirel(): Nullable<string> | Promise<Nullable<string>>;
     user(id: string): Nullable<User> | Promise<Nullable<User>>;
