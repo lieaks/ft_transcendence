@@ -1,4 +1,15 @@
-import { Resolver } from '@nestjs/graphql';
+import { Resolver, Query } from '@nestjs/graphql';
+import { Game } from 'src/graphql';
+import { PrismaService } from 'src/prisma/prisma.service';
 
-@Resolver()
-export class GamesResolver {}
+@Resolver('Game')
+export class GamesResolver {
+	constructor(private readonly PrismaService: PrismaService) {}
+
+	@Query('games')
+	async games(): Promise<Game[]> {
+		const prismaGames = this.PrismaService.game.findMany({});
+		console.log(await prismaGames);
+		return prismaGames;
+	}
+}
