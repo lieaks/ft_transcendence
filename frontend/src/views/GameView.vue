@@ -54,11 +54,9 @@ onMounted(() => {
         }
     });
 
-    function gameLoop() {
-        game.render();
-        requestAnimationFrame(gameLoop);
-    }
-    gameLoop();
+    setInterval(() => {
+        game.draw();
+    }, 1000 / 60);
 });
 </script>
 

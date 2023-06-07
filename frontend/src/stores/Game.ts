@@ -75,13 +75,4 @@ export class Game {
 	updateBallPosition() {
 		this.ball.move(this.context, this.rightPaddle, this.leftPaddle, this.rightScore, this.leftScore);
 	}
-
-	/**
-	 * Updates the position of the ball.
-	 * @returns Nothing.
-	 */
-    render() {
-        this.draw();
-        requestAnimationFrame(() => this.render());
-    }
 }
