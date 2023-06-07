@@ -18,13 +18,18 @@ onMounted(() => {
     const game = new Game(canvas);
 
     window.addEventListener('keydown', (event) => {
-        if (event.key === 'w' || event.key === 's') {
-            game.updateLeftPaddlePosition(event.key);
-        }
-        if (event.key === 'i' || event.key === 'k') {
-            game.updateRightPaddlePosition(event.key);
+        switch (event.key) {
+            case 'w':
+            socket.emit('movePaddle', { direction: 'up' });
+            break;
+
+            case 's':
+            socket.emit('movePaddle', { direction: 'down' });
+            break;
         }
     });
+
+    socket.on('movePaddle', (data) => {game.updateLeftPaddlePosition(data.direction);});
 
     setInterval(() => {
         game.draw();

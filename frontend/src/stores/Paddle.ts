@@ -55,9 +55,9 @@ export class Paddle {
 	}
 
 	updateLeftPaddlePosition(key: string, canvasHeight: number) {
-		if (key === 'w' && this.y > 15) {
+		if (key === "up" && this.y > 15) {
 			this.y -= this.speed;
-		} else if (key === 's' && this.y + this.height < canvasHeight - 15) {
+		} else if (key === "down" && this.y + this.height < canvasHeight - 15) {
 			this.y += this.speed;
 		}
 	}

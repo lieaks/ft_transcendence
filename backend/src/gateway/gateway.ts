@@ -17,6 +17,13 @@ export class MyGateway implements OnModuleInit {
 		});
 	}
 
+	@SubscribeMessage('movePaddle')
+	onMovePaddle(@MessageBody() body: any) {
+		const { direction } = body;
+		console.log(`Message received from movePaddle: ${direction}`);
+		this.server.emit('movePaddle', {direction: direction});
+	}
+
 	@SubscribeMessage('hello')
 	onHello(@MessageBody() body: any) {
 		console.log("Message received from Hello: " + body);
