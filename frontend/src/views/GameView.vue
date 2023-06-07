@@ -7,24 +7,6 @@ import { onMounted, ref } from 'vue'
 import { Game } from '@/elements/Game.js';
 import { io } from 'socket.io-client';
 
-// socket.io
-import { io } from 'socket.io-client';
-
-const socket = io('http://localhost:3000');
-
-socket.on('connect', () => {
-	console.log('connected');
-});
-
-socket.on('disconnect', () => {
-	console.log('disconnected');
-});
-
-socket.on('message', (message: string) => {
-	console.log(message);
-});
-
-socket.emit('message', 'Hello World!');
 const pongCanvas = ref<HTMLCanvasElement | null>(null);
 const socket = io('http://localhost:3000');
 
@@ -34,6 +16,15 @@ onMounted(() => {
     if (!canvas) return;
 
     const game = new Game(canvas);
+
+    // @SubscribeMessage('msgToUser')
+	// onMsgToUser(@MessageBody() body: any) {
+	// 	console.log(body);
+	// 	const { userId, message } = body;
+	// 	this.connectedSockets.get(userId).emit('msgToUser', {
+	// 		message: message,
+	// 	});
+	// }
 
     window.addEventListener('keydown', (event) => {
         switch (event.key) {
