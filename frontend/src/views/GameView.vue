@@ -59,10 +59,6 @@ onMounted(() => {
         requestAnimationFrame(gameLoop);
     }
     gameLoop();
-
-    function sendMessage() {
-        socket.emit('hello', 'Hello from client');
-    }
 });
 </script>
 
