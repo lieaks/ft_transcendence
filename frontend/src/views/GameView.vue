@@ -45,38 +45,7 @@ onMounted(() => {
 	
     const game = new Game(canvas, ball, leftPaddle, rightPaddle, leftScore, rightScore);
 
-    // @SubscribeMessage('msgToUser')
-	// onMsgToUser(@MessageBody() body: any) {
-	// 	console.log(body);
-	// 	const { userId, message } = body;
-	// 	this.connectedSockets.get(userId).emit('msgToUser', {
-	// 		message: message,
-	// 	});
-	// }
-
     window.addEventListener('keydown', (event) => {
-        // if '1' is pressed, send msgToUser event to server
-        if (event.key === '1') {
-            socket.emit('msgToUser', {
-                userId: 1,
-                message: 'Hello client 1'
-            });
-        }
-        // if '2' is pressed, send msgToUser event to server
-        if (event.key === '2') {
-            socket.emit('msgToUser', {
-                userId: 2,
-                message: 'Hello client 2'
-            });
-        }
-        // if '3' is pressed, send msgToUser event to server
-        if (event.key === '3') {
-            socket.emit('msgToUser', {
-                userId: 3,
-                message: 'Hello client 3'
-            });
-        }
-
         if (event.key === 'w' || event.key === 's') {
             game.updateLeftPaddlePosition(event.key);
         }
@@ -91,17 +60,9 @@ onMounted(() => {
     }
     gameLoop();
 
-    // function sendMessage() {
-    //     socket.emit('hello', 'Hello from client');
-    // }
-
-    socket.on('msgToUser', (data) => {
-        console.log(data);
-    });
-
-    socket.on('onHello', (data) => {
-        console.log(data);
-    });
+    function sendMessage() {
+        socket.emit('hello', 'Hello from client');
+    }
 });
 </script>
 
