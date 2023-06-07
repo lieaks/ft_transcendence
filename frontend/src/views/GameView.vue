@@ -29,7 +29,14 @@ onMounted(() => {
         }
     });
 
-    socket.on('movePaddle', (data) => {game.updateLeftPaddlePosition(data.direction);});
+    socket.on('movePaddle', (data) => {
+        console.log(data);
+        if (data.player === 'left') {
+            game.updateLeftPaddlePosition(data.direction);
+        } else {
+            game.updateRightPaddlePosition(data.direction);
+        }
+    });
 
     setInterval(() => {
         game.draw();
