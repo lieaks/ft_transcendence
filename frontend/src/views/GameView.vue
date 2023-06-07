@@ -17,15 +17,6 @@ onMounted(() => {
 
     const game = new Game(canvas);
 
-    // @SubscribeMessage('msgToUser')
-	// onMsgToUser(@MessageBody() body: any) {
-	// 	console.log(body);
-	// 	const { userId, message } = body;
-	// 	this.connectedSockets.get(userId).emit('msgToUser', {
-	// 		message: message,
-	// 	});
-	// }
-
     window.addEventListener('keydown', (event) => {
         switch (event.key) {
             case 'w':
