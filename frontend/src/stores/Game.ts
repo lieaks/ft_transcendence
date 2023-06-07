@@ -1,10 +1,16 @@
 import { Ball } from './Ball';
 import { Paddle } from './Paddle';
-import type { Scoreboard } from './Scoreboard';
+import { Scoreboard } from './Scoreboard';
 
 /**
  * Represents the game.
  */
+const paddle = {
+	width: 20,
+	height: 175,
+	speed: 17
+}
+
 export class Game {
     canvas: HTMLCanvasElement;
     context: CanvasRenderingContext2D;
@@ -22,14 +28,24 @@ export class Game {
 	 * @param leftPaddle The left paddle object.
 	 * @returns A new game object.
 	 */
-    constructor(canvas: HTMLCanvasElement, ball: Ball, rightPaddle: Paddle, leftPaddle: Paddle, rightScore: Scoreboard, leftScore: Scoreboard) {
+    constructor(canvas: HTMLCanvasElement) {
         this.canvas = canvas;
         this.context = canvas.getContext('2d')!;
-        this.ball = ball;
-        this.rightPaddle = rightPaddle;
-        this.leftPaddle = leftPaddle;
-		this.rightScore = rightScore;
-		this.leftScore = leftScore;
+        this.ball = new Ball(canvas.width / 2, canvas.height / 2, 10, 'white');
+        this.leftPaddle = new Paddle(20,
+			canvas.height / 2 - paddle.height / 2,
+			paddle.width, paddle.height,
+			paddle.speed,
+			'red'
+		);;
+        this.rightPaddle = new Paddle(canvas.width - 20 - paddle.width,
+			canvas.height / 2 - paddle.height / 2,
+			paddle.width, paddle.height,
+			paddle.speed,
+			'blue'
+		);;
+		this.rightScore = new Scoreboard(0, canvas.width / 2 + 100 - 20, 75, 'white', "40px Arial");;
+		this.leftScore = new Scoreboard(0, canvas.width / 2 - 100, 75, 'white', "40px Arial");;
     }
 
 	/**
