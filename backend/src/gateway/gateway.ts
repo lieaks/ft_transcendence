@@ -1,6 +1,6 @@
 import { OnModuleInit } from "@nestjs/common";
 import { MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
-import { Server } from "socket.io";
+import { Server, Socket } from "socket.io";
 
 @WebSocketGateway({ cors: true })
 export class MyGateway implements OnModuleInit {
@@ -8,10 +8,14 @@ export class MyGateway implements OnModuleInit {
 	@WebSocketServer()
 	server: Server;
 
+	private connectedSockets: Map<number, Socket> = new Map<number, Socket>();
+
 	onModuleInit() {
 		this.server.on('connection', (socket) => {
 			console.log(socket.id);
-			console.log('connected');
+			
+			this.connectedSockets.set(this.connectedSockets.size + 1, socket);
+			console.log('connected to socket with id:' + this.connectedSockets.size);
 		});
 	}
 
@@ -23,4 +27,20 @@ export class MyGateway implements OnModuleInit {
 			content: body,
 		})
 	}
+
+	@SubscribeMessage('msgToUser')
+    onMsgToUser(@MessageBody() body: any) {
+        // console.log(body);
+        const { userId, message } = body;
+		console.log("userId: " + userId + " message: " + message);
+        const socket = this.connectedSockets.get(userId);
+        if (socket) {
+			console.log("socket found");
+            socket.emit('msgToUser', {
+                message: message,
+            });
+        } else  {
+			console.log("socket not found");
+		}
+    }
 }
