@@ -12,8 +12,6 @@ export class MyGateway implements OnModuleInit {
 
 	onModuleInit() {
 		this.server.on('connection', (socket) => {
-			console.log(socket.id);
-			
 			this.connectedSockets.set(this.connectedSockets.size + 1, socket);
 			console.log('connected to socket with id:' + this.connectedSockets.size);
 		});
@@ -21,7 +19,7 @@ export class MyGateway implements OnModuleInit {
 
 	@SubscribeMessage('hello')
 	onHello(@MessageBody() body: any) {
-		console.log(body);
+		console.log("Message received from Hello: " + body);
 		this.server.emit('onHello', {
 			message: 'Hello from server',
 			content: body,
@@ -30,17 +28,13 @@ export class MyGateway implements OnModuleInit {
 
 	@SubscribeMessage('msgToUser')
     onMsgToUser(@MessageBody() body: any) {
-        // console.log(body);
         const { userId, message } = body;
-		console.log("userId: " + userId + " message: " + message);
+		console.log("Message received from msgToUser: userId: " + userId + " message: " + message);
         const socket = this.connectedSockets.get(userId);
         if (socket) {
-			console.log("socket found");
             socket.emit('msgToUser', {
                 message: message,
             });
-        } else  {
-			console.log("socket not found");
 		}
     }
 }
