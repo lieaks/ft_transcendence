@@ -15,17 +15,17 @@ import { GamesModule } from './games/games.module';
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-	  subscriptions: {
-		  'graphql-ws': true
-	  },
-	  typePaths: ['./**/*.graphql'],
-	  definitions: {
-		  path: join(process.cwd(), 'src/graphql.ts'),
-		  emitTypenameField: true,
-	  },
-	  playground: false,
-	  plugins: [ApolloServerPluginLandingPageLocalDefault()],
-	  resolvers: { DateTime: DateTimeResolver, Byte: ByteResolver },
+      subscriptions: {
+        'graphql-ws': true,
+      },
+      typePaths: ['./**/*.graphql'],
+      definitions: {
+        path: join(process.cwd(), 'src/graphql.ts'),
+        emitTypenameField: true,
+      },
+      playground: false,
+      plugins: [ApolloServerPluginLandingPageLocalDefault()],
+      resolvers: { DateTime: DateTimeResolver, Byte: ByteResolver },
     }),
     UsersModule,
     GamesModule,

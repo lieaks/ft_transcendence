@@ -22,7 +22,7 @@ export interface UpdateUserInput {
 export interface Game {
     __typename?: 'Game';
     id: string;
-    players?: Nullable<User[]>;
+    players: User[];
     winner?: Nullable<User>;
     looser?: Nullable<User>;
     createdAt: DateTime;
