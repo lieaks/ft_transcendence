@@ -25,12 +25,12 @@ type Query {
 }
 
 type Mutation {
-	createUser(input: CreateUserInput!): User!
-	updateUser(id: String!, input: UpdateUserInput!): User!
+	# createUser(input: CreateUserInput!): User!
+	updateUser(input: UpdateUserInput!): User!
 
-	enable2FA(id: String!): String!
-	disable2FA(id: String!): Boolean!
-	verify2FA(id: String!, code: String!): Boolean!
+	submit2FA(token: String!): Boolean!
+	enable2FA: String!
+	disable2FA(token: String!): Boolean!
 }
 
 input CreateUserInput {
@@ -40,6 +40,6 @@ input CreateUserInput {
 
 input UpdateUserInput {
 	name: String
-	avatar: String
+	avatar: Byte
 	friends: [String!]
 }

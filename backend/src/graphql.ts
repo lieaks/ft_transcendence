@@ -15,7 +15,7 @@ export interface CreateUserInput {
 
 export interface UpdateUserInput {
     name?: Nullable<string>;
-    avatar?: Nullable<string>;
+    avatar?: Nullable<Byte>;
     friends?: Nullable<string[]>;
 }
 
@@ -41,11 +41,10 @@ export interface IQuery {
 export interface IMutation {
     __typename?: 'IMutation';
     createGame(userId: string, enemyUserId: string): Game | Promise<Game>;
-    createUser(input: CreateUserInput): User | Promise<User>;
-    updateUser(id: string, input: UpdateUserInput): User | Promise<User>;
-    enable2FA(id: string): string | Promise<string>;
-    disable2FA(id: string): boolean | Promise<boolean>;
-    verify2FA(id: string, code: string): boolean | Promise<boolean>;
+    updateUser(input: UpdateUserInput): User | Promise<User>;
+    submit2FA(token: string): boolean | Promise<boolean>;
+    enable2FA(): string | Promise<string>;
+    disable2FA(token: string): boolean | Promise<boolean>;
 }
 
 export interface User {
