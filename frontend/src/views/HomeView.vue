@@ -1,16 +1,14 @@
-<script setup lang="ts">
-	import { useUserStore } from '@/stores/userStore';
-	import { ref } from 'vue';
-
-	const { user, setName } = useUserStore();
-	const newUser = ref('');
-</script>
-
 <template>
 	<div>
 	  <h1 class="text-white text-1xl">HOME VIEW</h1>
-	  <p>Welcome, {{ user.name }}</p>
-	  <input v-model="newUser" />
-	  <button @click="setName(newUser)">Set User</button>
+	  <button @click="fetchChirelData">Fetch Data</button>
+	  <p>Chirel data: {{ getChirelData() }}</p>
 	</div>
-</template>
+  </template>
+  
+  <script setup lang="ts">
+	import { useTestStore } from '@/stores/testStore';
+	import { ref } from 'vue';
+  
+	const { fetchChirelData, getChirelData } = useTestStore();
+  </script>

@@ -12,7 +12,7 @@ export class TestResolver {
     @Query(() => String)
     chirel(): string {
 		if (this.love) {
-			return 'Chirel je t\'aime !';
+			return 'Chirel le sang !';
 		} else {
 			return 'Chirel grosse pute !';
 		}
