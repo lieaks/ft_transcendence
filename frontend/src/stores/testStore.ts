@@ -9,18 +9,32 @@ const CHIREL_QUERY = gql`
   }
 `;
 
+const CHIREL_MUTATION = gql`
+	mutation {
+		notLoveChirel
+	}
+`;
+
 export const useTestStore = defineStore('test', () => {
   const chirel = ref(null);
 
   async function fetchChirelData() {
-    try {
-      const response = await apolloClient.query({
-        query: CHIREL_QUERY
-      });
-      chirel.value = response.data.chirel;
-	  console.log("chirelData.value: " + chirel.value);
-    } catch (err) {}
+		try {
+			const response = await apolloClient.query({
+				query: CHIREL_QUERY
+			});
+			chirel.value = response.data.chirel;
+		} catch (err) {}
   }
+
+  async function notLoveChirel() {
+		try {
+			const response = await apolloClient.mutate({
+				mutation: CHIREL_MUTATION
+			});
+			chirel.value = response.data.notLoveChirel;
+		} catch (err) {}
+	}
 
   function getChirelData() {
 	return chirel.value;
@@ -28,6 +42,7 @@ export const useTestStore = defineStore('test', () => {
 
   return {
     fetchChirelData,
+	notLoveChirel,
 	getChirelData
   }
 });
