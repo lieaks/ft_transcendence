@@ -4,7 +4,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { Game } from '@/stores/Game';
+import { Game } from '@/elements/Game.js';
 import { io } from 'socket.io-client';
 
 const pongCanvas = ref<HTMLCanvasElement | null>(null);
