@@ -7,8 +7,7 @@ import { RouterLink } from 'vue-router'
 		<RouterLink class="title text-3xl" to="/">🏓 ⚔️ Pongquistadors</RouterLink>
 		<nav class="text-2xl">
 			<RouterLink class="hover:text-gray-400 transition p-2" to="/">Home</RouterLink>
-			<RouterLink class="hover:text-gray-400 transition p-2" to="/play">Play</RouterLink>
-			<!-- <RouterLink class="hover:text-gray-400 transition p-2" to="/game">Game</RouterLink> -->
+			<RouterLink class="hover:text-gray-400 transition p-2" to="/game">Game</RouterLink>
 			<RouterLink class="hover:text-gray-400 transition p-2" to="/chat">Chat</RouterLink>
 			<RouterLink class="hover:text-gray-400 transition p-2" to="/friends">Friends</RouterLink>
 		</nav>

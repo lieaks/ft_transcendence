@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import GameView from '../views/GameView.vue'
-import PlayView from '../views/PlayView.vue'
 import HomeView from '../views/HomeView.vue'
 import ChatView from '../views/ChatView.vue'
 import FriendsView from '../views/FriendsView.vue'
@@ -34,11 +33,6 @@ const router = createRouter({
 		  name: 'account',
 		  component: AccountView
 	  },
-	  {
-		  path: '/play',
-		  name: 'play',
-		  component: PlayView
-	  }
   ]
 })
 
