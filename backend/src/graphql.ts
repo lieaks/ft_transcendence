@@ -66,12 +66,50 @@ export interface IQuery {
 export interface IMutation {
     __typename?: 'IMutation';
     createGame(userId: string, enemyUserId: string): Game | Promise<Game>;
+<<<<<<< HEAD
     loveChirel(): Nullable<string> | Promise<Nullable<string>>;
     notLoveChirel(): Nullable<string> | Promise<Nullable<string>>;
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    loveChirel(): Nullable<string> | Promise<Nullable<string>>;
+    notLoveChirel(): Nullable<string> | Promise<Nullable<string>>;
+    createUser(input: CreateUserInput): User | Promise<User>;
+    updateUser(id: string, input: UpdateUserInput): User | Promise<User>;
+    enable2FA(id: string): string | Promise<string>;
+    disable2FA(id: string): boolean | Promise<boolean>;
+    verify2FA(id: string, code: string): boolean | Promise<boolean>;
+=======
+=======
+>>>>>>> 747ca03 (WIP implement sockets)
+=======
+>>>>>>> cd91218 (Mutation works)
+>>>>>>> 7b8ff66 (Mutation works)
     updateUser(input: UpdateUserInput): User | Promise<User>;
     submit2FA(token: string): boolean | Promise<boolean>;
     enable2FA(): string | Promise<string>;
     disable2FA(token: string): boolean | Promise<boolean>;
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 904e72c (backend: all user resolver created. need to have the auth system to finish it)
+=======
+=======
+    loveChirel(): Nullable<boolean> | Promise<Nullable<boolean>>;
+    notLoveChirel(): Nullable<boolean> | Promise<Nullable<boolean>>;
+=======
+    loveChirel(): Nullable<string> | Promise<Nullable<string>>;
+    notLoveChirel(): Nullable<string> | Promise<Nullable<string>>;
+>>>>>>> 622e01e (Mutation works)
+    createUser(input: CreateUserInput): User | Promise<User>;
+    updateUser(id: string, input: UpdateUserInput): User | Promise<User>;
+    enable2FA(id: string): string | Promise<string>;
+    disable2FA(id: string): boolean | Promise<boolean>;
+    verify2FA(id: string, code: string): boolean | Promise<boolean>;
+>>>>>>> 04f80e6 (WIP implement sockets)
+>>>>>>> 747ca03 (WIP implement sockets)
+>>>>>>> 7b8ff66 (Mutation works)
 }
 
 export interface User {
