@@ -13,3 +13,32 @@
 
 	const { fetchChirelData, notLoveChirel, loveChirel, getChirelData } = useTestStore();
 </script>
+
+<style scoped>
+.text-white {
+    color: #fff;
+}
+
+.text-1xl {
+    font-size: 1.5rem;
+}
+
+button {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    margin-right: 1rem;
+}
+
+button:hover {
+    background-color: #3e8e41;
+}
+
+p {
+    margin-top: 1rem;
+    font-size: 1.25rem;
+}
+</style>
