@@ -12,6 +12,10 @@ export class MyGateway implements OnModuleInit {
 
 	onModuleInit() {
 		this.server.on('connection', (socket) => {
+			socket.on('disconnect', () => {
+				this.connectedSockets.delete(socket);
+				console.log('disconnected from socket with id:' + this.connectedSockets.size);
+			});
 			this.connectedSockets.set(socket, this.connectedSockets.size + 1);
 			console.log('connected to socket with id:' + this.connectedSockets.size);
 		});
@@ -33,25 +37,4 @@ export class MyGateway implements OnModuleInit {
 		console.log("Message received from movePaddle: player: " + player + " direction: " + direction);
 		this.server.emit('movePaddle', { player: player, direction: direction });
 	}
-
-	// @SubscribeMessage('hello')
-	// onHello(@MessageBody() body: any) {
-	// 	console.log("Message received from Hello: " + body);
-	// 	this.server.emit('onHello', {
-	// 		message: 'Hello from server',
-	// 		content: body,
-	// 	})
-	// }
-
-	// @SubscribeMessage('msgToUser')
-    // onMsgToUser(@MessageBody() body: any) {
-    //     const { userId, message } = body;
-	// 	console.log("Message received from msgToUser: userId: " + userId + " message: " + message);
-    //     const socket = this.connectedSockets.get(userId);
-    //     if (socket) {
-    //         socket.emit('msgToUser', {
-    //             message: message,
-    //         });
-	// 	}
-    // }
 }
