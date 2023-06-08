@@ -7,6 +7,6 @@ type Query {
 
 # Mutation
 type Mutation {
-	loveChirel: Boolean
-	notLoveChirel: Boolean
+	loveChirel: String
+	notLoveChirel: String
 }

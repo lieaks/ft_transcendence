@@ -2,7 +2,7 @@ import { Resolver, Query, Mutation } from '@nestjs/graphql';
 
 @Resolver()
 export class TestResolver {
-    private love: boolean = true;
+    private str: string = 'Chirel le sang !';
 
     @Query(() => String)
     ping(): string {
@@ -11,22 +11,18 @@ export class TestResolver {
 
     @Query(() => String)
     chirel(): string {
-		if (this.love) {
-			return 'Chirel le sang !';
-		} else {
-			return 'Chirel grosse pute !';
-		}
+        return this.str;
     }
 
-    @Mutation(() => Boolean)
-    loveChirel(): boolean {
-        this.love = true;
-        return this.love;
+    @Mutation(() => String)
+    loveChirel(): String {
+        this.str = 'Chirel le sang !';
+        return this.str;
     }
 
-    @Mutation(() => Boolean)
-    notLoveChirel(): boolean {
-        this.love = false;
-        return this.love;
+    @Mutation(() => String)
+    notLoveChirel(): String {
+        this.str = 'Chirel plus le sang !';
+        return this.str;
     }
 }

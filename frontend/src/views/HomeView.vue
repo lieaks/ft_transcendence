@@ -4,11 +4,12 @@
 		<button @click="fetchChirelData">Fetch Data</button>
 		<p>Chirel data: {{ getChirelData() }}</p>
 		<button @click="notLoveChirel">Not Love Chirel</button>
+		<button @click="loveChirel">Love Chirel</button>
 	</div>
 </template>
   
 <script setup lang="ts">
 	import { useTestStore } from '@/stores/testStore';
 
-	const { fetchChirelData, notLoveChirel, getChirelData } = useTestStore();
+	const { fetchChirelData, notLoveChirel, loveChirel, getChirelData } = useTestStore();
 </script>

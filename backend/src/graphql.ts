@@ -47,6 +47,7 @@ export interface IMutation {
     __typename?: 'IMutation';
     createGame(userId: string, enemyUserId: string): Game | Promise<Game>;
 <<<<<<< HEAD
+<<<<<<< HEAD
     updateUser(input: UpdateUserInput): User | Promise<User>;
     submit2FA(token: string): boolean | Promise<boolean>;
     enable2FA(): string | Promise<string>;
@@ -54,6 +55,10 @@ export interface IMutation {
 =======
     loveChirel(): Nullable<boolean> | Promise<Nullable<boolean>>;
     notLoveChirel(): Nullable<boolean> | Promise<Nullable<boolean>>;
+=======
+    loveChirel(): Nullable<string> | Promise<Nullable<string>>;
+    notLoveChirel(): Nullable<string> | Promise<Nullable<string>>;
+>>>>>>> 622e01e (Mutation works)
     createUser(input: CreateUserInput): User | Promise<User>;
     updateUser(id: string, input: UpdateUserInput): User | Promise<User>;
     enable2FA(id: string): string | Promise<string>;
