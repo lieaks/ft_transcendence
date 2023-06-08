@@ -1,9 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
-export const useUserStore = defineStore('user', () => {
-  const user = ref({ name: 'Norminet BG' })
-
+export const useTestStore = defineStore('test', () => {
   return {
     user: computed(() => user.value),
     setName(name: string) {
