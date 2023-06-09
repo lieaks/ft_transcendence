@@ -166,12 +166,9 @@ export abstract class IMutation {
 export interface IMutation {
     __typename?: 'IMutation';
     createGame(userId: string, enemyUserId: string): Game | Promise<Game>;
-<<<<<<< HEAD
     loveChirel(): Nullable<string> | Promise<Nullable<string>>;
     notLoveChirel(): Nullable<string> | Promise<Nullable<string>>;
     test(): Nullable<string> | Promise<Nullable<string>>;
-=======
->>>>>>> 904e72c (backend: all user resolver created. need to have the auth system to finish it)
     updateUser(input: UpdateUserInput): User | Promise<User>;
     submit2FA(token: string): boolean | Promise<boolean>;
     enable2FA(): string | Promise<string>;
