@@ -37,20 +37,4 @@ export class MyGateway implements OnModuleInit {
 		console.log("Message received from movePaddle: player: " + player + " direction: " + direction);
 		this.server.emit('movePaddle', { player: player, direction: direction });
 	}
-
-	@SubscribeMessage('msgToUser')
-    onMsgToUser(@MessageBody() body: any) {
-        // console.log(body);
-        const { userId, message } = body;
-		console.log("userId: " + userId + " message: " + message);
-        const socket = this.connectedSockets.get(userId);
-        if (socket) {
-			console.log("socket found");
-            socket.emit('msgToUser', {
-                message: message,
-            });
-        } else  {
-			console.log("socket not found");
-		}
-    }
 }
