@@ -1,7 +1,7 @@
 import { Controller, Get, HttpException, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
-import { RequestWithUser } from '../interfaces/request-with-user.interface';
+import { IRequestOauthUser } from '../interfaces/request-oauth-user.interface';
 
 @Controller('auth')
 export class AuthController {
@@ -11,10 +11,9 @@ export class AuthController {
 
   @Get('42/callback')
   @UseGuards(AuthGuard('42'))
-  async fortyTwoAuthCallback(@Req() req: RequestWithUser) {
+  async fortyTwoAuthCallback(@Req() req: IRequestOauthUser) {
     try {
-      const user = req.user;
-      return { user };
+      return req.user;
     } catch (error) {
       console.error('auth.controller.ts/42:', error);
       throw new HttpException('Internal Server Error', 500);
@@ -27,10 +26,9 @@ export class AuthController {
 
   @Get('google/callback')
   @UseGuards(AuthGuard('google'))
-  async googleAuthCallback(@Req() req: RequestWithUser) {
+  async googleAuthCallback(@Req() req: IRequestOauthUser) {
     try {
-      const user = req.user;
-      return { user };
+      return req.user;
     } catch (error) {
       console.error('auth.controller.ts/google:', error);
       throw new HttpException('Internal Server Error', 500);

@@ -3,7 +3,6 @@ import { Strategy, VerifyCallback } from 'passport-42';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { AuthService } from './auth.service';
-import { User } from '../interfaces/user.interface';
 import * as fs from 'fs';
 
 @Injectable()
@@ -33,7 +32,7 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
   ): Promise<any> {
     try {
       console.log('42 profile:', profile);
-      let user: User = await this.prismaService.user.findFirst({
+      let user = await this.prismaService.user.findFirst({
         where: {
           oauthProvider: profile.provider,
           oauthId: profile.id as string,
@@ -44,7 +43,7 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
           where: { name: profile.username },
         });
         const name = userwithname
-          ? `${profile.username}42${profile.id}`
+          ? `${profile.username}${profile.provider}${profile.id}`
           : profile.username;
 
         user = await this.prismaService.user.create({
@@ -56,8 +55,8 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
           },
         });
       }
-      user.jwtToken = await this.authService.generateJwtToken(user);
-      done(null, user);
+      const jwtToken = await this.authService.generateJwtToken(user);
+      done(null, { id: user.id, name: user.name, jwtToken });
     } catch (error) {
       done(error, null);
     }
