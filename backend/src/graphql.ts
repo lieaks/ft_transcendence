@@ -30,41 +30,24 @@ export interface IQuery {
     games(): Game[] | Promise<Game[]>;
     game(id: string): Game | Promise<Game>;
     getPlayersByGameId(id: string): User[] | Promise<User[]>;
+    getCurrentGames(): Game[] | Promise<Game[]>;
     users(): User[] | Promise<User[]>;
     user(id: string): User | Promise<User>;
     ping(): Nullable<string> | Promise<Nullable<string>>;
     chirel(): Nullable<string> | Promise<Nullable<string>>;
     userByName(name: string): Nullable<User> | Promise<Nullable<User>>;
-<<<<<<< HEAD
     usersByIds(ids: string[]): Nullable<Nullable<User>[]> | Promise<Nullable<Nullable<User>[]>>;
-    users(): User[] | Promise<User[]>;
-=======
-    usersByIds(id?: Nullable<string[]>): Nullable<Nullable<User>[]> | Promise<Nullable<Nullable<User>[]>>;
->>>>>>> fcb584e (Update schema)
 }
 
 export interface IMutation {
     __typename?: 'IMutation';
     createGame(userId: string, enemyUserId: string): Game | Promise<Game>;
-<<<<<<< HEAD
-<<<<<<< HEAD
+    loveChirel(): Nullable<string> | Promise<Nullable<string>>;
+    notLoveChirel(): Nullable<string> | Promise<Nullable<string>>;
     updateUser(input: UpdateUserInput): User | Promise<User>;
     submit2FA(token: string): boolean | Promise<boolean>;
     enable2FA(): string | Promise<string>;
     disable2FA(token: string): boolean | Promise<boolean>;
-=======
-    loveChirel(): Nullable<boolean> | Promise<Nullable<boolean>>;
-    notLoveChirel(): Nullable<boolean> | Promise<Nullable<boolean>>;
-=======
-    loveChirel(): Nullable<string> | Promise<Nullable<string>>;
-    notLoveChirel(): Nullable<string> | Promise<Nullable<string>>;
->>>>>>> 622e01e (Mutation works)
-    createUser(input: CreateUserInput): User | Promise<User>;
-    updateUser(id: string, input: UpdateUserInput): User | Promise<User>;
-    enable2FA(id: string): string | Promise<string>;
-    disable2FA(id: string): boolean | Promise<boolean>;
-    verify2FA(id: string, code: string): boolean | Promise<boolean>;
->>>>>>> 04f80e6 (WIP implement sockets)
 }
 
 export interface User {
