@@ -8,15 +8,14 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export interface UpdateUserInput {
+export class UpdateUserInput {
     name?: Nullable<string>;
     avatar?: Nullable<Byte>;
     friendsToAdd?: Nullable<string[]>;
     friendsToRemove?: Nullable<string[]>;
 }
 
-export interface Game {
-    __typename?: 'Game';
+export class Game {
     id: string;
     players: User[];
     winner?: Nullable<User>;
@@ -25,6 +24,7 @@ export interface Game {
     finishedAt?: Nullable<DateTime>;
 }
 
+<<<<<<< HEAD
 export interface IQuery {
     __typename?: 'IQuery';
     games(): Game[] | Promise<Game[]>;
@@ -110,10 +110,49 @@ export interface IMutation {
 >>>>>>> 04f80e6 (WIP implement sockets)
 >>>>>>> 747ca03 (WIP implement sockets)
 >>>>>>> 7b8ff66 (Mutation works)
+=======
+export abstract class IQuery {
+    abstract games(): Game[] | Promise<Game[]>;
+
+    abstract game(id: string): Game | Promise<Game>;
+
+    abstract getPlayersByGameId(id: string): User[] | Promise<User[]>;
+
+    abstract getCurrentGames(): Game[] | Promise<Game[]>;
+
+    abstract users(): User[] | Promise<User[]>;
+
+    abstract user(id: string): User | Promise<User>;
+
+    abstract ping(): Nullable<string> | Promise<Nullable<string>>;
+
+    abstract chirel(): Nullable<string> | Promise<Nullable<string>>;
+
+    abstract userByName(name: string): Nullable<User> | Promise<Nullable<User>>;
+
+    abstract usersByIds(ids: string[]): Nullable<Nullable<User>[]> | Promise<Nullable<Nullable<User>[]>>;
 }
 
-export interface User {
-    __typename?: 'User';
+export abstract class IMutation {
+    abstract createGame(userId: string, enemyUserId: string): Game | Promise<Game>;
+
+    abstract loveChirel(): Nullable<string> | Promise<Nullable<string>>;
+
+    abstract notLoveChirel(): Nullable<string> | Promise<Nullable<string>>;
+
+    abstract test(): Nullable<string> | Promise<Nullable<string>>;
+
+    abstract updateUser(input: UpdateUserInput): User | Promise<User>;
+
+    abstract submit2FA(token: string): boolean | Promise<boolean>;
+
+    abstract enable2FA(): string | Promise<string>;
+
+    abstract disable2FA(token: string): boolean | Promise<boolean>;
+>>>>>>> 9670b2f (Update the graphql.ts)
+}
+
+export class User {
     id: string;
     name: string;
     avatar: Byte;
