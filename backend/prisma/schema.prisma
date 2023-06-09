@@ -16,7 +16,6 @@ model User {
 	oauthId         String
   name            String   @unique
   avatar          Bytes?
-  ladderRanking   Int      @default(0)
   experience      Float    @default(0)
   createdAt       DateTime @default(now())
   doubleAuthToken String?

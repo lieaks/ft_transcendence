@@ -32,25 +32,24 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
     done: VerifyCallback,
   ): Promise<any> {
     try {
+			console.log('42 profile:', profile);
       let user: User = await this.prismaService.user.findFirst({
-        where: { oauthProvider: '42', oauthId: profile.id as string },
+        where: { oauthProvider: profile.provider, oauthId: profile.id as string },
       });
       if (!user) {
         const userwithname = await this.prismaService.user.findFirst({
           where: { name: profile.username },
         });
         const name = userwithname
-          ? `${profile.username}${userwithname.id}`
+          ? `${profile.username}42${profile.id}`
           : profile.username;
 
         user = await this.prismaService.user.create({
           data: {
             name,
-            oauthProvider: '42',
+            oauthProvider: profile.provider,
             oauthId: profile.id,
-            // TODO: should also set a default avatar
             avatar: this.default_avatar,
-            ladderRanking: (await this.prismaService.user.count()) + 1,
           },
         });
       }
