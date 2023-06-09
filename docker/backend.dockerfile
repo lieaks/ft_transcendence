@@ -6,7 +6,7 @@ WORKDIR /var/www/nestjs
 
 COPY ./backend .
 COPY ./docker/backend-start.sh .
-COPY .env .
+COPY ./docker/.env .
 
 RUN npm ci @nestjs/cli
 
