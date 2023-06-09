@@ -55,6 +55,22 @@ export class UsersResolver {
     });
   }
 
+  @Query('leaderboard')
+  async leaderboard(
+    @Args('skip') skip: number,
+    @Args('take') take: number,
+  ): Promise<User[]> {
+    skip ??= 0;
+    take ??= undefined;
+    return this.PrismaService.user.findMany({
+      skip,
+      take,
+      orderBy: {
+        experience: 'desc',
+      },
+    });
+  }
+
   @Mutation('updateUser')
   async updateUser(
     @Args('input') input: UpdateUserInput,

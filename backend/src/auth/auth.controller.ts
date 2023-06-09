@@ -21,21 +21,21 @@ export class AuthController {
     }
   }
 
-	@Get('google')
-	@UseGuards(AuthGuard('google'))
-	async googleAuth() {}
+  @Get('google')
+  @UseGuards(AuthGuard('google'))
+  async googleAuth() {}
 
-	@Get('google/callback')
-	@UseGuards(AuthGuard('google'))
-	async googleAuthCallback(@Req() req: RequestWithUser) {
-		try {
-			const user = req.user;
-			return { user };
-		} catch (error) {
-			console.error('auth.controller.ts/google:', error);
-			throw new HttpException('Internal Server Error', 500);
-		}
-	}
+  @Get('google/callback')
+  @UseGuards(AuthGuard('google'))
+  async googleAuthCallback(@Req() req: RequestWithUser) {
+    try {
+      const user = req.user;
+      return { user };
+    } catch (error) {
+      console.error('auth.controller.ts/google:', error);
+      throw new HttpException('Internal Server Error', 500);
+    }
+  }
 
   @Get('status')
   @UseGuards(AuthGuard('jwt'))

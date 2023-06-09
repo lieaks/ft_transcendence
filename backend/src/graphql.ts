@@ -36,7 +36,8 @@ export interface IQuery {
     ping(): Nullable<string> | Promise<Nullable<string>>;
     chirel(): Nullable<string> | Promise<Nullable<string>>;
     userByName(name: string): Nullable<User> | Promise<Nullable<User>>;
-    usersByIds(ids: string[]): Nullable<Nullable<User>[]> | Promise<Nullable<Nullable<User>[]>>;
+    usersByIds(ids: string[]): Nullable<User[]> | Promise<Nullable<User[]>>;
+    leaderboard(skip?: Nullable<number>, take?: Nullable<number>): Nullable<User[]> | Promise<Nullable<User[]>>;
 }
 
 export interface IMutation {
