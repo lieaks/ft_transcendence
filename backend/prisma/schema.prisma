@@ -12,6 +12,8 @@ datasource db {
 
 model User {
   id              String   @id @default(uuid())
+	oauthProvider   String
+	oauthId         String
   name            String   @unique
   avatar          Bytes?
   ladderRanking   Int      @default(0)
@@ -25,6 +27,8 @@ model User {
   blockedOf       User[]   @relation("blocked")
   gamesWon        Game[]   @relation("winner")
   gamesLost       Game[]   @relation("loser")
+
+	@@unique([oauthProvider, oauthId])
 }
 
 model Game {

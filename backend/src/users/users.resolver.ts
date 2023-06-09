@@ -82,9 +82,10 @@ export class UsersResolver {
   }
 
   @Mutation('enable2FA')
-  async enable2FA(): Promise<string> {
+  async enable2FA(@Context() ctx): Promise<string> {
     // TODO: get the client id from the context token
     // then, generate a 2fa token, put in the db and return it
+		const { id, name } = ctx.req.user;
     return 'token';
   }
 

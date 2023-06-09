@@ -1,7 +1,7 @@
 import { Controller, Get, HttpException, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
-import { User } from '../interfaces/user.interface';
+import { RequestWithUser } from '../interfaces/request-with-user.interface';
 
 @Controller('auth')
 export class AuthController {
@@ -11,9 +11,9 @@ export class AuthController {
 
   @Get('42/callback')
   @UseGuards(AuthGuard('42'))
-  async fortyTwoAuthCallback(@Req() req: Request) {
+  async fortyTwoAuthCallback(@Req() req: RequestWithUser) {
     try {
-      const user = req.user as User;
+      const user = req.user
       return { user };
     } catch (error) {
       console.error('auth.controller.ts:', error);

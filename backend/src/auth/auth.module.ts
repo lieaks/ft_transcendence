@@ -16,7 +16,7 @@ import { AuthService } from './auth.service';
     }),
   ],
   controllers: [AuthController],
-  providers: [PrismaService, JwtStrategy, FortyTwoStrategy, AuthService],
-  exports: [JwtStrategy, PassportModule],
+  providers: [PrismaService, JwtStrategy, FortyTwoStrategy, AuthService]
+  // exports: [JwtStrategy, PassportModule],
 })
 export class AuthModule {}

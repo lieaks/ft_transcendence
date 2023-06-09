@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { sign } from 'jsonwebtoken';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  generateJwtToken(profile: any): string {
-    const payload = { sub: profile.id, name: profile.name }; // Customize the payload as per your requirements
-    const token = sign(payload, process.env.JWT_SECRET, { expiresIn: '1d' });
+	constructor(private readonly jwtService: JwtService) {}
+  async generateJwtToken(profile: any): Promise<string> {
+    const payload = { sub: profile.id, name: profile.name };
+    const token = this.jwtService.signAsync(payload);
     return token;
   }
 }
