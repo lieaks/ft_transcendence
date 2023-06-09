@@ -5,7 +5,6 @@ type User {
 	id: String!
 	name: String!
 	avatar: Byte!
-	ladderRanking: Int!
 	experience: Float!
 	createdAt: DateTime!
 	gameHistory: [Game!]

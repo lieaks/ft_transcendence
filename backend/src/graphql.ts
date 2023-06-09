@@ -56,7 +56,6 @@ export interface User {
     id: string;
     name: string;
     avatar: Byte;
-    ladderRanking: number;
     experience: number;
     createdAt: DateTime;
     gameHistory?: Nullable<Game[]>;
