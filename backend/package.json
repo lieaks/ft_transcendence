@@ -31,6 +31,8 @@
     "@nestjs/platform-socket.io": "^9.4.2",
     "@nestjs/platform-ws": "^9.4.2",
     "@prisma/client": "^4.15.0",
+    "@types/passport-jwt": "^3.0.8",
+    "cookie-parser": "^1.4.6",
     "graphql": "^16.6.0",
     "graphql-scalar": "^0.1.0",
     "graphql-scalars": "^1.22.1",
