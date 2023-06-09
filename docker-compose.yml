@@ -38,13 +38,7 @@ services:
     restart: unless-stopped
     depends_on:
       - postgres
-    env_file:
-      - .env
-    environment:
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_HOST: ${POSTGRES_HOST}
+
     ports:
       - 3000:3000
     healthcheck:
@@ -62,7 +56,7 @@ services:
     ports:
       - 5432:5432
     env_file:
-      - .env
+      - ./docker/.env
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_USER: ${POSTGRES_USER}
@@ -85,13 +79,6 @@ services:
       - postgres
     ports:
       - 5555:5555
-    env_file:
-      - .env
-    environment:
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_HOST: ${POSTGRES_HOST}
     networks:
         - backend
     healthcheck:

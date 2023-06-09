@@ -10,6 +10,7 @@ import { HealthController } from './health/health.controller';
 import { PrismaService } from './prisma/prisma.service';
 import { UsersModule } from './users/users.module';
 import { GamesModule } from './games/games.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { GamesModule } from './games/games.module';
     }),
     UsersModule,
     GamesModule,
+    AuthModule,
   ],
   controllers: [HealthController],
   providers: [UsersResolver, GamesResolver, PrismaService],

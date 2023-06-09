@@ -8,15 +8,11 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export interface CreateUserInput {
-    name: string;
-    avatar?: Nullable<string>;
-}
-
 export interface UpdateUserInput {
     name?: Nullable<string>;
     avatar?: Nullable<Byte>;
-    friends?: Nullable<string[]>;
+    friendsToAdd?: Nullable<string[]>;
+    friendsToRemove?: Nullable<string[]>;
 }
 
 export interface Game {

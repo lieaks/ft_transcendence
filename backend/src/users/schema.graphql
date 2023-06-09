@@ -25,7 +25,6 @@ type Query {
 }
 
 type Mutation {
-	# createUser(input: CreateUserInput!): User!
 	updateUser(input: UpdateUserInput!): User!
 
 	submit2FA(token: String!): Boolean!
@@ -33,13 +32,9 @@ type Mutation {
 	disable2FA(token: String!): Boolean!
 }
 
-input CreateUserInput {
-	name: String!
-	avatar: String
-}
-
 input UpdateUserInput {
 	name: String
 	avatar: Byte
-	friends: [String!]
+	friendsToAdd: [String!]
+	friendsToRemove: [String!]
 }
