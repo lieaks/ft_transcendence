@@ -3,6 +3,6 @@ import { GamesResolver } from './games.resolver';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Module({
-	providers: [GamesResolver, PrismaService],
+  providers: [GamesResolver, PrismaService],
 })
 export class GamesModule {}

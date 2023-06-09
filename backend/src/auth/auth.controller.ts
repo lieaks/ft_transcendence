@@ -13,7 +13,7 @@ export class AuthController {
   @UseGuards(AuthGuard('42'))
   async fortyTwoAuthCallback(@Req() req: RequestWithUser) {
     try {
-      const user = req.user
+      const user = req.user;
       return { user };
     } catch (error) {
       console.error('auth.controller.ts:', error);

@@ -85,7 +85,7 @@ export class UsersResolver {
   async enable2FA(@Context() ctx): Promise<string> {
     // TODO: get the client id from the context token
     // then, generate a 2fa token, put in the db and return it
-		const { id, name } = ctx.req.user;
+    const { id, name } = ctx.req.user;
     return 'token';
   }
 
