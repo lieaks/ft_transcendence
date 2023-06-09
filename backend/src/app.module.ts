@@ -11,6 +11,7 @@ import { PrismaService } from './prisma/prisma.service';
 import { UsersModule } from './users/users.module';
 import { GamesModule } from './games/games.module';
 import { AuthModule } from './auth/auth.module';
+import { UsersService } from './users/users.service';
 
 import { TestModule } from './tests/test.module';
 
@@ -39,6 +40,12 @@ import { GatewayModule } from './gateway/gateway.module';
     GatewayModule,
   ],
   controllers: [HealthController],
-  providers: [UsersResolver, GamesResolver, TestModule, PrismaService],
+  providers: [
+    UsersResolver,
+    GamesResolver,
+    TestModule,
+    PrismaService,
+    UsersService,
+  ],
 })
 export class AppModule {}

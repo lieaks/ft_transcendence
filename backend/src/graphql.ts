@@ -13,6 +13,8 @@ export interface UpdateUserInput {
     avatar?: Nullable<Byte>;
     friendsToAdd?: Nullable<string[]>;
     friendsToRemove?: Nullable<string[]>;
+    usersToBlock?: Nullable<string[]>;
+    usersToUnblock?: Nullable<string[]>;
 }
 
 export interface Game {
@@ -58,6 +60,7 @@ export interface User {
     name: string;
     avatar: Byte;
     experience: number;
+    twoFactorNeeded?: Nullable<boolean>;
     createdAt: DateTime;
     gameHistory?: Nullable<Game[]>;
     gamesWon?: Nullable<Game[]>;

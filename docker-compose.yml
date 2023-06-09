@@ -65,6 +65,8 @@ services:
       retries: 5
 
   prisma-studio:
+    profiles:
+      - dev
     container_name: prisma-studio
     build:
       context: .

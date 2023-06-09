@@ -1,7 +1,17 @@
-import { User as prismaUser } from '@prisma/client';
+import { Socket } from 'socket.io';
 
-export interface User extends prismaUser {
-  doubleAuthNeeded?: boolean; // if the client need to submit a code
-  jwtToken?: string; // the jwt token
-  status?: string; // online, offline, in game
+export enum userStatus {
+  ONLINE,
+  OFFLINE,
+  IN_GAME,
+}
+
+export interface IUser {
+  id: string;
+  name: string;
+  socket: Socket;
+  twoFactorNeeded: boolean; // if the client need to submit a code
+  status: userStatus;
+
+  addExperience(exp: number): Promise<number>;
 }

@@ -6,6 +6,7 @@ type User {
 	name: String!
 	avatar: Byte!
 	experience: Float!
+	twoFactorNeeded: Boolean
 	createdAt: DateTime!
 	gameHistory: [Game!]
 	gamesWon: [Game!]
@@ -38,4 +39,6 @@ input UpdateUserInput {
 	avatar: Byte
 	friendsToAdd: [String!]
 	friendsToRemove: [String!]
+	usersToBlock: [String!]
+	usersToUnblock: [String!]
 }

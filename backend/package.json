@@ -43,6 +43,7 @@
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
     "socket.io-client": "^4.6.2",
+    "speakeasy": "^2.0.0",
     "ts-morph": "^18.0.0",
     "ws": "^8.13.0"
   },
@@ -54,6 +55,7 @@
     "@types/jest": "29.5.1",
     "@types/node": "18.16.12",
     "@types/passport-jwt": "^3.0.8",
+    "@types/speakeasy": "^2.0.7",
     "@types/supertest": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
