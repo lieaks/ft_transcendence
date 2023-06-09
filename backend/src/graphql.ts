@@ -8,14 +8,15 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export class UpdateUserInput {
+export interface UpdateUserInput {
     name?: Nullable<string>;
     avatar?: Nullable<Byte>;
     friendsToAdd?: Nullable<string[]>;
     friendsToRemove?: Nullable<string[]>;
 }
 
-export class Game {
+export interface Game {
+    __typename?: 'Game';
     id: string;
     players: User[];
     winner?: Nullable<User>;
@@ -25,17 +26,24 @@ export class Game {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 29e0d17 (gpl)
 export interface IQuery {
     __typename?: 'IQuery';
     games(): Game[] | Promise<Game[]>;
     game(id: string): Game | Promise<Game>;
     getPlayersByGameId(id: string): User[] | Promise<User[]>;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 29e0d17 (gpl)
     getCurrentGames(): Game[] | Promise<Game[]>;
     users(): User[] | Promise<User[]>;
     user(id: string): User | Promise<User>;
     ping(): Nullable<string> | Promise<Nullable<string>>;
     chirel(): Nullable<string> | Promise<Nullable<string>>;
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 =======
@@ -150,9 +158,26 @@ export abstract class IMutation {
 
     abstract disable2FA(token: string): boolean | Promise<boolean>;
 >>>>>>> 9670b2f (Update the graphql.ts)
+=======
+    userByName(name: string): Nullable<User> | Promise<Nullable<User>>;
+    usersByIds(ids: string[]): Nullable<Nullable<User>[]> | Promise<Nullable<Nullable<User>[]>>;
 }
 
-export class User {
+export interface IMutation {
+    __typename?: 'IMutation';
+    createGame(userId: string, enemyUserId: string): Game | Promise<Game>;
+    loveChirel(): Nullable<string> | Promise<Nullable<string>>;
+    notLoveChirel(): Nullable<string> | Promise<Nullable<string>>;
+    test(): Nullable<string> | Promise<Nullable<string>>;
+    updateUser(input: UpdateUserInput): User | Promise<User>;
+    submit2FA(token: string): boolean | Promise<boolean>;
+    enable2FA(): string | Promise<string>;
+    disable2FA(token: string): boolean | Promise<boolean>;
+>>>>>>> 29e0d17 (gpl)
+}
+
+export interface User {
+    __typename?: 'User';
     id: string;
     name: string;
     avatar: Byte;
