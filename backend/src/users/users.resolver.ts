@@ -21,8 +21,8 @@ const include = {
   gamesLost: { include: { players: true } },
 };
 
+// @UseGuards(JwtAuthGuard) @TODO: uncomment after testing
 @Resolver('User')
-@UseGuards(JwtAuthGuard)
 export class UsersResolver {
   constructor(private readonly PrismaService: PrismaService) {}
 
