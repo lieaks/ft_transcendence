@@ -47,5 +47,6 @@ import { GatewayModule } from './gateway/gateway.module';
     PrismaService,
     UsersService,
   ],
+	exports: [UsersService],
 })
 export class AppModule {}

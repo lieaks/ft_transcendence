@@ -8,7 +8,7 @@ export enum userStatus {
 
 export interface IUser {
   id: string;
-  name: string;
+  name?: string;
   socket: Socket;
   twoFactorNeeded: boolean; // if the client need to submit a code
   status: userStatus;

@@ -12,13 +12,21 @@ export class User implements IUser {
   constructor(
     private readonly prismaService: PrismaService,
     id: string,
-    name: string,
+    name?: string,
   ) {
     this.id = id;
-    this.name = name;
     this.twoFactorNeeded = false;
     this.status = userStatus.OFFLINE;
     this.socket = null;
+		if (name)
+			this.name = name;
+		else {
+			// TODO: ??
+			// const user = this.prismaService.user.findUnique({where: {id}});
+			// user.then((u) => {
+			// 	this.name = u.name;
+			// });
+		}
   }
 
   async addExperience(exp: number): Promise<number> {
