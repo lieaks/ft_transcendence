@@ -33,12 +33,12 @@ export interface IQuery {
     game(id: string): Game | Promise<Game>;
     getPlayersByGameId(id: string): User[] | Promise<User[]>;
     getCurrentGames(): Game[] | Promise<Game[]>;
-    users(): User[] | Promise<User[]>;
-    user(id: string): User | Promise<User>;
     ping(): Nullable<string> | Promise<Nullable<string>>;
     chirel(): Nullable<string> | Promise<Nullable<string>>;
+    user(id: string): Nullable<User> | Promise<Nullable<User>>;
     userByName(name: string): Nullable<User> | Promise<Nullable<User>>;
     usersByIds(ids: string[]): Nullable<User[]> | Promise<Nullable<User[]>>;
+    users(): User[] | Promise<User[]>;
     leaderboard(skip?: Nullable<number>, take?: Nullable<number>): Nullable<User[]> | Promise<Nullable<User[]>>;
 }
 
