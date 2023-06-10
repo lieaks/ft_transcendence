@@ -16,6 +16,7 @@ import { UsersService } from './users/users.service';
 import { TestModule } from './tests/test.module';
 
 import { GatewayModule } from './gateway/gateway.module';
+import { GamesService } from './games/games.service';
 
 @Module({
   imports: [
@@ -46,7 +47,8 @@ import { GatewayModule } from './gateway/gateway.module';
     TestModule,
     PrismaService,
     UsersService,
+    GamesService,
   ],
-  exports: [UsersService, PrismaService],
+  exports: [UsersService, GamesService, PrismaService],
 })
 export class AppModule {}
