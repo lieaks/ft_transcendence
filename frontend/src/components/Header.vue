@@ -2,10 +2,11 @@
 import { RouterLink } from 'vue-router'
 import { useUserStore } from '@/stores/userStore';
 import { computed } from 'vue';
+import default_avatar from '@/assets/default_avatar.png'
 
 const user = useUserStore()
 const userAvatar = computed(() => {
-	return user.avatar || 'src/assets/default_avatar.png'
+	return user.avatar || default_avatar
 })
 
 </script>
