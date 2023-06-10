@@ -13,7 +13,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly authService: AuthService,
-		private readonly usersService: UsersService,
+    private readonly usersService: UsersService,
   ) {
     super({
       clientID: process.env.GOOGLE_CLIENT_ID,
@@ -59,10 +59,14 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         });
       }
       const jwtToken = await this.authService.generateJwtToken(user);
-			if (user.twoFactorSecret) {
-				this.usersService.requireTwoFactor(user.id)
-			}
-			done(null, { id: user.id, twoFactorAuth: Boolean(user.twoFactorSecret), jwtToken });
+      if (user.twoFactorSecret) {
+        this.usersService.requireTwoFactor(user.id);
+      }
+      done(null, {
+        id: user.id,
+        twoFactorAuth: Boolean(user.twoFactorSecret),
+        jwtToken,
+      });
     } catch (error) {
       done(error, null);
     }

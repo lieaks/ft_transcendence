@@ -1,7 +1,6 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { AuthController } from './auth.controller';
-import { PrismaService } from '../prisma/prisma.service';
 import { FortyTwoStrategy } from './forty-two.strategy';
 import { GoogleStrategy } from './google.strategy';
 import { JwtModule } from '@nestjs/jwt';
@@ -16,15 +15,9 @@ import { AppModule } from 'src/app.module';
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '1d' },
     }),
-		forwardRef(() => AppModule),
+    forwardRef(() => AppModule),
   ],
   controllers: [AuthController],
-  providers: [
-    PrismaService,
-    JwtStrategy,
-    FortyTwoStrategy,
-    GoogleStrategy,
-    AuthService,
-  ],
+  providers: [JwtStrategy, FortyTwoStrategy, GoogleStrategy, AuthService],
 })
 export class AuthModule {}

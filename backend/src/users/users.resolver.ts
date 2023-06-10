@@ -108,10 +108,16 @@ export class UsersResolver {
     });
     console.log('totpCode', totpCode);
     // if (token != totpCode) return false;
-		console.log('id', id);
-		console.log('twoFactorNeeded before:', this.UsersService.getUser(id)?.twoFactorNeeded);
+    console.log('id', id);
+    console.log(
+      'twoFactorNeeded before:',
+      this.UsersService.getUser(id)?.twoFactorNeeded,
+    );
     this.UsersService.removeTwoFactor(id);
-		console.log('twoFactorNeeded after:', this.UsersService.getUser(id)?.twoFactorNeeded);
+    console.log(
+      'twoFactorNeeded after:',
+      this.UsersService.getUser(id)?.twoFactorNeeded,
+    );
     return true;
   }
 

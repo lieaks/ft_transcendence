@@ -18,15 +18,14 @@ export class User implements IUser {
     this.twoFactorNeeded = false;
     this.status = userStatus.OFFLINE;
     this.socket = null;
-		if (name)
-			this.name = name;
-		else {
-			// TODO: ??
-			// const user = this.prismaService.user.findUnique({where: {id}});
-			// user.then((u) => {
-			// 	this.name = u.name;
-			// });
-		}
+    if (name) this.name = name;
+    else {
+      // TODO: ??
+      // const user = this.prismaService.user.findUnique({where: {id}});
+      // user.then((u) => {
+      // 	this.name = u.name;
+      // });
+    }
   }
 
   async addExperience(exp: number): Promise<number> {

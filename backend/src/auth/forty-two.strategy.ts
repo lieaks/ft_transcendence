@@ -13,7 +13,7 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly authService: AuthService,
-		private readonly usersService: UsersService,
+    private readonly usersService: UsersService,
   ) {
     super({
       clientID: process.env.FORTYTWO_CLIENT_ID,
@@ -58,10 +58,14 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
         });
       }
       const jwtToken = await this.authService.generateJwtToken(user);
-			if (user.twoFactorSecret) {
-				this.usersService.requireTwoFactor(user.id)
-			}
-      done(null, { id: user.id, twoFactorAuth: Boolean(user.twoFactorSecret), jwtToken });
+      if (user.twoFactorSecret) {
+        this.usersService.requireTwoFactor(user.id);
+      }
+      done(null, {
+        id: user.id,
+        twoFactorAuth: Boolean(user.twoFactorSecret),
+        jwtToken,
+      });
     } catch (error) {
       done(error, null);
     }
