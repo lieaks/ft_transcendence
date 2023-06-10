@@ -1,10 +1,19 @@
 import { Resolver, Query, Args } from '@nestjs/graphql';
 import { Game, User } from 'src/graphql';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { GamesService } from './games.service';
 
 @Resolver('Game')
 export class GamesResolver {
-  constructor(private readonly PrismaService: PrismaService) {}
+  constructor (
+    private readonly PrismaService: PrismaService, 
+    private readonly gamesService: GamesService
+  ) {}
+
+  @Query(() => String)
+  async hello() {
+    return 'Hello World!';
+  }
 
   @Query('games')
   async games(): Promise<Game[]> {

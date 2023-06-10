@@ -34,7 +34,7 @@ export class GamesService {
 	// Interval, 1 time per 5 seconds
 	@Interval(5000)
 	async checkGames() {
-		console.log("checking games");
+		// console.log("checking games");
 		for (const game of this.games) {
 			if (game.status === gameStatus.ENDED) {
 				this.removeGame(game.id);

@@ -15,6 +15,7 @@ type Query {
 	game(id: String!): Game!
 	getPlayersByGameId(id: String!): [User!]!
 	getCurrentGames: [Game!]!
+	hello: String!
 }
 
 type Mutation {

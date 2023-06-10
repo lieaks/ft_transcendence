@@ -3,6 +3,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { ByteResolver, DateTimeResolver } from 'graphql-scalars';
+import { ScheduleModule } from '@nestjs/schedule'
 import { join } from 'path';
 import { UsersResolver } from './users/users.resolver';
 import { GamesResolver } from './games/games.resolver';
@@ -39,6 +40,7 @@ import { GamesService } from './games/games.service';
     AuthModule,
     TestModule,
     GatewayModule,
+    ScheduleModule.forRoot(),
   ],
   controllers: [HealthController],
   providers: [
