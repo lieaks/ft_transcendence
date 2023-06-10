@@ -6,8 +6,6 @@ export class Game {
 	id: string;
 	status: gameStatus;
 	players: User[];
-	winner: User;
-	loser: User;
 	createdAt: Date;
 
 	constructor(
@@ -17,7 +15,6 @@ export class Game {
 		this.id = id;
 		this.status = gameStatus.WAITING;
 		this.players = [];
-		this.winner = null;
 		this.createdAt = new Date();
 	}
 
@@ -39,6 +36,18 @@ export class Game {
 				createdAt: this.createdAt,
 				winner: null,
 				loser: null,
+			},
+		});
+	}
+
+	async finish(winner: User, loser: User): Promise<void> {
+		this.status = gameStatus.ENDED;
+		await this.prismaService.game.update({
+			where: { id: this.id },
+			data: {
+				winner: { connect: { id: winner.id } },
+				loser: { connect: { id: loser.id } },
+				finishedAt: new Date(),
 			},
 		});
 	}
