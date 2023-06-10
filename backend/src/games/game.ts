@@ -7,6 +7,7 @@ export class Game {
 	status: gameStatus;
 	players: User[];
 	winner: User;
+	loser: User;
 	createdAt: Date;
 
 	constructor(
@@ -28,5 +29,17 @@ export class Game {
 		this.players = this.players.filter((p) => p.id !== player.id);
 	}
 
-	// Function to create the game in the database
+	async create(): Promise<void> {
+		await this.prismaService.game.create({
+			data: {
+				id: this.id,
+				players: {
+				connect: this.players.map((p) => ({ id: p.id })),
+				},
+				createdAt: this.createdAt,
+				winner: null,
+				loser: null,
+			},
+		});
+	}
 }
