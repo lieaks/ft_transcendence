@@ -15,7 +15,4 @@ import Header from './components/Header.vue'
 	border: 1px solid red;
 } */
 
-body {
-	@apply bg-slate-800;
-}
 </style>
