@@ -1,7 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
-import { IGame } from "src/interfaces/game.interface";
+import { IGame, gameStatus } from "src/interfaces/game.interface";
 import { Game } from "./game";
+import { Interval } from "@nestjs/schedule";
 
 @Injectable()
 export class GamesService {
@@ -28,5 +29,15 @@ export class GamesService {
 		await game.create();
 		this.addGame(game);
 		return game;
+	}
+
+	// Interval, 1 time per 5 seconds
+	@Interval(5000)
+	async checkGames() {
+		for (const game of this.games) {
+			if (game.status === gameStatus.ENDED) {
+				this.removeGame(game.id);
+			}
+		}
 	}
 }
