@@ -1,8 +1,8 @@
-import { gameStatus } from "../interfaces/game.interface";
+import { IGame, gameStatus } from "../interfaces/game.interface";
 import { PrismaService } from "../prisma/prisma.service";
 import { User } from "../users/user";
 
-export class Game {
+export class Game implements IGame {
 	id: string;
 	status: gameStatus;
 	players: User[];
