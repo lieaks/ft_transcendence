@@ -3,6 +3,7 @@ import { Strategy, VerifyCallback } from 'passport-42';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { AuthService } from './auth.service';
+import { UsersService } from '../users/users.service';
 import * as fs from 'fs';
 
 @Injectable()
@@ -12,6 +13,7 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly authService: AuthService,
+		private readonly usersService: UsersService,
   ) {
     super({
       clientID: process.env.FORTYTWO_CLIENT_ID,
@@ -31,7 +33,7 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
     done: VerifyCallback,
   ): Promise<any> {
     try {
-      console.log('42 profile:', profile);
+      // console.log('42 profile:', profile);
       let user = await this.prismaService.user.findFirst({
         where: {
           oauthProvider: profile.provider,
@@ -56,7 +58,10 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
         });
       }
       const jwtToken = await this.authService.generateJwtToken(user);
-      done(null, { id: user.id, name: user.name, jwtToken });
+			if (user.twoFactorSecret) {
+				this.usersService.requireTwoFactor(user.id)
+			}
+      done(null, { id: user.id, twoFactorAuth: Boolean(user.twoFactorSecret), jwtToken });
     } catch (error) {
       done(error, null);
     }

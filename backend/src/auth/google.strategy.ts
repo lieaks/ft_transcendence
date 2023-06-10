@@ -3,6 +3,7 @@ import { Strategy, VerifyCallback } from 'passport-google-oauth2';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { AuthService } from './auth.service';
+import { UsersService } from '../users/users.service';
 import * as fs from 'fs';
 
 @Injectable()
@@ -12,6 +13,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly authService: AuthService,
+		private readonly usersService: UsersService,
   ) {
     super({
       clientID: process.env.GOOGLE_CLIENT_ID,
@@ -32,7 +34,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     done: VerifyCallback,
   ): Promise<any> {
     try {
-      console.log('google profile:', profile);
+      // console.log('google profile:', profile);
       let user = await this.prismaService.user.findFirst({
         where: {
           oauthProvider: profile.provider,
@@ -57,7 +59,10 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         });
       }
       const jwtToken = await this.authService.generateJwtToken(user);
-      done(null, { id: user.id, name: user.name, jwtToken });
+			if (user.twoFactorSecret) {
+				this.usersService.requireTwoFactor(user.id)
+			}
+			done(null, { id: user.id, twoFactorAuth: Boolean(user.twoFactorSecret), jwtToken });
     } catch (error) {
       done(error, null);
     }
