@@ -14,7 +14,7 @@ export class Game {
 	id: string,
   ) {
 	this.id = id;
-	this.status = gameStatus.PLAYING;
+	this.status = gameStatus.WAITING;
 	this.players = [];
 	this.winner = null;
 	this.createdAt = new Date();
