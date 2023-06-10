@@ -51,4 +51,10 @@ export class Game implements IGame {
 			},
 		});
 	}
+
+	emitToPlayers(event: string, data: any): void {
+		for (const player of this.players) {
+			player.socket.emit(event, data);
+		}
+	}
 }
