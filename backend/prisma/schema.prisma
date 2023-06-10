@@ -33,10 +33,10 @@ model User {
 model Game {
   id         String    @id @default(uuid())
   players    User[]    @relation("players")
-  winner     User      @relation("winner", fields: [winnerId], references: [id])
-  loser      User      @relation("loser", fields: [loserId], references: [id])
-  winnerId   String
-  loserId    String
+  winner     User?     @relation("winner", fields: [winnerId], references: [id])
+  loser      User?     @relation("loser", fields: [loserId], references: [id])
+  winnerId   String?
+  loserId    String?
   createdAt  DateTime  @default(now())
   finishedAt DateTime?
 }
