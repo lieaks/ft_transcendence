@@ -7,59 +7,59 @@ const CHIREL_QUERY = gql`
   query {
     chirel
   }
-`;
+`
 
 const CHIREL_NOTLOVE_MUTATION = gql`
-	mutation {
-		notLoveChirel
-	}
-`;
+  mutation {
+    notLoveChirel
+  }
+`
 
 const CHIREL_LOVE_MUTATION = gql`
-	mutation {
-		loveChirel
-	}
-`;
+  mutation {
+    loveChirel
+  }
+`
 
 export const useTestStore = defineStore('test', () => {
- 	const chirel = ref(null);
+  const chirel = ref(null)
 
-	async function fetchChirelData() {
-			try {
-				const response = await apolloClient.query({
-					query: CHIREL_QUERY,
-					fetchPolicy: 'network-only'
-				});
-				chirel.value = response.data.chirel;
-			} catch (err) {}
-	}
+  async function fetchChirelData() {
+    try {
+      const response = await apolloClient.query({
+        query: CHIREL_QUERY,
+        fetchPolicy: 'network-only'
+      })
+      chirel.value = response.data.chirel
+    } catch (err) {}
+  }
 
-  	async function notLoveChirel() {
-		try {
-			const response = await apolloClient.mutate({
-				mutation: CHIREL_NOTLOVE_MUTATION
-			});
-			chirel.value = response.data.notLoveChirel;
-		} catch (err) {}
-	}
+  async function notLoveChirel() {
+    try {
+      const response = await apolloClient.mutate({
+        mutation: CHIREL_NOTLOVE_MUTATION
+      })
+      chirel.value = response.data.notLoveChirel
+    } catch (err) {}
+  }
 
-	async function loveChirel() {
-		try {
-			const response = await apolloClient.mutate({
-				mutation: CHIREL_LOVE_MUTATION
-			});
-			chirel.value = response.data.loveChirel;
-		} catch (err) {}
-	}
+  async function loveChirel() {
+    try {
+      const response = await apolloClient.mutate({
+        mutation: CHIREL_LOVE_MUTATION
+      })
+      chirel.value = response.data.loveChirel
+    } catch (err) {}
+  }
 
   function getChirelData() {
-	return chirel.value;
+    return chirel.value
   }
 
   return {
     fetchChirelData,
-	notLoveChirel,
-	loveChirel,
-	getChirelData
+    notLoveChirel,
+    loveChirel,
+    getChirelData
   }
-});
+})

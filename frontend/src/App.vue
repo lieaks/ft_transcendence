@@ -4,15 +4,13 @@ import Header from './components/Header.vue'
 </script>
 
 <template>
-	<Header />
-	<RouterView />
+  <Header />
+  <RouterView />
 </template>
 
 <style>
-
 /* To debug */
 /* * {
 	border: 1px solid red;
 } */
-
 </style>

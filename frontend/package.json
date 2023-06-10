@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@vue/apollo-composable": "^4.0.0-beta.5",
+    "graphql-scalars": "^1.22.2",
     "pinia": "^2.0.36",
     "socket.io-client": "^4.6.2",
     "vue": "^3.3.2",

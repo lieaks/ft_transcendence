@@ -1,13 +1,22 @@
+import { GraphQLByte } from 'graphql-scalars'
+import { useQuery } from '@vue/apollo-composable'
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
 export const useUserStore = defineStore('user', () => {
-  const user = ref({ name: 'Norminet BG' })
+	const id = '';
+	const jwtToken = ''
+	const name = ref('name')
+	const avatar = ref<GraphQLByte>('')
 
-  return {
-    user: computed(() => user.value),
-    setName(name: string) {
-      user.value.name = name
-    }
+	async function setName(newName: string) {
+		// gpl mutate back
+		name.value = newName
   }
-})   
+	async function setAvatar(newAvatar: typeof GraphQLByte) { // blob, buffer ?
+		// gpl mutate back
+		avatar.value = newAvatar
+	}
+
+	return { id, jwtToken, name, avatar, setName, setAvatar }
+})

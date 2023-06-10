@@ -9,23 +9,19 @@ import App from './App.vue'
 import router from './router'
 
 const httpLink = createHttpLink({
-	uri: 'http://localhost:3000/graphql',
-})
-
-const cache = new InMemoryCache({
-	addTypename: false,
+  uri: 'http://localhost:3000/graphql'
 })
 
 export const apolloClient = new ApolloClient({
-	link: httpLink,
-	cache,
+  link: httpLink,
+  cache: new InMemoryCache()
 })
 
 const app = createApp({
-	setup() {
-		provide(DefaultApolloClient, apolloClient)
-	},
-	render: () => h(App)
+  setup() {
+    provide(DefaultApolloClient, apolloClient)
+  },
+  render: () => h(App)
 })
 
 app.use(router).use(createPinia()).mount('#app')
