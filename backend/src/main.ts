@@ -5,6 +5,7 @@ import * as passport from 'passport';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.enableCors();
   if (
     !process.env.FORTYTWO_CLIENT_ID ||
     !process.env.FORTYTWO_CLIENT_SECRET ||
