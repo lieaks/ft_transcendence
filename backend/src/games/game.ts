@@ -31,7 +31,7 @@ export class Game {
 			data: {
 				id: this.id,
 				players: {
-				connect: this.players.map((p) => ({ id: p.id })),
+					connect: this.players.map((p) => ({ id: p.id })),
 				},
 				createdAt: this.createdAt,
 				winner: null,
