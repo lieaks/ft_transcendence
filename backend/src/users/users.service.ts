@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { IUser } from '../interfaces/user.interface';
 import { User } from './user';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { Interval } from '@nestjs/schedule';
 
 @Injectable()
 export class UsersService {
@@ -43,8 +44,20 @@ export class UsersService {
       this.addUser(user);
     }
   }
+
   removeTwoFactor(id: string) {
     const user = this.getUser(id);
     if (user) user.twoFactorNeeded = false;
+  }
+
+  @Interval(3000)
+  printUsers() {
+    console.log('Users: ');
+    console.log(
+      this.users.map((u) => ({
+        id: u.id,
+        name: u.name,
+      })),
+    );
   }
 }
