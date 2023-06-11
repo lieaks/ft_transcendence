@@ -106,18 +106,11 @@ export class UsersResolver {
       secret: twoFactorSecret,
       encoding: 'base32',
     });
-    console.log('totpCode', totpCode);
-    // if (token != totpCode) return false;
-    console.log('id', id);
-    console.log(
-      'twoFactorNeeded before:',
-      this.UsersService.getUser(id)?.twoFactorNeeded,
-    );
+		if (token != totpCode) {
+			console.log('totpCode', totpCode);
+			return false;
+		}
     this.UsersService.removeTwoFactor(id);
-    console.log(
-      'twoFactorNeeded after:',
-      this.UsersService.getUser(id)?.twoFactorNeeded,
-    );
     return true;
   }
 
