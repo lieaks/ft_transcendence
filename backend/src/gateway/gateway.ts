@@ -39,12 +39,13 @@ export class MyGateway implements OnModuleInit {
 
 	// addUser function, to add a new user to the users array in the UsersService, take id as parameter
 	@SubscribeMessage('login')
-	onLogin(@MessageBody() body: any) {
+	onLogin(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
 		const { jwtToken } = body;
 		try {
 			const payload = this.JwtService.verify(jwtToken);
 			const user = new User(this.UsersService.prismaService, payload.sub);
 			this.UsersService.addUser(user);
+			this.UsersService.setSocket(payload.sub, client);
 		} catch (error) {
 			console.error('onAddUser:', error);
 		}
