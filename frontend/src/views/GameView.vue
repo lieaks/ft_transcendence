@@ -5,10 +5,10 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { Game } from '@/elements/Game.js'
-import { io } from 'socket.io-client'
+import { useUserStore } from '@/stores/userStore';
 
 const pongCanvas = ref<HTMLCanvasElement | null>(null)
-const socket = io('http://localhost:3000')
+const userStore = useUserStore()
 
 onMounted(() => {
   const canvas = pongCanvas.value
@@ -19,16 +19,16 @@ onMounted(() => {
   window.addEventListener('keydown', (event) => {
     switch (event.key) {
       case 'w':
-        socket.emit('movePaddle', { direction: 'up' })
+		userStore.socket?.emit('movePaddle', { direction: 'up' })
         break
 
       case 's':
-        socket.emit('movePaddle', { direction: 'down' })
+		userStore.socket?.emit('movePaddle', { direction: 'down' })
         break
     }
   })
 
-  socket.on('movePaddle', (data) => {
+  userStore.socket?.on('movePaddle', (data) => {
     console.log(data)
     if (data.player === 'left') {
       game.updateLeftPaddlePosition(data.direction)

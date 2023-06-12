@@ -49,12 +49,12 @@ export class MyGateway implements OnModuleInit {
 		let player = '';
 
 		if (this.connectedSockets.get(client) === 1) {
-		player = 'left';
+			player = 'left';
 		} else if (this.connectedSockets.get(client) === 2) {
-		player = 'right';
+			player = 'right';
 		}
 		if (player === '') {
-		return;
+			return;
 		}
 		console.log(
 		'Message received from movePaddle: player: ' +

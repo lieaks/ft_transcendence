@@ -9,8 +9,6 @@ export const useUserStore = defineStore('user', () => {
 	const avatar = ref('');
 	const socket = ref<Socket>();
 
-	socket.value = io('http://localhost:3000');
-
 	async function setName(newName: string) {
 		// gpl mutate back
 		name.value = newName;
