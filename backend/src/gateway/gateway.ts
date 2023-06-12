@@ -41,11 +41,10 @@ export class MyGateway implements OnModuleInit {
 	@SubscribeMessage('login')
 	onLogin(@MessageBody() body: any) {
 		const { jwtToken } = body;
-		console.log('Message received from login: jwtToken: ' + jwtToken);
 		try {
-			const user = this.JwtService.verify(jwtToken);
-			console.log('user:', user);
-			// this.UsersService.addUser(user);
+			const payload = this.JwtService.verify(jwtToken);
+			const user = new User(this.UsersService.prismaService, payload.sub);
+			this.UsersService.addUser(user);
 		} catch (error) {
 			console.error('onAddUser:', error);
 		}
