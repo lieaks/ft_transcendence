@@ -6,14 +6,17 @@ WebSocketGateway,
 WebSocketServer,
 ConnectedSocket,
 } from '@nestjs/websockets';
+
 import { Server, Socket } from 'socket.io';
 import { UsersService } from 'src/users/users.service';
 import { User } from 'src/users/user';
+import { JwtService } from '@nestjs/jwt';
 
 @WebSocketGateway({ cors: true })
 export class MyGateway implements OnModuleInit {
 	constructor(
 		private readonly UsersService: UsersService,
+		private readonly JwtService: JwtService,
 	) {}
 
 	@WebSocketServer()
@@ -36,11 +39,16 @@ export class MyGateway implements OnModuleInit {
 
 	// addUser function, to add a new user to the users array in the UsersService, take id as parameter
 	@SubscribeMessage('login')
-	onAddUser(@MessageBody() body: any) {
-		const { id } = body;
-		let user = new User(this.UsersService.prismaService, id);
-		console.log('Message received from addUser: id: ' + id);
-		this.UsersService.addUser(user);
+	onLogin(@MessageBody() body: any) {
+		const { jwtToken } = body;
+		console.log('Message received from login: jwtToken: ' + jwtToken);
+		try {
+			const user = this.JwtService.verify(jwtToken);
+			console.log('user:', user);
+			// this.UsersService.addUser(user);
+		} catch (error) {
+			console.error('onAddUser:', error);
+		}
 	}
 
 	@SubscribeMessage('movePaddle')

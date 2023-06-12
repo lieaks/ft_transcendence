@@ -25,7 +25,7 @@ if (Array.isArray(route.query.id)) {
 }
 user.socket = io('http://localhost:3000');
 user.socket.on('connect', () => {
-	user.socket?.emit('login', { id: user.id });
+	user.socket?.emit('login', { jwtToken: user.jwtToken });
 });
 </script>
 
