@@ -35,7 +35,7 @@ export class MyGateway implements OnModuleInit {
 	}
 
 	// addUser function, to add a new user to the users array in the UsersService, take id as parameter
-	@SubscribeMessage('addUser')
+	@SubscribeMessage('login')
 	onAddUser(@MessageBody() body: any) {
 		const { id } = body;
 		let user = new User(this.UsersService.prismaService, id);
