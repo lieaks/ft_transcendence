@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router';
 import { useUserStore } from '@/stores/userStore';
+import { io } from 'socket.io-client';
 
 const route = useRoute();
 const user = useUserStore()
@@ -22,6 +23,7 @@ if (Array.isArray(route.query.id)) {
 } else {
 	user.name = route.query.id || '';
 }
+// user.socket = io('http://localhost:3000');
 </script>
 
 <template>

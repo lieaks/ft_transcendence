@@ -6,7 +6,7 @@ import { Interval } from '@nestjs/schedule';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(public readonly prismaService: PrismaService) {}
 
   private users: IUser[] = [];
 
