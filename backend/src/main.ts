@@ -10,7 +10,8 @@ async function bootstrap() {
     !process.env.FORTYTWO_CLIENT_ID ||
     !process.env.FORTYTWO_CLIENT_SECRET ||
     !process.env.FORTYTWO_CALLBACK_URL ||
-    !process.env.JWT_SECRET
+    !process.env.JWT_SECRET ||
+		!process.env.FRONT_URL
   ) {
     return console.error('Missing environment variables!');
   }

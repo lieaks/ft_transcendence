@@ -14,7 +14,8 @@ export class AuthController {
   async fortyTwoAuthCallback(@Req() req: IRequestOauthUser, @Res() res: Response) {
     try {
       const user = req.user;
-			return res.redirect(`/auth/callback?jwtToken=${user.jwtToken}&id=${user.id}&twoFactorAuth=${user.twoFactorAuth}`);
+			// console.log('hostname:', req.hostname);
+			return res.redirect(`${process.env.FRONT_URL}/auth/callback?jwtToken=${user.jwtToken}&id=${user.id}&twoFactorAuth=${user.twoFactorAuth}`);
     } catch (error) {
       console.error('auth.controller.ts/42:', error);
       throw new HttpException('Internal Server Error', 500);
@@ -30,7 +31,7 @@ export class AuthController {
 	async googleAuthCallback(@Req() req: IRequestOauthUser, @Res() res: Response) {
     try {
       const user = req.user;
-			return res.redirect(`/auth/callback?jwtToken=${user.jwtToken}&id=${user.id}&twoFactorAuth=${user.twoFactorAuth}`);
+			return res.redirect(`${process.env.FRONT_URL}/auth/callback?jwtToken=${user.jwtToken}&id=${user.id}&twoFactorAuth=${user.twoFactorAuth}`);
     } catch (error) {
       console.error('auth.controller.ts/google:', error);
       throw new HttpException('Internal Server Error', 500);
