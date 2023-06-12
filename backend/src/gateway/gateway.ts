@@ -11,12 +11,14 @@ import { Server, Socket } from 'socket.io';
 import { UsersService } from 'src/users/users.service';
 import { User } from 'src/users/user';
 import { JwtService } from '@nestjs/jwt';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @WebSocketGateway({ cors: true })
 export class MyGateway implements OnModuleInit {
 	constructor(
 		private readonly UsersService: UsersService,
 		private readonly JwtService: JwtService,
+		private readonly prismaService: PrismaService,
 	) {}
 
 	@WebSocketServer()
@@ -43,7 +45,7 @@ export class MyGateway implements OnModuleInit {
 		const { jwtToken } = body;
 		try {
 			const payload = this.JwtService.verify(jwtToken);
-			const user = new User(this.UsersService.prismaService, payload.sub);
+			const user = new User(this.prismaService, payload.sub);
 			this.UsersService.addUser(user);
 			this.UsersService.setSocket(payload.sub, client);
 		} catch (error) {
