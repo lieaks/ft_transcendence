@@ -18,6 +18,8 @@ const user = useUserStore()
 
   </div>
 	<input type="text" placeholder="user's name" v-model="user.name" class="input input-bordered m-4">
+	<button class="btn m-4 btn-primary" onclick="window.location.href='http://localhost:3000/auth/42'">login 42</button>
+	<button class="btn m-4 btn-primary" onclick="window.location.href='http://localhost:3000/auth/google'">login google</button>
 </template>
 
 <style scoped>
