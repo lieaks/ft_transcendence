@@ -35,8 +35,8 @@ export class Game implements IGame {
 					connect: this.players.map((p) => ({ id: p.id })),
 				},
 				createdAt: this.createdAt,
-				winner: null,
-				loser: null,
+				winner: undefined,
+				loser: undefined,
 			},
 		});
 		console.log(`Game ${this.id} created`);
