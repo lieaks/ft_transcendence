@@ -59,15 +59,15 @@ export class UsersService {
 	if (user) user.socket = socket;
   }
 
-  @Interval(3000)
-  printUsers() {
-    console.log('Users: ');
-    console.log(
-      this.users.map((u) => ({
-        id: u.id,
-        name: u.name,
-		socket: u.socket,
-      })),
-    );
-  }
+//   @Interval(3000)
+//   printUsers() {
+//     console.log('Users: ');
+//     console.log(
+//       this.users.map((u) => ({
+//         id: u.id,
+//         name: u.name,
+// 		socket: u.socket,
+//       })),
+//     );
+//   }
 }
