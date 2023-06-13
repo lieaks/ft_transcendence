@@ -30,7 +30,7 @@ export class UsersService {
   }
 
   removeUserBySocket(socket: any) {
-	this.users = this.users.filter((u) => u.socket.id !== socket);
+	this.users = this.users.filter((u) => u.socket.id !== socket.id);
   }
 
   getUser(id: string) {

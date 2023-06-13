@@ -29,7 +29,7 @@ export class MyGateway implements OnModuleInit {
 	onModuleInit() {
 		this.server.on('connection', (socket) => {
 		socket.on('disconnect', () => {
-			this.usersService.removeUserBySocket(socket.id);
+			this.usersService.removeUserBySocket(socket);
 			this.connectedSockets.delete(socket);
 			console.log(
 			'disconnected from socket with id:' + this.connectedSockets.size,
