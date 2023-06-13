@@ -3,11 +3,13 @@ import { PrismaService } from "src/prisma/prisma.service";
 import { IGame, gameStatus } from "src/interfaces/game.interface";
 import { Game } from "./game";
 import { Interval } from "@nestjs/schedule";
+import { UsersService } from "src/users/users.service";
 
 @Injectable()
 export class GamesService {
 	constructor(
 		private readonly prismaService: PrismaService,
+		private readonly usersService: UsersService,
 	) {}
 
 	private games: IGame[] = [];
@@ -34,13 +36,8 @@ export class GamesService {
 	}
 
 	// Interval, 1 time per 5 seconds
-	@Interval(5000)
-	async checkGames() {
-		// console.log("checking games");
-		for (const game of this.games) {
-			if (game.status === gameStatus.ENDED) {
-				this.removeGame(game.id);
-			}
-		}
-	}
+	// @Interval(1000)
+	// checkGames() {
+	// 	if (this.usersService.getUser)
+	// }
 }

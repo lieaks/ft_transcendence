@@ -16,7 +16,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 @WebSocketGateway({ cors: true })
 export class MyGateway implements OnModuleInit {
 	constructor(
-		private readonly UsersService: UsersService,
+		private readonly usersService: UsersService,
 		private readonly JwtService: JwtService,
 		private readonly prismaService: PrismaService,
 	) {}
@@ -29,6 +29,7 @@ export class MyGateway implements OnModuleInit {
 	onModuleInit() {
 		this.server.on('connection', (socket) => {
 		socket.on('disconnect', () => {
+			this.usersService.removeUserBySocket(socket.id);
 			this.connectedSockets.delete(socket);
 			console.log(
 			'disconnected from socket with id:' + this.connectedSockets.size,
@@ -39,15 +40,14 @@ export class MyGateway implements OnModuleInit {
 		});
 	}
 
-	// addUser function, to add a new user to the users array in the UsersService, take id as parameter
 	@SubscribeMessage('login')
 	onLogin(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
 		const { jwtToken } = body;
 		try {
 			const payload = this.JwtService.verify(jwtToken);
 			const user = new User(this.prismaService, payload.sub);
-			this.UsersService.addUser(user);
-			this.UsersService.setSocket(payload.sub, client);
+			this.usersService.addUser(user);
+			this.usersService.setSocket(payload.sub, client);
 		} catch (error) {
 			console.error('onAddUser:', error);
 		}

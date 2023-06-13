@@ -24,9 +24,15 @@ export class UsersService {
     );
     return user;
   }
+
   removeUser(id: string) {
     this.users = this.users.filter((u) => u.id !== id);
   }
+
+  removeUserBySocket(socket: any) {
+	this.users = this.users.filter((u) => u.socket.id !== socket);
+  }
+
   getUser(id: string) {
     console.log(
       'users stored: ',
@@ -59,12 +65,15 @@ export class UsersService {
 	if (user) user.socket = socket;
   }
 
-//   @Interval(3000)
-//   printUsers() {
-// 	for (const user of this.users) {
-// 		if (user.socket) {
-// 			user.socket.emit('movePaddle', { direction: 'down' })
-// 		}
-// 	}
-//   }
+  @Interval(3000)
+  printUsers() {
+    console.log('Users: ');
+    console.log(
+      this.users.map((u) => ({
+        id: u.id,
+        name: u.name,
+		socket: u.socket,
+      })),
+    );
+  }
 }
