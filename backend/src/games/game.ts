@@ -39,6 +39,7 @@ export class Game implements IGame {
 				loser: null,
 			},
 		});
+		console.log(`Game ${this.id} created`);
 	}
 
 	async finish(winner: IUser, loser: IUser): Promise<void> {

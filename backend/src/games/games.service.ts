@@ -41,8 +41,12 @@ export class GamesService {
 	checkGames() {
 		if (this.usersService.getUsers().length === 2) {
 			const game = new Game(this.prismaService, "test");
+			game.addPlayer(this.usersService.getUsers[0]);
+			game.addPlayer(this.usersService.getUsers[1]);
 			game.create();
 			this.addGame(game);
+		} else {
+			console.log("Waiting for players..." + this.usersService.getUsers().length);
 		}
 	}
 }
