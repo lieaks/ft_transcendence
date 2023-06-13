@@ -24,7 +24,7 @@ function redirectToOAuth(provider: string) {
   </div>
 	<input type="text" placeholder="user's name" v-model="user.name" class="input input-bordered m-4">
 	<button class="btn m-4 btn-primary" @click="redirectToOAuth('42')">login 42</button>
-	<button class="btn m-4 btn-primary" @click="redirectToOAuth('42')">login google</button>
+	<button class="btn m-4 btn-primary" @click="redirectToOAuth('google')">login google</button>
 </template>
 
 <style scoped>
