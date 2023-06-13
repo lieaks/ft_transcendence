@@ -41,6 +41,7 @@ import { GamesService } from './games/games.service';
     TestModule,
     GatewayModule,
     ScheduleModule.forRoot(),
+	GatewayModule,
   ],
   controllers: [HealthController],
   providers: [
@@ -50,7 +51,8 @@ import { GamesService } from './games/games.service';
     PrismaService,
     UsersService,
     GamesService,
+	GatewayModule,
   ],
-  exports: [UsersService, GamesService, PrismaService],
+  exports: [UsersService, GamesService, PrismaService, GatewayModule],
 })
 export class AppModule {}

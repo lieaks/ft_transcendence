@@ -1,12 +1,16 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 import { IGame, gameStatus } from "src/interfaces/game.interface";
 import { Game } from "./game";
 import { Interval } from "@nestjs/schedule";
+import { MyGateway } from "src/gateway/gateway";
 
 @Injectable()
 export class GamesService {
-	constructor(private readonly prismaService: PrismaService) {}
+	constructor(
+		private readonly prismaService: PrismaService,
+		@Inject(MyGateway) private readonly gateway: MyGateway
+	) {}
 
 	private games: IGame[] = [];
 
