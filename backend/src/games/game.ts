@@ -55,6 +55,7 @@ export class Game implements IGame {
 	}
 
 	emitToPlayers(event: string, data: any): void {
+		// console.log(`Emitting ${event} to players of game ${this.id}`);
 		for (const player of this.players) {
 			player.socket.emit(event, data);
 		}

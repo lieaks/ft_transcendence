@@ -25,6 +25,14 @@ export class GamesService {
 	addToQueue(user: IUser) {
 		if (this.queue.find((u) => u.id === user.id)) return;
 		this.queue.push(user);
+		if (this.queue.length >= 2) {
+			const game = new Game(this.prismaService, "test");
+			game.addPlayer(this.queue[0]);
+			game.addPlayer(this.queue[1]);
+			this.queue.splice(0, 2);
+			game.create();
+			this.addGame(game);
+		}
 	}
 
 	removeGame(id: string) {
@@ -46,15 +54,9 @@ export class GamesService {
 	// Interval, 1 time per 5 seconds
 	@Interval(3000)
 	checkGames() {
-		if (this.queue.length >= 2) {
-			const game = new Game(this.prismaService, "test");
-			game.addPlayer(this.queue[0]);
-			game.addPlayer(this.queue[1]);
-			this.queue.splice(0, 2);
-			game.create();
-			this.addGame(game);
-		} else {
-			console.log("Waiting for players..." + this.queue.length);
+		for (const game of this.games) {
+			// userStore.socket?.emit('movePaddle', { direction: 'up' })
+			game.emitToPlayers("movePaddle", { player: "left", direction: "up" });
 		}
 	}
 }

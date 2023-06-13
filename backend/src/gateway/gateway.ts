@@ -68,6 +68,7 @@ export class MyGateway implements OnModuleInit {
 		if (this.connectedSockets.get(client) === 1) {
 			player = 'left';
 		} else if (this.connectedSockets.get(client) === 2) {
+			console.log('right');
 			player = 'right';
 		}
 		if (player === '') {
