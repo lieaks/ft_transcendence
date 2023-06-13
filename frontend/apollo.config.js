@@ -2,7 +2,7 @@ module.exports = {
 	client: {
 		service: {
 			name: 'ft_transcendence',
-			url: 'http://localhost:3000/graphql',
+			url: import.meta.env.VITE_BACKEND_URL + '/graphql'
 		},
 		includes: [
 			'src/**/*.vue',

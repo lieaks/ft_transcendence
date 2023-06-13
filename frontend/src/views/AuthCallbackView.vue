@@ -23,7 +23,7 @@ if (Array.isArray(route.query.id)) {
 } else {
 	user.name = route.query.id || '';
 }
-user.socket = io('http://localhost:3000');
+user.socket = io(import.meta.env.VITE_BACKEND_URL);
 user.socket.on('connect', () => {
 	user.socket?.emit('login', { jwtToken: user.jwtToken });
 });

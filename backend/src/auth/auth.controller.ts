@@ -14,7 +14,6 @@ export class AuthController {
   async fortyTwoAuthCallback(@Req() req: IRequestOauthUser, @Res() res: Response) {
     try {
       const user = req.user;
-			// console.log('hostname:', req.hostname);
 			return res.redirect(`${process.env.FRONT_URL}/auth/callback?jwtToken=${user.jwtToken}&id=${user.id}&twoFactorAuth=${user.twoFactorAuth}`);
     } catch (error) {
       console.error('auth.controller.ts/42:', error);

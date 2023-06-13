@@ -4,7 +4,7 @@ import { io, Socket } from 'socket.io-client';
 
 export const useUserStore = defineStore('user', () => {
 	const id = '';
-	const jwtToken = '';
+	const jwtToken = ''; // should store it in localstorage
 	const name = ref('name');
 	const avatar = ref('');
 	const socket = ref<Socket>();

@@ -5,6 +5,11 @@ import { useUserStore } from '@/stores/userStore';
 const { fetchChirelData, notLoveChirel, loveChirel, getChirelData } = useTestStore()
 const user = useUserStore()
 
+function redirectToOAuth(provider: string) {
+	console.log('redirectToOAuth(42)')
+	window.location.href = `${import.meta.env.VITE_BACKEND_URL}/auth/${provider}`
+}
+
 </script>
 
 <template>
@@ -18,8 +23,8 @@ const user = useUserStore()
 
   </div>
 	<input type="text" placeholder="user's name" v-model="user.name" class="input input-bordered m-4">
-	<button class="btn m-4 btn-primary" onclick="window.location.href='http://localhost:3000/auth/42'">login 42</button>
-	<button class="btn m-4 btn-primary" onclick="window.location.href='http://localhost:3000/auth/google'">login google</button>
+	<button class="btn m-4 btn-primary" @click="redirectToOAuth('42')">login 42</button>
+	<button class="btn m-4 btn-primary" @click="redirectToOAuth('42')">login google</button>
 </template>
 
 <style scoped>
