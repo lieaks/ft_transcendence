@@ -51,8 +51,7 @@ import { GamesService } from './games/games.service';
     PrismaService,
     UsersService,
     GamesService,
-	GatewayModule,
   ],
-  exports: [UsersService, GamesService, PrismaService, GatewayModule],
+  exports: [UsersService, GamesService, PrismaService],
 })
 export class AppModule {}

@@ -61,13 +61,10 @@ export class UsersService {
 
 //   @Interval(3000)
 //   printUsers() {
-//     console.log('Users: ');
-//     console.log(
-//       this.users.map((u) => ({
-//         id: u.id,
-//         name: u.name,
-// 		socket: u.socket,
-//       })),
-//     );
+// 	for (const user of this.users) {
+// 		if (user.socket) {
+// 			user.socket.emit('movePaddle', { direction: 'down' })
+// 		}
+// 	}
 //   }
 }
