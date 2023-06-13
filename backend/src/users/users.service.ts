@@ -41,6 +41,10 @@ export class UsersService {
     return this.users.find((u) => u.id === id);
   }
 
+  getUserBySocketId(id: string) {
+	return this.users.find((u) => u.socket.id === id);
+  }
+
   getUsers() {
 	return this.users;
   }

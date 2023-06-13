@@ -23,6 +23,7 @@ export class GamesService {
 	}
 
 	addToQueue(user: IUser) {
+		if (this.queue.find((u) => u.id === user.id)) return;
 		this.queue.push(user);
 	}
 
@@ -53,7 +54,7 @@ export class GamesService {
 			game.create();
 			this.addGame(game);
 		} else {
-			console.log("Waiting for players..." + this.usersService.getUsers().length);
+			console.log("Waiting for players..." + this.queue.length);
 		}
 	}
 }

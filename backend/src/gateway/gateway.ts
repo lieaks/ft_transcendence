@@ -12,11 +12,13 @@ import { UsersService } from 'src/users/users.service';
 import { User } from 'src/users/user';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { GamesService } from 'src/games/games.service';
 
 @WebSocketGateway({ cors: true })
 export class MyGateway implements OnModuleInit {
 	constructor(
 		private readonly usersService: UsersService,
+		private readonly gamesService: GamesService,
 		private readonly JwtService: JwtService,
 		private readonly prismaService: PrismaService,
 	) {}
@@ -51,6 +53,11 @@ export class MyGateway implements OnModuleInit {
 		} catch (error) {
 			console.error('onAddUser:', error);
 		}
+	}
+
+	@SubscribeMessage('joinQueue')
+	onJoinQueue(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
+		this.gamesService.addToQueue(this.usersService.getUserBySocketId(client.id));
 	}
 
 	@SubscribeMessage('movePaddle')
