@@ -1,4 +1,5 @@
-import { User } from '../users/user';
+// import { User } from '../users/user';
+import { IUser } from "./user.interface";
 
 export enum gameStatus {
 	WAITING,
@@ -9,11 +10,11 @@ export enum gameStatus {
 export interface IGame {
 	id: string;
 	status: gameStatus;
-	players: User[];
+	players: IUser[];
 	createdAt: Date;
 
-	addPlayer(player: User): void;
-	removePlayer(player: User): void;
+	addPlayer(player: IUser): void;
+	removePlayer(player: IUser): void;
 	create(): Promise<void>;
-	finish(winner: User, loser: User): Promise<void>;
+	finish(winner: IUser, loser: IUser): Promise<void>;
 }

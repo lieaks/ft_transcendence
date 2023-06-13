@@ -1,11 +1,12 @@
 import { IGame, gameStatus } from "../interfaces/game.interface";
 import { PrismaService } from "../prisma/prisma.service";
 import { User } from "../users/user";
+import { IUser } from "../interfaces/user.interface";
 
 export class Game implements IGame {
 	id: string;
 	status: gameStatus;
-	players: User[];
+	players: IUser[];
 	createdAt: Date;
 
 	constructor(
@@ -18,11 +19,11 @@ export class Game implements IGame {
 		this.createdAt = new Date();
 	}
 
-	addPlayer(player: User): void {
+	addPlayer(player: IUser): void {
 		this.players.push(player);
 	}
 
-	removePlayer(player: User): void {
+	removePlayer(player: IUser): void {
 		this.players = this.players.filter((p) => p.id !== player.id);
 	}
 
@@ -40,7 +41,7 @@ export class Game implements IGame {
 		});
 	}
 
-	async finish(winner: User, loser: User): Promise<void> {
+	async finish(winner: IUser, loser: IUser): Promise<void> {
 		this.status = gameStatus.ENDED;
 		await this.prismaService.game.update({
 			where: { id: this.id },

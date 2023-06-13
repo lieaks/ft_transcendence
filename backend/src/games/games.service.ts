@@ -30,6 +30,7 @@ export class GamesService {
 
 	async createGame(id: string): Promise<IGame> {
 		const game = new Game(this.prismaService, id);
+		game.addPlayer(this.usersService.getUser(id));
 		await game.create();
 		this.addGame(game);
 		return game;
@@ -38,6 +39,10 @@ export class GamesService {
 	// Interval, 1 time per 5 seconds
 	@Interval(1000)
 	checkGames() {
-		if (this.usersService.getUser)
+		if (this.usersService.getUsers().length === 2) {
+			const game = new Game(this.prismaService, "test");
+			game.create();
+			this.addGame(game);
+		}
 	}
 }
