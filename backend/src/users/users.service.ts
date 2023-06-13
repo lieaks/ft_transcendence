@@ -40,6 +40,11 @@ export class UsersService {
     );
     return this.users.find((u) => u.id === id);
   }
+
+  getUsers() {
+	return this.users;
+  }
+
   requireTwoFactor(id: string) {
     let user = this.getUser(id);
     if (user) user.twoFactorNeeded = true;

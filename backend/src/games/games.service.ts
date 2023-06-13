@@ -36,8 +36,8 @@ export class GamesService {
 	}
 
 	// Interval, 1 time per 5 seconds
-	// @Interval(1000)
-	// checkGames() {
-	// 	if (this.usersService.getUser)
-	// }
+	@Interval(1000)
+	checkGames() {
+		if (this.usersService.getUser)
+	}
 }
