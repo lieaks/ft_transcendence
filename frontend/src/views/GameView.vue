@@ -25,6 +25,14 @@ onMounted(() => {
       case 's':
 		userStore.socket?.emit('movePaddle', { direction: 'down' })
         break
+
+	  case 'q':
+		userStore.socket?.emit('joinQueue', {})
+		console.log('join queue')
+		break
+
+	  default:
+		break
     }
   })
 
