@@ -1,9 +1,10 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
-import { IGame, gameStatus } from "src/interfaces/game.interface";
+import { IGame } from "src/interfaces/game.interface";
 import { Game } from "./game";
 import { Interval } from "@nestjs/schedule";
 import { UsersService } from "src/users/users.service";
+import { IUser } from "src/interfaces/user.interface";
 
 @Injectable()
 export class GamesService {
@@ -13,11 +14,16 @@ export class GamesService {
 	) {}
 
 	private games: IGame[] = [];
+	private queue: IUser[] = [];
 
 	addGame(game: IGame) {
 		if (this.getGame(game.id)) return;
 		this.games.push(game);
 		return game;
+	}
+
+	addToQueue(user: IUser) {
+		this.queue.push(user);
 	}
 
 	removeGame(id: string) {
@@ -39,10 +45,11 @@ export class GamesService {
 	// Interval, 1 time per 5 seconds
 	@Interval(3000)
 	checkGames() {
-		if (this.usersService.getUsers().length === 2) {
+		if (this.queue.length >= 2) {
 			const game = new Game(this.prismaService, "test");
-			game.addPlayer(this.usersService.getUsers()[0]);
-			game.addPlayer(this.usersService.getUsers()[1]);
+			game.addPlayer(this.queue[0]);
+			game.addPlayer(this.queue[1]);
+			this.queue.splice(0, 2);
 			game.create();
 			this.addGame(game);
 		} else {
