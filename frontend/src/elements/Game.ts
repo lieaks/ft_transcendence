@@ -64,8 +64,6 @@ export class Game {
   updateScore(data: any) {
 	this.rightScore.score = data.right
 	this.leftScore.score = data.left
-	this.rightScore.draw(this.context)
-	this.leftScore.draw(this.context)
   }
 
   updateBallPosition(data: any) {

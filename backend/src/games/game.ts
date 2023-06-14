@@ -92,7 +92,23 @@ export class Game implements IGame {
 			this.score.right++;
 		else if (this.ball.x > this.canvas.width - this.ball.radius)
 			this.score.left++;
-		this.emitToPlayers("updateScore", { left: this.score.left, right: this.score.right });
+		if (this.ball.x < this.ball.radius || this.ball.x > this.canvas.width - this.ball.radius) {
+			this.reset();
+			this.emitToPlayers("updateScore", { left: this.score.left, right: this.score.right });
+		}
+	}
+
+	reset(): void {
+		this.ball.x = this.canvas.width / 2;
+		this.ball.y = this.canvas.height / 2;
+		this.ball.dx = 5;
+		this.ball.dy = 5;
+		this.leftPaddle.y = this.canvas.height / 2 - this.leftPaddle.height / 2;
+		this.rightPaddle.y = this.canvas.height / 2 - this.rightPaddle.height / 2;
+		this.emitToPlayers("updatePaddlePosition", { player: "left", y: this.leftPaddle.y });
+		this.emitToPlayers("updatePaddlePosition", { player: "right", y: this.rightPaddle.y });
+		this.emitToPlayers("updateBallPosition", { x: this.ball.x, y: this.ball.y });
+		
 	}
 
 	movePaddle(player: IUser, direction: string): void {

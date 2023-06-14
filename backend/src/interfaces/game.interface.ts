@@ -17,6 +17,7 @@ export interface IGame {
 	addPlayer(player: IUser): void;
 	update(): void;
 	updateScore(): void;
+	reset(): void;
 	removePlayer(player: IUser): void;
 	create(): Promise<void>;
 	finish(winner: IUser, loser: IUser): Promise<void>;
