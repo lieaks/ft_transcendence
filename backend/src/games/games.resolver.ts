@@ -5,9 +5,9 @@ import { GamesService } from './games.service';
 
 @Resolver('Game')
 export class GamesResolver {
-  constructor (
-    private readonly PrismaService: PrismaService, 
-    private readonly gamesService: GamesService
+  constructor(
+    private readonly PrismaService: PrismaService,
+    private readonly gamesService: GamesService,
   ) {}
 
   @Query(() => String)

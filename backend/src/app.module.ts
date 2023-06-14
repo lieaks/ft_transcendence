@@ -3,21 +3,15 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { ByteResolver, DateTimeResolver } from 'graphql-scalars';
-import { ScheduleModule } from '@nestjs/schedule'
+import { ScheduleModule } from '@nestjs/schedule';
 import { join } from 'path';
-import { UsersResolver } from './users/users.resolver';
-import { GamesResolver } from './games/games.resolver';
 import { HealthController } from './health/health.controller';
-import { PrismaService } from './prisma/prisma.service';
 import { UsersModule } from './users/users.module';
 import { GamesModule } from './games/games.module';
 import { AuthModule } from './auth/auth.module';
-import { UsersService } from './users/users.service';
-
-import { TestModule } from './tests/test.module';
-
 import { GatewayModule } from './gateway/gateway.module';
-import { GamesService } from './games/games.service';
+import { TestModule } from './tests/test.module';
+import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
   imports: [
@@ -41,17 +35,10 @@ import { GamesService } from './games/games.service';
     TestModule,
     GatewayModule,
     ScheduleModule.forRoot(),
-	GatewayModule,
+    GatewayModule,
+    PrismaModule,
   ],
   controllers: [HealthController],
-  providers: [
-    UsersResolver,
-    GamesResolver,
-    TestModule,
-    PrismaService,
-    UsersService,
-    GamesService,
-  ],
-  exports: [UsersService, GamesService, PrismaService],
+  providers: [TestModule],
 })
 export class AppModule {}

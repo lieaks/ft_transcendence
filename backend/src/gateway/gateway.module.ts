@@ -1,15 +1,11 @@
-import { Module, forwardRef } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { MyGateway } from './gateway';
-import { AppModule } from 'src/app.module';
-import { JwtModule } from '@nestjs/jwt';
+import { AuthModule } from 'src/auth/auth.module';
+import { UsersModule } from 'src/users/users.module';
+import { GamesModule } from 'src/games/games.module';
+import { PrismaModule } from 'src/prisma/prisma.module';
 @Module({
-	imports: [
-		forwardRef(() => AppModule),
-		JwtModule.register({
-			secret: process.env.JWT_SECRET,
-			signOptions: { expiresIn: '1d' },
-		}),
-	],
-	providers: [MyGateway],
+  imports: [AuthModule, UsersModule, GamesModule, PrismaModule],
+  providers: [MyGateway],
 })
 export class GatewayModule {}

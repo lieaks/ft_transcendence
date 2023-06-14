@@ -18,7 +18,7 @@ export class User implements IUser {
     this.twoFactorNeeded = false;
     this.status = userStatus.OFFLINE;
     this.socket = null;
-		this.name = name;
+    this.name = name;
   }
 
   async addExperience(exp: number): Promise<number> {

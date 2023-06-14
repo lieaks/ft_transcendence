@@ -106,10 +106,10 @@ export class UsersResolver {
       secret: twoFactorSecret,
       encoding: 'base32',
     });
-		if (token != totpCode) {
-			console.log('totpCode', totpCode);
-			return false;
-		}
+    if (token != totpCode) {
+      console.log('totpCode', totpCode);
+      return false;
+    }
     this.UsersService.removeTwoFactor(id);
     return true;
   }

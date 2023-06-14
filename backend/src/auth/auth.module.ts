@@ -1,4 +1,4 @@
-import { Module, forwardRef } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { AuthController } from './auth.controller';
 import { FortyTwoStrategy } from './forty-two.strategy';
@@ -6,7 +6,8 @@ import { GoogleStrategy } from './google.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import { AuthService } from './auth.service';
-import { AppModule } from 'src/app.module';
+import { UsersModule } from 'src/users/users.module';
+import { PrismaModule } from 'src/prisma/prisma.module';
 
 @Module({
   imports: [
@@ -15,9 +16,11 @@ import { AppModule } from 'src/app.module';
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '1d' },
     }),
-    forwardRef(() => AppModule),
+    PrismaModule,
+    UsersModule,
   ],
   controllers: [AuthController],
   providers: [JwtStrategy, FortyTwoStrategy, GoogleStrategy, AuthService],
+  exports: [AuthService, JwtModule],
 })
 export class AuthModule {}

@@ -16,11 +16,11 @@ export class UsersService {
     this.users.push(user);
     console.log(
       'users stored: ',
-	  this.users.map((u) => ({
-		id: u.id,
-		name: u.name,
-		socket: u.socket,
-	  })),
+      this.users.map((u) => ({
+        id: u.id,
+        name: u.name,
+        socket: u.socket,
+      })),
     );
     return user;
   }
@@ -30,7 +30,7 @@ export class UsersService {
   }
 
   removeUserBySocket(socket: any) {
-	this.users = this.users.filter((u) => u.socket.id !== socket.id);
+    this.users = this.users.filter((u) => u.socket.id !== socket.id);
   }
 
   getUser(id: string) {
@@ -42,11 +42,11 @@ export class UsersService {
   }
 
   getUserBySocketId(id: string) {
-	return this.users.find((u) => u.socket.id === id);
+    return this.users.find((u) => u.socket.id === id);
   }
 
   getUsers() {
-	return this.users;
+    return this.users;
   }
 
   requireTwoFactor(id: string) {
@@ -70,19 +70,19 @@ export class UsersService {
   }
 
   setSocket(id: string, socket: any) {
-	const user = this.getUser(id);
-	if (user) user.socket = socket;
+    const user = this.getUser(id);
+    if (user) user.socket = socket;
   }
 
-//   @Interval(3000)
-//   printUsers() {
-//     console.log('Users: ');
-//     console.log(
-//       this.users.map((u) => ({
-//         id: u.id,
-//         name: u.name,
-// 		socket: u.socket,
-//       })),
-//     );
-//   }
+  //   @Interval(3000)
+  //   printUsers() {
+  //     console.log('Users: ');
+  //     console.log(
+  //       this.users.map((u) => ({
+  //         id: u.id,
+  //         name: u.name,
+  // 		socket: u.socket,
+  //       })),
+  //     );
+  //   }
 }
