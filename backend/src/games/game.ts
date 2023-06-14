@@ -11,9 +11,7 @@ export class Game implements IGame {
 
 	constructor(
 		private readonly prismaService: PrismaService,
-		id: string,
 	) {
-		this.id = id;
 		this.status = gameStatus.WAITING;
 		this.players = [];
 		this.createdAt = new Date();
@@ -28,7 +26,7 @@ export class Game implements IGame {
 	}
 
 	async create(): Promise<void> {
-		await this.prismaService.game.create({
+		const game = await this.prismaService.game.create({
 			data: {
 				id: this.id,
 				players: {
@@ -39,6 +37,7 @@ export class Game implements IGame {
 				loser: undefined,
 			},
 		});
+		this.id = game.id;
 		console.log(`Game ${this.id} created`);
 	}
 

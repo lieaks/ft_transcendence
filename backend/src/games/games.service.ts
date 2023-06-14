@@ -25,8 +25,9 @@ export class GamesService {
 	addToQueue(user: IUser) {
 		if (this.queue.find((u) => u.id === user.id)) return;
 		this.queue.push(user);
+		console.log("Queue:", this.queue.length)
 		if (this.queue.length >= 2) {
-			const game = new Game(this.prismaService, "test");
+			const game = new Game(this.prismaService);
 			game.addPlayer(this.queue[0]);
 			game.addPlayer(this.queue[1]);
 			this.queue.splice(0, 2);
@@ -41,14 +42,6 @@ export class GamesService {
 
 	getGame(id: string) {
 		return this.games.find((g) => g.id === id);
-	}
-
-	async createGame(id: string): Promise<IGame> {
-		const game = new Game(this.prismaService, id);
-		game.addPlayer(this.usersService.getUser(id));
-		await game.create();
-		this.addGame(game);
-		return game;
 	}
 
 	// Interval, 1 time per 5 seconds
