@@ -14,14 +14,6 @@ export class UsersService {
     console.log('adding user: ', user.id);
     if (this.getUser(user.id)) return;
     this.users.push(user);
-    console.log(
-      'users stored: ',
-      this.users.map((u) => ({
-        id: u.id,
-        name: u.name,
-        socket: u.socket,
-      })),
-    );
     return user;
   }
 
@@ -34,11 +26,11 @@ export class UsersService {
   }
 
   getUser(id: string) {
-    console.log(
-      'users stored: ',
-      this.users.map((u) => u.id),
-    );
     return this.users.find((u) => u.id === id);
+  }
+
+  getUserByName(name: string) {
+    return this.users.find((u) => u.name === name);
   }
 
   getUserBySocketId(id: string) {
@@ -50,28 +42,18 @@ export class UsersService {
   }
 
   requireTwoFactor(id: string) {
-    let user = this.getUser(id);
-    if (user) user.twoFactorNeeded = true;
-    else {
-      console.log(
-        'user not found, creating new user to set two factor with id ',
-        id,
-      );
-      user = new User(this.prismaService, id);
-      console.log('user created: ', user.id);
-      user.twoFactorNeeded = true;
-      this.addUser(user);
-    }
+    const user = this.getUser(id);
+    user.twoFactorNeeded = true;
   }
 
   removeTwoFactor(id: string) {
     const user = this.getUser(id);
-    if (user) user.twoFactorNeeded = false;
+    user.twoFactorNeeded = false;
   }
 
   setSocket(id: string, socket: any) {
     const user = this.getUser(id);
-    if (user) user.socket = socket;
+    user.socket = socket;
   }
 
   //   @Interval(3000)

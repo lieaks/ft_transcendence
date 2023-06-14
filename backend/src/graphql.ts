@@ -8,6 +8,12 @@
 /* tslint:disable */
 /* eslint-disable */
 
+export enum Status {
+    OFFLINE = "OFFLINE",
+    ONLINE = "ONLINE",
+    INGAME = "INGAME"
+}
+
 export interface UpdateUserInput {
     name?: Nullable<string>;
     avatar?: Nullable<Byte>;
@@ -29,7 +35,7 @@ export interface Game {
 
 export interface IQuery {
     __typename?: 'IQuery';
-    games(): Game[] | Promise<Game[]>;
+    games(): Nullable<Game[]> | Promise<Nullable<Game[]>>;
     game(id: string): Game | Promise<Game>;
     getPlayersByGameId(id: string): User[] | Promise<User[]>;
     getCurrentGames(): Game[] | Promise<Game[]>;
@@ -61,6 +67,7 @@ export interface User {
     name: string;
     avatar: Byte;
     experience: number;
+    status?: Nullable<Status>;
     twoFactorNeeded?: Nullable<boolean>;
     createdAt: DateTime;
     gameHistory?: Nullable<Game[]>;

@@ -47,9 +47,9 @@ export class MyGateway implements OnModuleInit {
     const { jwtToken } = body;
     try {
       const payload = this.JwtService.verify(jwtToken);
-      const user = new User(this.prismaService, payload.sub);
+      const user = new User(this.prismaService, payload.id, payload.name);
+      user.socket = client;
       this.usersService.addUser(user);
-      this.usersService.setSocket(payload.sub, client);
     } catch (error) {
       console.error('onAddUser:', error);
     }

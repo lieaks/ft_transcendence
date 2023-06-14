@@ -1,11 +1,18 @@
 scalar Byte
 scalar DateTime
 
+enum Status {
+	OFFLINE
+	ONLINE
+	INGAME
+}
+
 type User {
 	id: String!
 	name: String!
 	avatar: Byte!
 	experience: Float!
+	status: Status
 	twoFactorNeeded: Boolean
 	createdAt: DateTime!
 	gameHistory: [Game!]
