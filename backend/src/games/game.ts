@@ -9,7 +9,7 @@ export class Game implements IGame {
 	players: IUser[];
 	createdAt: Date;
 	canvas: { width: number; height: number };
-	ball: { x: number; y: number; dx: number; dy: number };
+	ball: { x: number; y: number; radius: number; dx: number; dy: number };
 
 	constructor(
 		private readonly prismaService: PrismaService,
@@ -24,6 +24,7 @@ export class Game implements IGame {
 		this.ball = {
 			x: this.canvas.width / 2,
 			y: this.canvas.height / 2,
+			radius: 10,
 			dx: 5,
 			dy: 5,
 		};
@@ -66,16 +67,23 @@ export class Game implements IGame {
 	}
 
 	update(): void {
-		const nextX = this.ball.x + this.ball.dx;
-		const nextY = this.ball.y + this.ball.dy;
-		if (nextX < 0 || nextX > this.canvas.width) {
-			this.ball.dx = -this.ball.dx;
-		}
-		if (nextY < 0 || nextY > this.canvas.height) {
-			this.ball.dy = -this.ball.dy;
-		}
 		this.ball.x += this.ball.dx;
 		this.ball.y += this.ball.dy;
+	
+		if (this.ball.x < this.ball.radius) {
+			this.ball.x = this.ball.radius;
+			this.ball.dx = -this.ball.dx;
+		} else if (this.ball.x > this.canvas.width - this.ball.radius) {
+			this.ball.x = this.canvas.width - this.ball.radius;
+			this.ball.dx = -this.ball.dx;
+		}
+		if (this.ball.y < this.ball.radius) {
+			this.ball.y = this.ball.radius;
+			this.ball.dy = -this.ball.dy;
+		} else if (this.ball.y > this.canvas.height - this.ball.radius) {
+			this.ball.y = this.canvas.height - this.ball.radius;
+			this.ball.dy = -this.ball.dy;
+		}
 		this.emitToPlayers("updateBallPosition", { x: this.ball.x, y: this.ball.y});
 	}
 

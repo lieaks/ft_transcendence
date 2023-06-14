@@ -45,13 +45,13 @@ export class GamesService {
 	}
 
 	// Interval, 1 time per 5 seconds
-	@Interval(3000)
-	checkGames() {
-		for (const game of this.games) {
-			// userStore.socket?.emit('movePaddle', { direction: 'up' })
-			game.emitToPlayers("movePaddle", { player: "left", direction: "up" });
-		}
-	}
+	// @Interval(3000)
+	// checkGames() {
+	// 	for (const game of this.games) {
+	// 		// userStore.socket?.emit('movePaddle', { direction: 'up' })
+	// 		game.emitToPlayers("movePaddle", { player: "left", direction: "up" });
+	// 	}
+	// }
 
 	@Interval(1000/60)
 	updateGames() {
