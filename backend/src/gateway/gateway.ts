@@ -68,23 +68,5 @@ export class MyGateway implements OnModuleInit {
     let user = this.usersService.getUserBySocketId(client.id);
     if (!user) return;
     this.gamesService.getGames()[0].movePaddle(user, direction);
-    // let player = '';
-
-    // if (this.connectedSockets.get(client) === 1) {
-    // 	player = 'left';
-    // } else if (this.connectedSockets.get(client) === 2) {
-    // 	console.log('right');
-    // 	player = 'right';
-    // }
-    // if (player === '') {
-    // 	return;
-    // }
-    // console.log(
-    // 'Message received from movePaddle: player: ' +
-    // 	player +
-    // 	' direction: ' +
-    // 	direction,
-    // );
-    // this.server.emit('movePaddle', { player: player, direction: direction });
   }
 }
