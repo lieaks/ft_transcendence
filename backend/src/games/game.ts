@@ -103,7 +103,27 @@ export class Game implements IGame {
 	update(): void {
 		this.ball.x += this.ball.dx;
 		this.ball.y += this.ball.dy;
-	
+
+		// Check for collision with left paddle
+		if (
+			this.ball.x - this.ball.radius <= this.leftPaddle.x + this.leftPaddle.width &&
+			this.ball.y >= this.leftPaddle.y &&
+			this.ball.y <= this.leftPaddle.y + this.leftPaddle.height
+		) {
+			this.ball.dx = -this.ball.dx;
+			this.ball.x = this.leftPaddle.x + this.leftPaddle.width + this.ball.radius;
+		}
+
+		// Check for collision with right paddle
+		if (
+			this.ball.x + this.ball.radius >= this.rightPaddle.x &&
+			this.ball.y >= this.rightPaddle.y &&
+			this.ball.y <= this.rightPaddle.y + this.rightPaddle.height
+		) {
+			this.ball.dx = -this.ball.dx;
+			this.ball.x = this.rightPaddle.x - this.ball.radius;
+		}
+
 		if (this.ball.x < this.ball.radius) {
 			this.ball.x = this.ball.radius;
 			this.ball.dx = -this.ball.dx;
