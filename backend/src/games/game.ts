@@ -72,6 +72,7 @@ export class Game implements IGame {
 			},
 		});
 		this.id = game.id;
+		this.reset();
 		console.log(`Game ${this.id} created`);
 	}
 
