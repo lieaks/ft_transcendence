@@ -63,12 +63,10 @@ export class Game implements IGame {
   }
 
   addPlayer(player: IUser): void {
-		player.status = Status.INGAME;
     this.players.push(player);
   }
 
   removePlayer(player: IUser): void {
-		player.status = Status.ONLINE;
     this.players = this.players.filter((p) => p.id !== player.id);
   }
 
@@ -96,6 +94,7 @@ export class Game implements IGame {
 
   async finish(): Promise<void> {
     this.status = gameStatus.ENDED;
+		this.players.forEach((p) => p.status = Status.ONLINE);
     const winner =
       this.score.left > this.score.right ? this.players[0] : this.players[1];
     const loser =
@@ -113,6 +112,7 @@ export class Game implements IGame {
 
   startGame(): void {
     this.status = gameStatus.PLAYING;
+		this.players.forEach((p) => p.status = Status.INGAME);
     this.emitToPlayers('startGame', { id: this.id });
   }
 
