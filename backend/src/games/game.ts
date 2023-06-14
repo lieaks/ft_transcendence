@@ -73,6 +73,7 @@ export class Game implements IGame {
 		});
 		this.id = game.id;
 		this.reset();
+		this.emitToPlayers("updateScore", { left: this.score.left, right: this.score.right });
 		console.log(`Game ${this.id} created`);
 	}
 
