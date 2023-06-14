@@ -13,6 +13,7 @@ export class Game implements IGame {
 	leftPaddle: { x: number; y: number; width: number; height: number; speed: number };
 	rightPaddle: { x: number; y: number; width: number; height: number; speed: number };
 	score: { left: number; right: number };
+	scoreLimit: number;
 
 	constructor(
 		private readonly prismaService: PrismaService,
@@ -49,6 +50,7 @@ export class Game implements IGame {
 			left: 0,
 			right: 0,
 		};
+		this.scoreLimit = 5;
 	}
 
 	addPlayer(player: IUser): void {
@@ -77,8 +79,11 @@ export class Game implements IGame {
 		console.log(`Game ${this.id} created`);
 	}
 
-	async finish(winner: IUser, loser: IUser): Promise<void> {
+	async finish(): Promise<void> {
 		this.status = gameStatus.ENDED;
+		const winner = this.score.left > this.score.right ? this.players[0] : this.players[1];
+		const loser = this.score.left > this.score.right ? this.players[1] : this.players[0];
+
 		await this.prismaService.game.update({
 			where: { id: this.id },
 			data: {
@@ -101,6 +106,9 @@ export class Game implements IGame {
 			}
 			this.reset();
 			this.emitToPlayers("updateScore", { left: this.score.left, right: this.score.right });
+			if (this.score.left === this.scoreLimit || this.score.right === this.scoreLimit) {
+				this.finish();
+			}
 		}
 	}
 

@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
-import { IGame } from "src/interfaces/game.interface";
+import { IGame, gameStatus } from "src/interfaces/game.interface";
 import { Game } from "./game";
 import { Interval } from "@nestjs/schedule";
 import { UsersService } from "src/users/users.service";
@@ -61,6 +61,9 @@ export class GamesService {
 	updateGames() {
 		for (const game of this.games) {
 			game.update();
+			if (game.status === gameStatus.ENDED) {
+				this.removeGame(game.id);
+			}
 		}
 	}
 }

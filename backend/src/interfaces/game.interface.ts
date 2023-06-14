@@ -20,7 +20,7 @@ export interface IGame {
 	reset(): void;
 	removePlayer(player: IUser): void;
 	create(): Promise<void>;
-	finish(winner: IUser, loser: IUser): Promise<void>;
+	finish(): Promise<void>;
 	emitToPlayers(event: string, data: any): void;
 	movePaddle(player: IUser, direction: string): void;
 }
