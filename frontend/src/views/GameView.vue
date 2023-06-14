@@ -16,31 +16,31 @@ onMounted(() => {
 
   const game = new Game(canvas)
 
-  window.addEventListener('keydown', (event) => {
+  document.addEventListener('keydown', (event) => {
     switch (event.key) {
       case 'w':
-		userStore.socket?.emit('movePaddle', { direction: 'up', gameId: userStore.gameId })
+		    userStore.socket?.emit('movePaddle', { direction: 'up', gameId: userStore.gameId })
         break
 
-	  case 'o':
-		userStore.socket?.emit('movePaddle', { direction: 'up', gameId: userStore.gameId })
-        break
+	    case 'o':
+		  userStore.socket?.emit('movePaddle', { direction: 'up', gameId: userStore.gameId })
+          break
 
       case 's':
-		userStore.socket?.emit('movePaddle', { direction: 'down', gameId: userStore.gameId })
+		    userStore.socket?.emit('movePaddle', { direction: 'down', gameId: userStore.gameId })
         break
 
-	  case 'l':
-		userStore.socket?.emit('movePaddle', { direction: 'down', gameId: userStore.gameId })
+	    case 'l':
+		    userStore.socket?.emit('movePaddle', { direction: 'down', gameId: userStore.gameId })
         break
 
-	  case 'q':
-		userStore.socket?.emit('joinQueue', {})
-		console.log('join queue')
-		break
+	    case 'q':
+		    userStore.socket?.emit('joinQueue', {})
+		    console.log('join queue')
+		    break
 
-	  default:
-		break
+	    default:
+		    break
     }
   })
 
