@@ -104,6 +104,7 @@ export class Game implements IGame {
 		this.ball.x += this.ball.dx;
 		this.ball.y += this.ball.dy;
 
+		// Collision with left Paddle
 		if (
 			this.ball.x - this.ball.radius <= this.leftPaddle.x + this.leftPaddle.width &&
 			this.ball.y >= this.leftPaddle.y &&
@@ -113,13 +114,14 @@ export class Game implements IGame {
 			this.ball.x = this.leftPaddle.x + this.leftPaddle.width + this.ball.radius;
 		}
 
+		// Collision with right Paddle
 		if (
-			this.ball.x + this.ball.radius >= this.rightPaddle.x + this.rightPaddle.width &&
+			this.ball.x + this.ball.radius >= this.rightPaddle.x - this.rightPaddle.width &&
 			this.ball.y >= this.rightPaddle.y &&
 			this.ball.y <= this.rightPaddle.y + this.rightPaddle.height
 		) {
 			this.ball.dx = -this.ball.dx;
-			this.ball.x = this.rightPaddle.x - this.ball.radius;
+			this.ball.x = this.rightPaddle.x - this.rightPaddle.width - this.ball.radius;
 		}
 
 		if (this.ball.x < this.ball.radius) {
