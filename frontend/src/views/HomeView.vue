@@ -35,7 +35,7 @@ user.socket?.on('startGame', (data) => {
     <!-- <button @click="loveChirel">Love Chirel</button> -->
     <button @click="joinQueue">Join Queue</button>
     <!-- If the user.inQueue = True, print "In Queue" -->
-    <Matchmaking v-if="user.inQueue" />
+    <Matchmaking/>
   </div>
   <input
     type="text"

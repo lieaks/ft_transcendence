@@ -12,7 +12,7 @@
 <template>
   <div class="load text-info">
     <div class="loading loading-ball loading-lg"></div>
-    <div class="message">Looking for a game</div>
+    <div class="message text-2xl font-bold my-4">Looking for a game</div>
     <button class="btn btn-outline btn-error" @click="cancelQueue">Cancel</button>
   </div>
 </template>
@@ -24,12 +24,5 @@
   align-items: center;
   justify-content: center;
   height: 100%;
-}
-
-.message {
-  margin-top: 16px;
-  font-size: 24px;
-  font-weight: bold;
-  text-align: center;
 }
 </style>
