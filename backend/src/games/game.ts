@@ -8,6 +8,8 @@ export class Game implements IGame {
 	status: gameStatus;
 	players: IUser[];
 	createdAt: Date;
+	canvas: { width: number; height: number };
+	ball: { x: number; y: number; dx: number; dy: number };
 
 	constructor(
 		private readonly prismaService: PrismaService,
@@ -15,6 +17,16 @@ export class Game implements IGame {
 		this.status = gameStatus.WAITING;
 		this.players = [];
 		this.createdAt = new Date();
+		this.canvas = {
+			width: 1600,
+			height: 800,
+		};
+		this.ball = {
+			x: this.canvas.width / 2,
+			y: this.canvas.height / 2,
+			dx: 5,
+			dy: 5,
+		};
 	}
 
 	addPlayer(player: IUser): void {
@@ -51,6 +63,20 @@ export class Game implements IGame {
 				finishedAt: new Date(),
 			},
 		});
+	}
+
+	update(): void {
+		const nextX = this.ball.x + this.ball.dx;
+		const nextY = this.ball.y + this.ball.dy;
+		if (nextX < 0 || nextX > this.canvas.width) {
+			this.ball.dx = -this.ball.dx;
+		}
+		if (nextY < 0 || nextY > this.canvas.height) {
+			this.ball.dy = -this.ball.dy;
+		}
+		this.ball.x += this.ball.dx;
+		this.ball.y += this.ball.dy;
+		this.emitToPlayers("updateBallPosition", { x: this.ball.x, y: this.ball.y});
 	}
 
 	emitToPlayers(event: string, data: any): void {

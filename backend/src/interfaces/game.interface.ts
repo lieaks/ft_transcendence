@@ -12,8 +12,10 @@ export interface IGame {
 	status: gameStatus;
 	players: IUser[];
 	createdAt: Date;
+	ball: { x: number; y: number; dx: number; dy: number };
 
 	addPlayer(player: IUser): void;
+	update(): void;
 	removePlayer(player: IUser): void;
 	create(): Promise<void>;
 	finish(winner: IUser, loser: IUser): Promise<void>;

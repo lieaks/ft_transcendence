@@ -69,7 +69,7 @@ export class Game {
     this.leftPaddle.updateLeftPaddlePosition(key, this.canvas.height)
   }
 
-  updateBallPosition() {
-    this.ball.move(this.context, this.rightPaddle, this.leftPaddle, this.rightScore, this.leftScore)
+  updateBallPosition(data: any) {
+    this.ball.move(data, this.context)
   }
 }

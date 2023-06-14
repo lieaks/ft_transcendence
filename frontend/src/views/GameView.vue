@@ -44,6 +44,7 @@ onMounted(() => {
       game.updateRightPaddlePosition(data.direction)
     }
   })
+  userStore.socket?.on('updateBallPosition', (data) => game.updateBallPosition(data))
 
   setInterval(() => {
     game.draw()

@@ -52,4 +52,11 @@ export class GamesService {
 			game.emitToPlayers("movePaddle", { player: "left", direction: "up" });
 		}
 	}
+
+	@Interval(1000/60)
+	updateGames() {
+		for (const game of this.games) {
+			game.update();
+		}
+	}
 }

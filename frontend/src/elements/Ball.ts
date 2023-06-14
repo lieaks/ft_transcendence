@@ -43,30 +43,11 @@ export class Ball {
   }
 
   // function to move the ball, and check for collision
-  move(
-    context: CanvasRenderingContext2D,
-    leftPaddle: Paddle,
-    rightPaddle: Paddle,
-    leftScore: Scoreboard,
-    rightScore: Scoreboard
-  ) {
-    // move the ball
-    this.x += this.velocityX
-    this.y += this.velocityY
+  move( data: any, context: CanvasRenderingContext2D ) {
+	const { x, y } = data
 
-    // check if ball hits top or bottom wall
-    if (this.y + this.radius > context.canvas.height || this.y - this.radius < 0) {
-      this.velocityY = -this.velocityY
-    }
-
-    // check if ball hits left or right wall
-    if (this.x + this.radius > context.canvas.width - 10) {
-      leftScore.score++
-      this.reset(context)
-    } else if (this.x - this.radius < 10) {
-      rightScore.score++
-      this.reset(context)
-    }
+    this.x = x
+    this.y = y
   }
 
   reset(context: CanvasRenderingContext2D) {
