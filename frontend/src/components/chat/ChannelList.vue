@@ -17,7 +17,6 @@ import { useUserStore } from '@/stores/userStore';
 
 const userStore = useUserStore()
 // useUserStore.socket?.em
-
 </script>
 
 <style>
