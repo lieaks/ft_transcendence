@@ -10,6 +10,7 @@ export const useUserStore = defineStore('user', () => {
   const avatar = ref('')
   const socket = ref<Socket>()
   const gameId = ref('')
+  const inQueue = ref(false);
 
   const { result, variables } = useQuery(
     gql`
@@ -54,5 +55,9 @@ export const useUserStore = defineStore('user', () => {
     console.log(`Game id set to ${id}`)
   }
 
-  return { id, name, avatar, socket, gameId, setId, setName, setAvatar, setGameId }
+  function setInQueue(val: boolean) {
+	inQueue.value = val;
+  }
+
+  return { id, name, avatar, socket, gameId, inQueue, setId, setName, setAvatar, setGameId, setInQueue }
 })

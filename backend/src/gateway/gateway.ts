@@ -59,9 +59,11 @@ export class MyGateway implements OnModuleInit {
 
   @SubscribeMessage('joinQueue')
   onJoinQueue(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
-    this.gamesService.addToQueue(
+    if (this.gamesService.addToQueue(
       this.usersService.getUserBySocketId(client.id),
-    );
+    )) {
+      client.emit('joinQueue', {});
+    }
   }
 
   @SubscribeMessage('movePaddle')

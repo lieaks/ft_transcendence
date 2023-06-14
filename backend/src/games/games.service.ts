@@ -22,8 +22,8 @@ export class GamesService {
     return game;
   }
 
-  addToQueue(user: IUser) {
-    if (this.queue.find((u) => u.id === user.id)) return;
+  addToQueue(user: IUser): boolean {
+    if (this.queue.find((u) => u.id === user.id)) return false;
     this.queue.push(user);
     console.log('Queue:', this.queue.length);
     if (this.queue.length >= 2) {
@@ -34,6 +34,7 @@ export class GamesService {
       game.create();
       this.addGame(game);
     }
+    return true;
   }
 
   removeGame(id: string) {

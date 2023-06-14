@@ -48,13 +48,12 @@ onMounted(() => {
 
   document.addEventListener('keydown', keydownHandler)
 
-  userStore.socket?.on('startGame', (data) => userStore.setGameId(data.id))
-  userStore.socket?.on('updateBallPosition', (data) => game.updateBallPosition(data))
-  userStore.socket?.on('updatePaddlePosition', (data) => game.updatePaddlePosition(data))
-  userStore.socket?.on('updateScore', (data) => game.updateScore(data))
-  setInterval(() => {
-    game.draw()
-  }, 1000 / 60)
+	userStore.socket?.on('updateBallPosition', (data) => game.updateBallPosition(data))
+	userStore.socket?.on('updatePaddlePosition', (data) => game.updatePaddlePosition(data))
+	userStore.socket?.on('updateScore', (data) => game.updateScore(data))
+	setInterval(() => {
+	game.draw()
+	}, 1000 / 60)
 
   console.log('mounted')
 })

@@ -1,23 +1,35 @@
 <script setup lang="ts">
 import { useTestStore } from '@/stores/testStore'
-import { useUserStore } from '@/stores/userStore'
+import { useUserStore } from '@/stores/userStore';
+import Matchmaking from '@/components/Matchmaking.vue';
 
-const { fetchChirelData, notLoveChirel, loveChirel, getChirelData } = useTestStore()
+// const { fetchChirelData, notLoveChirel, loveChirel, getChirelData } = useTestStore()
 const user = useUserStore()
 
 function redirectToOAuth(provider: string) {
   console.log('redirectToOAuth(42)')
   window.location.href = `${import.meta.env.VITE_BACKEND_URL}/auth/${provider}`
 }
+
+function joinQueue() {
+  user.socket?.emit('joinQueue', {})
+}
+
+user.socket?.on('joinQueue', () => user.setInQueue(true))
+user.socket?.on('startGame', (data) => user.setGameId(data.id))
+
 </script>
 
 <template>
   <div>
-    <h1 class="text-white text-1xl">HOME VIEW</h1>
-    <button @click="fetchChirelData">Fetch Data</button>
-    <p>Chirel data: {{ getChirelData() }}</p>
-    <button @click="notLoveChirel">Not Love Chirel</button>
-    <button @click="loveChirel">Love Chirel</button>
+    <!-- <h1 class="text-white text-1xl">HOME VIEW</h1> -->
+    <!-- <button @click="fetchChirelData">Fetch Data</button> -->
+    <!-- <p>Chirel data: {{ getChirelData() }}</p> -->
+    <!-- <button @click="notLoveChirel">Not Love Chirel</button> -->
+    <!-- <button @click="loveChirel">Love Chirel</button> -->
+    <button @click="joinQueue">Join Queue</button>
+    <!-- If the user.inQueue = True, print "In Queue" -->
+    <Matchmaking v-if="user.inQueue" />
   </div>
   <input
     type="text"
