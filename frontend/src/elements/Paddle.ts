@@ -41,7 +41,7 @@ export class Paddle {
   }
 
   movePaddle(y: number) {
-	  this.y = y
+    this.y = y
   }
 
   /**

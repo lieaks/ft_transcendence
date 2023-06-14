@@ -1,30 +1,32 @@
 <script setup lang="ts">
 import { useTestStore } from '@/stores/testStore'
-import { useUserStore } from '@/stores/userStore';
+import { useUserStore } from '@/stores/userStore'
 
 const { fetchChirelData, notLoveChirel, loveChirel, getChirelData } = useTestStore()
 const user = useUserStore()
 
 function redirectToOAuth(provider: string) {
-	console.log('redirectToOAuth(42)')
-	window.location.href = `${import.meta.env.VITE_BACKEND_URL}/auth/${provider}`
+  console.log('redirectToOAuth(42)')
+  window.location.href = `${import.meta.env.VITE_BACKEND_URL}/auth/${provider}`
 }
-
 </script>
 
 <template>
-
   <div>
     <h1 class="text-white text-1xl">HOME VIEW</h1>
     <button @click="fetchChirelData">Fetch Data</button>
     <p>Chirel data: {{ getChirelData() }}</p>
     <button @click="notLoveChirel">Not Love Chirel</button>
     <button @click="loveChirel">Love Chirel</button>
-
   </div>
-	<input type="text" placeholder="user's name" v-model="user.name" class="input input-bordered m-4">
-	<button class="btn m-4 btn-primary" @click="redirectToOAuth('42')">login 42</button>
-	<button class="btn m-4 btn-primary" @click="redirectToOAuth('google')">login google</button>
+  <input
+    type="text"
+    placeholder="user's name"
+    v-model="user.name"
+    class="input input-bordered m-4"
+  />
+  <button class="btn m-4 btn-primary" @click="redirectToOAuth('42')">login 42</button>
+  <button class="btn m-4 btn-primary" @click="redirectToOAuth('google')">login google</button>
 </template>
 
 <style scoped>

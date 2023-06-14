@@ -34,11 +34,11 @@ const router = createRouter({
       name: 'account',
       component: AccountView
     },
-		{
-			path: '/auth/callback',
-			name: 'authCallback',
-			component: AuthCallbackView
-		}
+    {
+      path: '/auth/callback',
+      name: 'authCallback',
+      component: AuthCallbackView
+    }
   ]
 })
 
