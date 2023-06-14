@@ -10,6 +10,7 @@ import {
 import { Server, Socket } from 'socket.io';
 import { UsersService } from 'src/users/users.service';
 import { User } from 'src/users/user';
+import { Status } from '../interfaces/user.interface'
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { GamesService } from 'src/games/games.service';
@@ -49,6 +50,7 @@ export class MyGateway implements OnModuleInit {
       const payload = this.JwtService.verify(jwtToken);
       const user = new User(this.prismaService, payload.id, payload.name);
       user.socket = client;
+			user.status = Status.ONLINE;
       this.usersService.addUser(user);
     } catch (error) {
       console.error('onAddUser:', error);
@@ -65,10 +67,10 @@ export class MyGateway implements OnModuleInit {
   @SubscribeMessage('movePaddle')
   onMovePaddle(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
     const { direction, gameId } = body;
-    let user = this.usersService.getUserBySocketId(client.id);
+    const user = this.usersService.getUserBySocketId(client.id);
     if (!user) return;
-	let game = this.gamesService.getGame(gameId);
-	if (!game) return;
-	game.movePaddle(user, direction);
+    const game = this.gamesService.getGame(gameId);
+    if (!game) return;
+    game.movePaddle(user, direction);
   }
 }
