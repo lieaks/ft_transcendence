@@ -61,6 +61,13 @@ export class Game {
     this.context.stroke()
   }
 
+  updateScore(data: any) {
+	this.rightScore.score = data.right
+	this.leftScore.score = data.left
+	this.rightScore.draw(this.context)
+	this.leftScore.draw(this.context)
+  }
+
   updateBallPosition(data: any) {
     this.ball.move(data, this.context)
   }

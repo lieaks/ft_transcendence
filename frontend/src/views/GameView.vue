@@ -38,7 +38,7 @@ onMounted(() => {
 
   userStore.socket?.on('updateBallPosition', (data) => game.updateBallPosition(data))
   userStore.socket?.on('updatePaddlePosition', (data) => game.updatePaddlePosition(data))
-
+  userStore.socket?.on('updateScore', (data) => game.updateScore(data))
   setInterval(() => {
     game.draw()
   }, 1000 / 60)

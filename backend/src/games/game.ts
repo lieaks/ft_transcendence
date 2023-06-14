@@ -12,6 +12,7 @@ export class Game implements IGame {
 	ball: { x: number; y: number; radius: number; dx: number; dy: number };
 	leftPaddle: { x: number; y: number; width: number; height: number; speed: number };
 	rightPaddle: { x: number; y: number; width: number; height: number; speed: number };
+	score: { left: number; right: number };
 
 	constructor(
 		private readonly prismaService: PrismaService,
@@ -43,6 +44,10 @@ export class Game implements IGame {
 			width: 20,
 			height: 175,
 			speed: 17,
+		};
+		this.score = {
+			left: 0,
+			right: 0,
 		};
 	}
 
@@ -80,6 +85,14 @@ export class Game implements IGame {
 				finishedAt: new Date(),
 			},
 		});
+	}
+
+	updateScore(): void {
+		if (this.ball.x < this.ball.radius)
+			this.score.right++;
+		else if (this.ball.x > this.canvas.width - this.ball.radius)
+			this.score.left++;
+		this.emitToPlayers("updateScore", { left: this.score.left, right: this.score.right });
 	}
 
 	movePaddle(player: IUser, direction: string): void {
@@ -122,6 +135,10 @@ export class Game implements IGame {
 		) {
 			this.ball.dx = -this.ball.dx;
 			this.ball.x = this.rightPaddle.x - this.rightPaddle.width - this.ball.radius;
+		}
+
+		if (this.ball.x < this.ball.radius || this.ball.x > this.canvas.width - this.ball.radius) {
+			this.updateScore();
 		}
 
 		if (this.ball.x < this.ball.radius) {
