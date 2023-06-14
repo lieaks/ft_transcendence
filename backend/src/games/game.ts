@@ -74,6 +74,7 @@ export class Game implements IGame {
 			},
 		});
 		this.id = game.id;
+		this.startGame();
 		this.reset();
 		this.emitToPlayers("updateScore", { left: this.score.left, right: this.score.right });
 		console.log(`Game ${this.id} created`);
@@ -92,6 +93,11 @@ export class Game implements IGame {
 				finishedAt: new Date(),
 			},
 		});
+	}
+
+	startGame(): void {
+		this.status = gameStatus.PLAYING;
+		this.emitToPlayers("startGame", this.id);
 	}
 
 	updateScore(): void {

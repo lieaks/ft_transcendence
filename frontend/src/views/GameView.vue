@@ -22,7 +22,15 @@ onMounted(() => {
 		userStore.socket?.emit('movePaddle', { direction: 'up' })
         break
 
+	  case 'o':
+		userStore.socket?.emit('movePaddle', { direction: 'up' })
+        break
+
       case 's':
+		userStore.socket?.emit('movePaddle', { direction: 'down' })
+        break
+
+	  case 'l':
 		userStore.socket?.emit('movePaddle', { direction: 'down' })
         break
 
@@ -36,6 +44,7 @@ onMounted(() => {
     }
   })
 
+  userStore.socket?.on('startGame', (data) => userStore.setGameId(data.gameId))
   userStore.socket?.on('updateBallPosition', (data) => game.updateBallPosition(data))
   userStore.socket?.on('updatePaddlePosition', (data) => game.updatePaddlePosition(data))
   userStore.socket?.on('updateScore', (data) => game.updateScore(data))

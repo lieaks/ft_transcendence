@@ -8,6 +8,7 @@ export const useUserStore = defineStore('user', () => {
 	const name = ref('name');
 	const avatar = ref('');
 	const socket = ref<Socket>();
+	const gameId = ref('');
 
 	async function setName(newName: string) {
 		// gpl mutate back
@@ -19,5 +20,10 @@ export const useUserStore = defineStore('user', () => {
 		avatar.value = newAvatar;
 	}
 
-	return { id, jwtToken, name, avatar, socket, setName, setAvatar };
+	function setGameId(id: string) {
+		gameId.value = id;
+		console.log(`Game id set to ${id}`);
+	}
+
+	return { id, jwtToken, name, avatar, socket, gameId, setName, setAvatar, setGameId};
 });

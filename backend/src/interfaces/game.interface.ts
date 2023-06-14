@@ -21,6 +21,7 @@ export interface IGame {
 	removePlayer(player: IUser): void;
 	create(): Promise<void>;
 	finish(): Promise<void>;
+	startGame(): void;
 	emitToPlayers(event: string, data: any): void;
 	movePaddle(player: IUser, direction: string): void;
 }
