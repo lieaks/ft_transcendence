@@ -64,6 +64,15 @@ export class MyGateway implements OnModuleInit {
     )) {
       client.emit('joinQueue', {});
     }
+    console.log("Added to queue");
+  }
+
+  @SubscribeMessage('leaveQueue')
+  onLeaveQueue(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
+    this.gamesService.removeFromQueue(
+      this.usersService.getUserBySocketId(client.id),
+    );
+    console.log("Removed from queue");
   }
 
   @SubscribeMessage('movePaddle')

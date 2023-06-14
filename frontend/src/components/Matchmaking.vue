@@ -1,9 +1,19 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+  import { useUserStore } from '@/stores/userStore';
+
+  const user = useUserStore()
+
+  function cancelQueue() {
+    user.socket?.emit('leaveQueue', {})
+    user.setInQueue(false)
+  }
+</script>
 
 <template>
   <div class="load text-info">
     <div class="loading loading-ball loading-lg"></div>
     <div class="message">Looking for a game</div>
+    <button class="btn btn-outline btn-error" @click="cancelQueue">Cancel</button>
   </div>
 </template>
 
