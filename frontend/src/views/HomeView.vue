@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { useTestStore } from '@/stores/testStore'
 import { useUserStore } from '@/stores/userStore';
+import { useRouter } from 'vue-router';
 import Matchmaking from '@/components/Matchmaking.vue';
 
 // const { fetchChirelData, notLoveChirel, loveChirel, getChirelData } = useTestStore()
 const user = useUserStore()
+const router = useRouter()
 
 function redirectToOAuth(provider: string) {
   console.log('redirectToOAuth(42)')
@@ -16,7 +18,11 @@ function joinQueue() {
 }
 
 user.socket?.on('joinQueue', () => user.setInQueue(true))
-user.socket?.on('startGame', (data) => user.setGameId(data.id))
+user.socket?.on('startGame', (data) => {
+  user.setInQueue(false)
+  user.setGameId(data.id)
+  router.push('/game')
+})
 
 </script>
 
