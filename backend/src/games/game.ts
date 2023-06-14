@@ -86,14 +86,14 @@ export class Game implements IGame {
 		if (player.id === this.players[0].id) {
 			if (direction === "up" && this.leftPaddle.y > this.leftPaddle.speed - 2) {
 				this.leftPaddle.y -= this.leftPaddle.speed;
-			} else if (direction === "down" && this.leftPaddle.y < this.canvas.height - this.leftPaddle.height - this.leftPaddle.speed + 2) {
+			} else if (direction === "down" && this.leftPaddle.y + this.leftPaddle.height < this.canvas.height - this.leftPaddle.speed + 2) {
 				this.leftPaddle.y += this.leftPaddle.speed;
 			}
 			this.emitToPlayers("updatePaddlePosition", { player: "left", y: this.leftPaddle.y });
 		} else if (player.id === this.players[1].id) {
 			if (direction === "up" && this.rightPaddle.y > this.rightPaddle.speed - 2) {
 				this.rightPaddle.y -= this.rightPaddle.speed;
-			} else if (direction === "down" && this.rightPaddle.y < this.canvas.height - this.rightPaddle.height - this.rightPaddle.speed + 2) {
+			} else if (direction === "down" && this.rightPaddle.y + this.rightPaddle.height < this.canvas.height - this.rightPaddle.speed + 2) {
 				this.rightPaddle.y += this.rightPaddle.speed;
 			}
 			this.emitToPlayers("updatePaddlePosition", { player: "right", y: this.rightPaddle.y });
@@ -104,7 +104,6 @@ export class Game implements IGame {
 		this.ball.x += this.ball.dx;
 		this.ball.y += this.ball.dy;
 
-		// Check for collision with left paddle
 		if (
 			this.ball.x - this.ball.radius <= this.leftPaddle.x + this.leftPaddle.width &&
 			this.ball.y >= this.leftPaddle.y &&
@@ -114,9 +113,8 @@ export class Game implements IGame {
 			this.ball.x = this.leftPaddle.x + this.leftPaddle.width + this.ball.radius;
 		}
 
-		// Check for collision with right paddle
 		if (
-			this.ball.x + this.ball.radius >= this.rightPaddle.x &&
+			this.ball.x + this.ball.radius >= this.rightPaddle.x + this.rightPaddle.width &&
 			this.ball.y >= this.rightPaddle.y &&
 			this.ball.y <= this.rightPaddle.y + this.rightPaddle.height
 		) {
