@@ -97,7 +97,7 @@ export class Game implements IGame {
 
 	startGame(): void {
 		this.status = gameStatus.PLAYING;
-		this.emitToPlayers("startGame", this.id);
+		this.emitToPlayers("startGame", { id : this.id });
 	}
 
 	updateScore(): void {

@@ -44,7 +44,7 @@ onMounted(() => {
     }
   })
 
-  userStore.socket?.on('startGame', (data) => userStore.setGameId(data.gameId))
+  userStore.socket?.on('startGame', (data) => userStore.setGameId(data.id))
   userStore.socket?.on('updateBallPosition', (data) => game.updateBallPosition(data))
   userStore.socket?.on('updatePaddlePosition', (data) => game.updatePaddlePosition(data))
   userStore.socket?.on('updateScore', (data) => game.updateScore(data))
