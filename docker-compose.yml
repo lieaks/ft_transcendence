@@ -55,7 +55,7 @@ services:
     ports:
       - 5432:5432
     env_file:
-      - ./docker/.env
+      - ./docker/backend.env
     # volumes:
       # - ./db:/var/lib/postgresql/data
     healthcheck:
