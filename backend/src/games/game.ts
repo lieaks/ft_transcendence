@@ -1,7 +1,6 @@
 import { IGame, gameStatus } from '../interfaces/game.interface';
 import { PrismaService } from '../prisma/prisma.service';
-import { User } from '../users/user';
-import { IUser } from '../interfaces/user.interface';
+import { IUser, Status } from '../interfaces/user.interface';
 
 export class Game implements IGame {
   id: string;
@@ -64,10 +63,12 @@ export class Game implements IGame {
   }
 
   addPlayer(player: IUser): void {
+		player.status = Status.INGAME;
     this.players.push(player);
   }
 
   removePlayer(player: IUser): void {
+		player.status = Status.ONLINE;
     this.players = this.players.filter((p) => p.id !== player.id);
   }
 
