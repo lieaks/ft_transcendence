@@ -142,6 +142,7 @@ export class Game implements IGame {
 			this.ball.y >= this.leftPaddle.y &&
 			this.ball.y <= this.leftPaddle.y + this.leftPaddle.height
 		) {
+			this.ball.dx *= 1.1;
 			this.ball.dx = -this.ball.dx;
 			this.ball.x = this.leftPaddle.x + this.leftPaddle.width + this.ball.radius;
 		}
@@ -152,6 +153,7 @@ export class Game implements IGame {
 			this.ball.y >= this.rightPaddle.y &&
 			this.ball.y <= this.rightPaddle.y + this.rightPaddle.height
 		) {
+			this.ball.dx *= 1.1;
 			this.ball.dx = -this.ball.dx;
 			this.ball.x = this.rightPaddle.x - this.rightPaddle.width - this.ball.radius;
 		}
