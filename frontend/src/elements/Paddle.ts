@@ -40,6 +40,10 @@ export class Paddle {
     context.closePath()
   }
 
+  movePaddle(y: number) {
+	  this.y = y
+  }
+
   /**
    * Updates the position of the paddles.
    * @param key The key that was pressed.

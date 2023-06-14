@@ -72,4 +72,12 @@ export class Game {
   updateBallPosition(data: any) {
     this.ball.move(data, this.context)
   }
+
+  updatePaddlePosition(data: any) {
+	if (data.player === 'right') {
+		this.rightPaddle.movePaddle(data.y)
+	} else {
+		this.leftPaddle.movePaddle(data.y)
+  	}
+  }
 }

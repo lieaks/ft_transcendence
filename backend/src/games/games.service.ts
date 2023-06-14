@@ -44,6 +44,10 @@ export class GamesService {
 		return this.games.find((g) => g.id === id);
 	}
 
+	getGames() {
+		return this.games;
+	}
+
 	// Interval, 1 time per 5 seconds
 	// @Interval(3000)
 	// checkGames() {

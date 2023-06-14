@@ -10,6 +10,8 @@ export class Game implements IGame {
 	createdAt: Date;
 	canvas: { width: number; height: number };
 	ball: { x: number; y: number; radius: number; dx: number; dy: number };
+	leftPaddle: { x: number; y: number; width: number; height: number; speed: number };
+	rightPaddle: { x: number; y: number; width: number; height: number; speed: number };
 
 	constructor(
 		private readonly prismaService: PrismaService,
@@ -27,6 +29,20 @@ export class Game implements IGame {
 			radius: 10,
 			dx: 5,
 			dy: 5,
+		};
+		this.leftPaddle = {
+			x: 20,
+			y: this.canvas.height / 2,
+			width: 20,
+			height: 175,
+			speed: 17,
+		};
+		this.rightPaddle = {
+			x: this.canvas.width - 20,
+			y: this.canvas.height / 2,
+			width: 20,
+			height: 175,
+			speed: 17,
 		};
 	}
 
@@ -64,6 +80,24 @@ export class Game implements IGame {
 				finishedAt: new Date(),
 			},
 		});
+	}
+
+	movePaddle(player: IUser, direction: string): void {
+		if (player.id === this.players[0].id) {
+			if (direction === "up" && this.leftPaddle.y > this.leftPaddle.speed - 2) {
+				this.leftPaddle.y -= this.leftPaddle.speed;
+			} else if (direction === "down" && this.leftPaddle.y < this.canvas.height - this.leftPaddle.height - this.leftPaddle.speed + 2) {
+				this.leftPaddle.y += this.leftPaddle.speed;
+			}
+			this.emitToPlayers("updatePaddlePosition", { player: "left", y: this.leftPaddle.y });
+		} else if (player.id === this.players[1].id) {
+			if (direction === "up" && this.rightPaddle.y > this.rightPaddle.speed - 2) {
+				this.rightPaddle.y -= this.rightPaddle.speed;
+			} else if (direction === "down" && this.rightPaddle.y < this.canvas.height - this.rightPaddle.height - this.rightPaddle.speed + 2) {
+				this.rightPaddle.y += this.rightPaddle.speed;
+			}
+			this.emitToPlayers("updatePaddlePosition", { player: "right", y: this.rightPaddle.y });
+		}
 	}
 
 	update(): void {

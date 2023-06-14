@@ -20,4 +20,5 @@ export interface IGame {
 	create(): Promise<void>;
 	finish(winner: IUser, loser: IUser): Promise<void>;
 	emitToPlayers(event: string, data: any): void;
+	movePaddle(player: IUser, direction: string): void;
 }

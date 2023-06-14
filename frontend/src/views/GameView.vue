@@ -36,15 +36,8 @@ onMounted(() => {
     }
   })
 
-  userStore.socket?.on('movePaddle', (data) => {
-    console.log(data)
-    if (data.player === 'left') {
-      game.updateLeftPaddlePosition(data.direction)
-    } else {
-      game.updateRightPaddlePosition(data.direction)
-    }
-  })
   userStore.socket?.on('updateBallPosition', (data) => game.updateBallPosition(data))
+  userStore.socket?.on('updatePaddlePosition', (data) => game.updatePaddlePosition(data))
 
   setInterval(() => {
     game.draw()
