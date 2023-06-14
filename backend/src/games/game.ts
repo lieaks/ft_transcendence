@@ -252,6 +252,10 @@ export class Game implements IGame {
       x: this.ball.x,
       y: this.ball.y,
     });
+    this.emitToPlayers('updateScore', {
+      left: this.score.left,
+      right: this.score.right,
+    });
   }
 
   emitToPlayers(event: string, data: any): void {
