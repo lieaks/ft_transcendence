@@ -19,19 +19,19 @@ onMounted(() => {
   window.addEventListener('keydown', (event) => {
     switch (event.key) {
       case 'w':
-		userStore.socket?.emit('movePaddle', { direction: 'up' })
+		userStore.socket?.emit('movePaddle', { direction: 'up', gameId: userStore.gameId })
         break
 
 	  case 'o':
-		userStore.socket?.emit('movePaddle', { direction: 'up' })
+		userStore.socket?.emit('movePaddle', { direction: 'up', gameId: userStore.gameId })
         break
 
       case 's':
-		userStore.socket?.emit('movePaddle', { direction: 'down' })
+		userStore.socket?.emit('movePaddle', { direction: 'down', gameId: userStore.gameId })
         break
 
 	  case 'l':
-		userStore.socket?.emit('movePaddle', { direction: 'down' })
+		userStore.socket?.emit('movePaddle', { direction: 'down', gameId: userStore.gameId })
         break
 
 	  case 'q':

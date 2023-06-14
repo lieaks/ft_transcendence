@@ -64,9 +64,11 @@ export class MyGateway implements OnModuleInit {
 
   @SubscribeMessage('movePaddle')
   onMovePaddle(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
-    const { direction } = body;
+    const { direction, gameId } = body;
     let user = this.usersService.getUserBySocketId(client.id);
     if (!user) return;
-    this.gamesService.getGames()[0].movePaddle(user, direction);
+	let game = this.gamesService.getGame(gameId);
+	if (!game) return;
+	game.movePaddle(user, direction);
   }
 }
