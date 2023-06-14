@@ -61,14 +61,6 @@ export class Game {
     this.context.stroke()
   }
 
-  updateRightPaddlePosition(key: string) {
-    this.rightPaddle.updateRightPaddlePosition(key, this.canvas.height)
-  }
-
-  updateLeftPaddlePosition(key: string) {
-    this.leftPaddle.updateLeftPaddlePosition(key, this.canvas.height)
-  }
-
   updateBallPosition(data: any) {
     this.ball.move(data, this.context)
   }
