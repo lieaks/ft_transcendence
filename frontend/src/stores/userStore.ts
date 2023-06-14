@@ -5,7 +5,7 @@ import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 
 export const useUserStore = defineStore('user', () => {
-  const id = ref('21c08d58-a879-4e7c-aa55-28e39cdb5b0d')
+  const id = ref('')
   const name = ref('name')
   const avatar = ref('')
   const socket = ref<Socket>()
@@ -26,6 +26,7 @@ export const useUserStore = defineStore('user', () => {
   watch(result, async (res) => {
     if (res) {
       const user = res.user
+			if (!user) return
       name.value = user.name
       avatar.value = user.avatar
     }
