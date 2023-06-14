@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div class="load">
+  <div class="load text-info">
     <div class="loading loading-ball loading-lg"></div>
     <div class="message">Looking for a game</div>
   </div>
