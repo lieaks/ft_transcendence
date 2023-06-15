@@ -26,6 +26,7 @@ type User {
 
 type Query {
 	user(id: String!): User
+	me: User
 	userByName(name: String!): User
 	usersByIds(ids: [String!]!): [User!]
 	users: [User!]!

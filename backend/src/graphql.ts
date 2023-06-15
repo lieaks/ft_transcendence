@@ -43,6 +43,7 @@ export interface IQuery {
     ping(): Nullable<string> | Promise<Nullable<string>>;
     chirel(): Nullable<string> | Promise<Nullable<string>>;
     user(id: string): Nullable<User> | Promise<Nullable<User>>;
+    me(): Nullable<User> | Promise<Nullable<User>>;
     userByName(name: string): Nullable<User> | Promise<Nullable<User>>;
     usersByIds(ids: string[]): Nullable<User[]> | Promise<Nullable<User[]>>;
     users(): User[] | Promise<User[]>;

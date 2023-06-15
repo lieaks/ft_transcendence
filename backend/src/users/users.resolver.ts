@@ -50,6 +50,12 @@ export class UsersResolver {
         }
       : null;
   }
+  @Query('me')
+  async me(@Context() context): Promise<User> {
+    console.log('in me query', context.req.user.name);
+
+    return this.user(context.req.user.id);
+  }
   @Query('userByName')
   async userByName(@Args('name') name: string): Promise<User> {
     const user = await this.PrismaService.user.findUnique({

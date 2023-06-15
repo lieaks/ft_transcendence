@@ -10,7 +10,7 @@ import {
 import { Server, Socket } from 'socket.io';
 import { UsersService } from 'src/users/users.service';
 import { User } from 'src/users/user';
-import { Status } from '../interfaces/user.interface'
+import { Status } from '../interfaces/user.interface';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { GamesService } from 'src/games/games.service';
@@ -50,7 +50,7 @@ export class MyGateway implements OnModuleInit {
       const payload = this.JwtService.verify(jwtToken);
       const user = new User(this.prismaService, payload.id, payload.name);
       user.socket = client;
-			user.status = Status.ONLINE;
+      user.status = Status.ONLINE;
       this.usersService.addUser(user);
     } catch (error) {
       console.error('onAddUser:', error);
