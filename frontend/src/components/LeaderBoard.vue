@@ -4,7 +4,7 @@ import { useQuery } from '@vue/apollo-composable';
 import { onMounted, onActivated, onDeactivated } from 'vue';
 import gql from 'graphql-tag';
 
-const players = ref([])
+const players = ref<any[]>([])
 let currentId = 0
 const { result, refetch } = useQuery(
   gql`
