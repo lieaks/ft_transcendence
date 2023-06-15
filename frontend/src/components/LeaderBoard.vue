@@ -3,22 +3,27 @@
 import { ref } from 'vue'
 
  const players = ref([
-  { id: 1, name: 'John Doe', points: 100, avatar: 'https://i.pravatar.cc/150?img=1' },
-  { id: 2, name: 'Jane Doe', points: 90, avatar: 'https://i.pravatar.cc/150?img=2' },
-  { id: 3, name: 'Bob Smith', points: 80, avatar: 'https://i.pravatar.cc/150?img=3' },
+  { id: 1, name: 'John Doe', points: 100, avatar: 'https://i.pravatar.cc/150?img=1', win: 9, loose: 4 },
+  { id: 2, name: 'Jane Doe', points: 90, avatar: 'https://i.pravatar.cc/150?img=2', win: 2, loose: 1 },
+  { id: 3, name: 'Bob Smith', points: 80, avatar: 'https://i.pravatar.cc/150?img=3', win: 7, loose: 12 },
+  { id: 3, name: 'Aboulest', points: 60, avatar: 'https://i.pravatar.cc/150?img=4', win: 2, loose: 17 },
+  { id: 3, name: 'Vlepille', points: 40, avatar: 'https://i.pravatar.cc/150?img=5', win: 0, loose: 10 },
+  { id: 3, name: 'Giraffe', points: 20, avatar: 'https://i.pravatar.cc/150?img=6', win: 3, loose: 1 },
+  { id: 3, name: 'Jquil', points: 5, avatar: 'https://i.pravatar.cc/150?img=7', win: 19, loose: 0 },
 ])
 
 </script>
 
 <template>
-<div className="overflow-x-auto">
+<div className="mx-auto overflow-x-auto w-1/2">
   <table className="table">
     <thead>
       <tr>
         <th class="text-center">Rank</th>
         <th>Name</th>
-        <th>Point</th>
-        <th></th>
+        <th className="text-center">Point</th>
+        <th className="text-center">Win</th>
+        <th className="text-center">Loose</th>
       </tr>
     </thead>
     <tbody>
@@ -36,10 +41,9 @@ import { ref } from 'vue'
             </div>
           </div>
         </td>
-        <td>{{ player.points }}</td>
-        <th>
-          <button className="btn btn-ghost btn-xs">details</button>
-        </th>
+        <td className="text-center">{{ player.points }}</td>
+        <td className="text-center">{{ player.win }}</td>
+        <td className="text-center">{{ player.loose }}</td>
       </tr>
     </tbody>
     
