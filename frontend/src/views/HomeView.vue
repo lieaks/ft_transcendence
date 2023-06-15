@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useTestStore } from '@/stores/testStore'
-import { useUserStore } from '@/stores/userStore';
-import { useRouter } from 'vue-router';
-import Matchmaking from '@/components/Matchmaking.vue';
+import { useUserStore } from '@/stores/userStore'
+import { useRouter } from 'vue-router'
+import Matchmaking from '@/components/Matchmaking.vue'
 
 // const { fetchChirelData, notLoveChirel, loveChirel, getChirelData } = useTestStore()
 const user = useUserStore()
@@ -23,52 +23,50 @@ user.socket?.on('startGame', (data) => {
   user.setGameId(data.id)
   router.push('/game')
 })
-
 </script>
 
 <template>
   <div>
-    <!-- <h1 class="text-white text-1xl">HOME VIEW</h1> -->
+    <!-- <h1 class="text-white text-2xl">HOME VIEW</h1> -->
     <!-- <button @click="fetchChirelData">Fetch Data</button> -->
     <!-- <p>Chirel data: {{ getChirelData() }}</p> -->
     <!-- <button @click="notLoveChirel">Not Love Chirel</button> -->
     <!-- <button @click="loveChirel">Love Chirel</button> -->
-    <button @click="joinQueue">Join Queue</button>
+    <button class="btn btn-primary m-4" @click="joinQueue">Join Queue</button>
     <!-- If the user.inQueue = True, print "In Queue" -->
     <Matchmaking v-if="user.inQueue" />
   </div>
-  <input
-    type="text"
-    placeholder="user's name"
-    v-model="user.name"
-    class="input input-bordered m-4"
-  />
-  <button class="btn m-4 btn-primary" @click="redirectToOAuth('42')">login 42</button>
-  <button class="btn m-4 btn-primary" @click="redirectToOAuth('google')">login google</button>
+
+  <div class="p-4">
+    <h1>dev buttons</h1>
+    <input
+      type="text"
+      placeholder="user's name"
+      v-model="user.name"
+      class="input input-bordered m-4"
+    />
+    <button class="btn btn-primary m-2" onclick="localStorage.removeItem('jwtToken')">
+      delete jwtToken
+    </button>
+    <button class="btn btn-primary m-2" @click="redirectToOAuth('42')">login 42</button>
+    <button class="btn btn-primary m-2" @click="redirectToOAuth('google')">login google</button>
+  </div>
 </template>
 
 <style scoped>
-.text-white {
-  color: #fff;
-}
+/* button { */
+/*   background-color: #4caf50; */
+/*   color: #fff; */
+/*   padding: 0.5rem 1rem; */
+/*   border: none; */
+/*   border-radius: 0.25rem; */
+/*   cursor: pointer; */
+/*   margin-right: 1rem; */
+/* } */
 
-.text-1xl {
-  font-size: 1.5rem;
-}
-
-button {
-  background-color: #4caf50;
-  color: #fff;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 0.25rem;
-  cursor: pointer;
-  margin-right: 1rem;
-}
-
-button:hover {
-  background-color: #3e8e41;
-}
+/* button:hover { */
+/*   background-color: #3e8e41; */
+/* } */
 
 p {
   margin-top: 1rem;

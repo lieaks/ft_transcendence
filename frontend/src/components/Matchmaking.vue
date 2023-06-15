@@ -1,12 +1,12 @@
 <script setup lang="ts">
-  import { useUserStore } from '@/stores/userStore';
+import { useUserStore } from '@/stores/userStore'
 
-  const user = useUserStore()
+const user = useUserStore()
 
-  function cancelQueue() {
-    user.socket?.emit('leaveQueue', {})
-    user.setInQueue(false)
-  }
+function cancelQueue() {
+  user.socket?.emit('leaveQueue', {})
+  user.setInQueue(false)
+}
 </script>
 
 <template>

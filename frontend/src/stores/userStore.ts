@@ -10,7 +10,7 @@ export const useUserStore = defineStore('user', () => {
   const avatar = ref('')
   const socket = ref<Socket>()
   const gameId = ref('')
-  const inQueue = ref(false);
+  const inQueue = ref(false)
 
   const { result } = useQuery(
     gql`
@@ -28,7 +28,8 @@ export const useUserStore = defineStore('user', () => {
       const me = res.me
       if (!me) return
       name.value = me.name
-      avatar.value = me.avatar
+      const base64 = btoa(String.fromCharCode(...new Uint8Array(me.avatar.data))) // Convert buffer to base64
+      avatar.value = `data:image/png;base64,${base64}`
     }
   })
 
@@ -48,7 +49,7 @@ export const useUserStore = defineStore('user', () => {
   }
 
   function setInQueue(val: boolean) {
-	inQueue.value = val;
+    inQueue.value = val
   }
 
   return { id, name, avatar, socket, gameId, inQueue, setName, setAvatar, setGameId, setInQueue }
