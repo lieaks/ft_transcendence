@@ -43,12 +43,12 @@ watch(result, async (res) => {
         name: player.name,
         avatar: avatar,
         points: player.experience,
-        win: player.gamesWon,
-        loose: player.gamesLost
+        win: player.gamesWon.length,
+        loose: player.gamesLost.length,
       }
     })
   }
-})
+}, { immediate: true })
 
 onMounted(() => {
   refetch()
