@@ -1,20 +1,56 @@
 <script setup lang="ts">
  
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import alan from '@/assets/aboulest.jpg'
 import valentin from '@/assets/vlepille.jpg'
+import { useQuery } from '@vue/apollo-composable';
+import gql from 'graphql-tag';
 
- const players = ref([
-  { id: 1, name: 'John Doe', points: 100, avatar: 'https://i.pravatar.cc/150?img=1', win: 9, loose: 4 },
-  { id: 2, name: 'Jane Doe', points: 90, avatar: 'https://i.pravatar.cc/150?img=2', win: 2, loose: 1 },
-  { id: 3, name: 'Bob Smith', points: 80, avatar: 'https://i.pravatar.cc/150?img=3', win: 7, loose: 12 },
-  { id: 3, name: 'Aboulest', points: 60, avatar: alan, win: 2, loose: 17 },
-  { id: 3, name: 'Vlepille', points: 40, avatar: valentin, win: 0, loose: 10 },
-  { id: 3, name: 'Giraffe', points: 20, avatar: 'https://i.pravatar.cc/150?img=6', win: 3, loose: 1 },
-  { id: 3, name: 'Jquil', points: 5, avatar: 'https://i.pravatar.cc/150?img=7', win: 19, loose: 0 },
-])
+const	players = ref([])
+let		currentId = 0
+const { result } = useQuery(
+  gql`
+  query leaderboard($skip: Int, $take: Int) {
+	leaderboard(skip: $skip, take: $take) {
+		name
+		avatar
+		experience
+		gamesWon {
+			id
+		}
+		gamesLost {
+			id
+		}
+  	}
+  }
+  `,
+  {
+	fetchPolicy: 'network-only',
+	variables: {
+		skip: 0,
+		take: 10
+	}
+  }
+)
 
-
+watch(result, async (res) => {
+  if (res) {
+	const data = res.leaderboard
+	if (!data) return
+	players.value = res.leaderboard.map((player: any) => {
+		const base64 = btoa(String.fromCharCode(...new Uint8Array(player.avatar.data)))
+		const avatar = `data:image/png;base64,${base64}`
+		return {
+			id: currentId++,
+			name: player.name,
+			avatar: avatar,
+			points: player.experience,
+			win: player.gamesWon,
+			loose: player.gamesLost
+		}
+	})
+  }
+})
 </script>
 
 <template>
