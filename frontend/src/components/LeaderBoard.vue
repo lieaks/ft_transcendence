@@ -23,7 +23,7 @@ const { result, refetch } = useQuery(
   }
   `,
   {
-    fetchPolicy: 'network-only',
+    fetchPolicy: 'cache-and-network',
     variables: {
       skip: 0,
       take: 10
