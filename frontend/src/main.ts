@@ -15,6 +15,8 @@ const httpLink = createHttpLink({
 
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem('jwtToken')
+  console.log('token is ' + token) // TODO: debub to see new query to the server, not cached
+
   return {
     headers: {
       ...headers,

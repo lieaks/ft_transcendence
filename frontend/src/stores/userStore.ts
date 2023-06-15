@@ -5,40 +5,32 @@ import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 
 export const useUserStore = defineStore('user', () => {
-  const id = ref('')
+  const id = ''
   const name = ref('name')
   const avatar = ref('')
   const socket = ref<Socket>()
   const gameId = ref('')
   const inQueue = ref(false);
 
-  const { result, variables } = useQuery(
+  const { result } = useQuery(
     gql`
-      query user($id: String!) {
-        user(id: $id) {
+      query me {
+        me {
           name
           avatar
         }
       }
     `,
-    { id: id.value },
     { fetchPolicy: 'cache-and-network' }
   )
   watch(result, async (res) => {
     if (res) {
-      const user = res.user
-			if (!user) return
-      name.value = user.name
-      avatar.value = user.avatar
+      const me = res.me
+      if (!me) return
+      name.value = me.name
+      avatar.value = me.avatar
     }
   })
-
-  async function setId(newId: string) {
-    id.value = newId
-    variables.value = {
-      id: newId
-    }
-  }
 
   async function setName(newName: string) {
     // gpl mutate back
@@ -59,5 +51,5 @@ export const useUserStore = defineStore('user', () => {
 	inQueue.value = val;
   }
 
-  return { id, name, avatar, socket, gameId, inQueue, setId, setName, setAvatar, setGameId, setInQueue }
+  return { id, name, avatar, socket, gameId, inQueue, setName, setAvatar, setGameId, setInQueue }
 })
