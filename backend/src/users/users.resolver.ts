@@ -113,8 +113,6 @@ export class UsersResolver {
             ...user,
           };
         });
-				console.log(modifiedUsers)
-				
         return modifiedUsers;
       });
   }
