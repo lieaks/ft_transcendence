@@ -12,7 +12,7 @@ const user = useUserStore()
       <li><RouterLink class="text-lg mx-2" to="/">Home</RouterLink></li>
       <li><RouterLink class="text-lg mx-2" to="/game">Game</RouterLink></li>
       <li><RouterLink class="text-lg mx-2" to="/chat">Chat</RouterLink></li>
-      <li><RouterLink class="text-lg mx-2" to="/friends">Friends</RouterLink></li>
+      <li><RouterLink class="text-lg mx-2" to="/social">Social</RouterLink></li>
     </ul>
     <div class="navbar-end">
       <RouterLink
