@@ -1,8 +1,6 @@
 <script setup lang="ts">
  
 import { ref, watch } from 'vue'
-import alan from '@/assets/aboulest.jpg'
-import valentin from '@/assets/vlepille.jpg'
 import { useQuery } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
 
