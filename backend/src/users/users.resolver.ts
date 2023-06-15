@@ -52,8 +52,6 @@ export class UsersResolver {
   }
   @Query('me')
   async me(@Context() context): Promise<User> {
-    console.log('in me query', context.req.user.name);
-
     return this.user(context.req.user.id);
   }
   @Query('userByName')
@@ -105,6 +103,7 @@ export class UsersResolver {
         orderBy: {
           experience: 'desc',
         },
+				include
       })
       .then((users) => {
         const modifiedUsers = users.map((user) => {
@@ -114,6 +113,8 @@ export class UsersResolver {
             ...user,
           };
         });
+				console.log(modifiedUsers)
+				
         return modifiedUsers;
       });
   }
