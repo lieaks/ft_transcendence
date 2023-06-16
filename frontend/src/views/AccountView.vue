@@ -4,6 +4,7 @@ import gql from 'graphql-tag'
 import { useQuery, useMutation } from '@vue/apollo-composable'
 import { onMounted, ref, watch } from 'vue'
 import { useUserStore } from '@/stores/userStore'
+import { apolloClient } from '@/main'
 
 const userStore = useUserStore()
 const route = useRoute()
@@ -85,21 +86,20 @@ watch(result, async (res) => {
 onMounted(() => {
   refetch()
 })
+const { mutate } = useMutation(
+      gql`
+        mutation UpdateUser($input: UpdateUserInput!) {
+          updateUser(input: $input) {
+            id
+          }
+        }
+      `
+    );
 
 function addFriend(id: string) {
-  const {mutate} = useMutation(
-    gql`
-      mutation UpdateUser($input: UpdateUserInput!) {
-        updateUser(input: $input) {
-          id
-        }
-      }
-    `
-  );
-
-  const input = { friendsToAdd: [id] };
-
-  mutate({ variables: { input } });
+    const input = { friendsToAdd: [id] };
+	console.log(input)
+    mutate({ input });
 }
 
 </script>
