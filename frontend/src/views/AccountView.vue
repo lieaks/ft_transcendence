@@ -124,72 +124,39 @@ onMounted(() => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm w-2/5">
-                                <div class="flex items-center">
-                                    <div class="flex-shrink-0 w-10 h-10 hidden sm:table-cell">
-                                        <img class="w-full h-full rounded-full"
+						<tr v-for="game in user.gameHistory">
+							<td class="px-5 py-5 border-b border-gray-200 bg-white text-sm w-2/5">
+								<div class="flex items-center">
+									<div class="flex-shrink-0 w-10 h-10 hidden sm:table-cell">
+										<img class="w-full h-full rounded-full"
 											:src="user.avatar"
-                                            alt="" />
-                                    </div>
-                                    <div class="ml-3">
-                                        <p class="text-gray-900 whitespace-no-wrap">
-                                            axlamber
-                                        </p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                <p class="text-gray-900 whitespace-no-wrap text-center">0-3</p>
-                            </td>
-                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm w-2/5">
-                                <div class="flex items-center float-right">
-                                    <div class="mr-3">
-                                        <p class="text-gray-900 whitespace-no-wrap text-right">
-                                            Axel Lambert
-                                        </p>
-                                    </div>
-                                    <div class="flex-shrink-0 w-10 h-10 hidden sm:table-cell">
-                                        <img class="w-full h-full rounded-full"
-										:src="user.avatar"
-                                            alt="" />
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm w-2/5">
-                                <div class="flex items-center">
-                                    <div class="flex-shrink-0 w-10 h-10 hidden sm:table-cell">
-                                        <img class="w-full h-full rounded-full"
-										:src="user.avatar"
-                                            alt="" />
-                                    </div>
-                                    <div class="ml-3">
-                                        <p class="text-gray-900 whitespace-no-wrap">
-                                            lguillard
-                                        </p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                <p class="text-gray-900 whitespace-no-wrap text-center">2-1</p>
-                            </td>
-                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm w-2/5">
-                                <div class="flex items-center float-right">
-                                    <div class="mr-3">
-                                        <p class="text-gray-900 whitespace-no-wrap text-right">
-                                            axlamber
-                                        </p>
-                                    </div>
-                                    <div class="flex-shrink-0 w-10 h-10 hidden sm:table-cell">
-                                        <img class="w-full h-full rounded-full"
-										:src="user.avatar"
-                                            alt="" />
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
+											alt="" />
+									</div>
+									<div class="ml-3">
+										<p class="text-gray-900 whitespace-no-wrap">
+											{{ game.winner.name }}
+										</p>
+									</div>
+								</div>
+							</td>
+							<td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+								<p class="text-gray-900 whitespace-no-wrap text-center">3-0</p>
+							</td>
+							<td class="px-5 py-5 border-b border-gray-200 bg-white text-sm w-2/5">
+								<div class="flex items-center">
+									<div class="flex-shrink-0 w-10 h-10 hidden sm:table-cell">
+										<img class="w-full h-full rounded-full"
+											:src="user.avatar"
+											alt="" />
+									</div>
+									<div class="ml-3">
+										<p class="text-gray-900 whitespace-no-wrap">
+											{{ game.loser.name }}
+										</p>
+									</div>
+								</div>
+							</td>
+						</tr>
                     </tbody>
                 </table>
             </div>
