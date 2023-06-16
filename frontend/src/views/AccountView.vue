@@ -109,25 +109,25 @@ onMounted(() => {
         <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
             <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
                 <table class="min-w-full leading-normal">
-                    <thead>
+                    <thead class="bg-[#564F6F]">
                         <tr>
                             <th
-                                class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                class="px-5 py-3 border-b-2 border-green-400 text-white text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                 Winner
                             </th>
                             <th
-                                class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                class="px-5 py-3 border-b-2 border-white text-white text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                 Score
                             </th>
                             <th
-                                class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                class="px-5 py-3 border-b-2 border-red-400 text-white text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                 Looser
                             </th>
                         </tr>
                     </thead>
                     <tbody>
 						<tr v-for="game in user.gameHistory">
-							<td class="px-5 py-5 border-b border-gray-200 bg-white text-sm w-2/5">
+							<td class="px-5 py-5 border-b border-green-400 bg-green-300 text-sm w-2/5">
 								<div class="flex items-center">
 									<div class="flex-shrink-0 w-10 h-10 hidden sm:table-cell">
 										<img class="w-full h-full rounded-full"
@@ -144,7 +144,7 @@ onMounted(() => {
 							<td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
 								<p class="text-gray-900 whitespace-no-wrap text-center">3-0</p>
 							</td>
-							<td class="px-5 py-5 border-b border-gray-200 bg-white text-sm w-2/5">
+							<td class="px-5 py-5 border-b border-red-400 bg-red-300 text-sm w-2/5">
 								<div class="flex items-center">
 									<div class="flex-shrink-0 w-10 h-10 hidden sm:table-cell">
 										<img class="w-full h-full rounded-full"
