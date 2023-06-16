@@ -95,8 +95,8 @@ onMounted(() => {
     <p class="text-center text-gray-600 mt-1">Points: {{ user.points }}</p>
 	<p class="text-center text-gray-600 mt-1">Victoires: {{ user.nb_win }} | Defaites: {{ user.nb_loose }}</p>
     <div class="flex justify-center mt-5">
-      <a href="#" class="text-green-500 hover:text-green-700 mx-3 font-semibold">Add friend</a>
-      <a href="#" class="text-white-500 hover:text-white-700 mx-3 font-semibold">Remove friend</a>
+      <a href="#" class="text-green-500 hover:text-green-700 mx-3 font-semibold">Follow</a>
+      <a href="#" class="text-white-500 hover:text-white-700 mx-3 font-semibold">Unfollow</a>
       <a href="#" class="text-red-500 hover:text-red-700 mx-3 font-semibold">Block</a>
     </div>
   </div>
