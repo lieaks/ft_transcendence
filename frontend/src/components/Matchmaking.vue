@@ -1,40 +1,28 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useUserStore } from '@/stores/userStore'
+
+const user = useUserStore()
+
+function cancelQueue() {
+  user.socket?.emit('leaveQueue', {})
+  user.setInQueue(false)
+}
+</script>
 
 <template>
-  <div class="loading">
-    <div class="spinner"></div>
-    <div class="message">Looking for a game</div>
+  <div class="load text-info">
+    <div class="loading loading-ball loading-lg"></div>
+    <div class="message text-2xl font-bold my-4">Looking for a game</div>
+    <button class="btn btn-outline btn-error" @click="cancelQueue">Cancel</button>
   </div>
 </template>
 
 <style scoped>
-.loading {
+.load {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100%;
-}
-
-.spinner {
-  border: 4px solid rgba(0, 0, 0, 0.1);
-  border-top-color: #00ff00;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  animation: spin 1s linear infinite;
-}
-
-.message {
-  margin-top: 16px;
-  font-size: 24px;
-  font-weight: bold;
-  text-align: center;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
 }
 </style>

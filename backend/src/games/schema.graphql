@@ -11,7 +11,7 @@ type Game {
 }
 
 type Query {
-	games: [Game!]!
+	games: [Game!]
 	game(id: String!): Game!
 	getPlayersByGameId(id: String!): [User!]!
 	getCurrentGames: [Game!]!

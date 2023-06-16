@@ -10,6 +10,7 @@ import {
 import { Server, Socket } from 'socket.io';
 import { UsersService } from 'src/users/users.service';
 import { User } from 'src/users/user';
+import { Status } from '../interfaces/user.interface';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { GamesService } from 'src/games/games.service';
@@ -47,9 +48,10 @@ export class MyGateway implements OnModuleInit {
     const { jwtToken } = body;
     try {
       const payload = this.JwtService.verify(jwtToken);
-      const user = new User(this.prismaService, payload.sub);
+      const user = new User(this.prismaService, payload.id, payload.name);
+      user.socket = client;
+      user.status = Status.ONLINE;
       this.usersService.addUser(user);
-      this.usersService.setSocket(payload.sub, client);
     } catch (error) {
       console.error('onAddUser:', error);
     }
@@ -57,18 +59,29 @@ export class MyGateway implements OnModuleInit {
 
   @SubscribeMessage('joinQueue')
   onJoinQueue(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
-    this.gamesService.addToQueue(
+    if (this.gamesService.addToQueue(
+      this.usersService.getUserBySocketId(client.id),
+    )) {
+      client.emit('joinQueue', {});
+    }
+    console.log("Added to queue");
+  }
+
+  @SubscribeMessage('leaveQueue')
+  onLeaveQueue(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
+    this.gamesService.removeFromQueue(
       this.usersService.getUserBySocketId(client.id),
     );
+    console.log("Removed from queue");
   }
 
   @SubscribeMessage('movePaddle')
   onMovePaddle(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
     const { direction, gameId } = body;
-    let user = this.usersService.getUserBySocketId(client.id);
+    const user = this.usersService.getUserBySocketId(client.id);
     if (!user) return;
-	let game = this.gamesService.getGame(gameId);
-	if (!game) return;
-	game.movePaddle(user, direction);
+    const game = this.gamesService.getGame(gameId);
+    if (!game) return;
+    game.movePaddle(user, direction);
   }
 }

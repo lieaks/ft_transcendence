@@ -2,7 +2,7 @@ import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import * as speakeasy from 'speakeasy';
 import { Resolver, Query, Args, Mutation, Context } from '@nestjs/graphql';
-import { User, UpdateUserInput } from 'src/graphql';
+import { User, UpdateUserInput, Status } from 'src/graphql';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UsersService } from './users.service';
 
@@ -26,31 +26,67 @@ export class UsersResolver {
 
   @Query('users')
   async users(): Promise<User[]> {
-    return this.PrismaService.user.findMany({ include });
+    return this.PrismaService.user.findMany({ include }).then((users) => {
+      const modifiedUsers = users.map((user) => {
+        return {
+          status: this.UsersService.getUser(user.id)?.status || Status.OFFLINE,
+          ...user,
+        };
+      });
+      return modifiedUsers;
+    });
   }
 
   @Query('user')
   async user(@Args('id') id: string): Promise<User> {
-    return this.PrismaService.user.findUnique({
+    const user = await this.PrismaService.user.findUnique({
       where: { id },
       include,
     });
+    return user
+      ? {
+          ...user,
+          status: this.UsersService.getUser(id)?.status || Status.OFFLINE,
+        }
+      : null;
+  }
+  @Query('me')
+  async me(@Context() context): Promise<User> {
+    return this.user(context.req.user.id);
   }
   @Query('userByName')
   async userByName(@Args('name') name: string): Promise<User> {
-    return this.PrismaService.user.findUnique({
+    const user = await this.PrismaService.user.findUnique({
       where: { name },
       include,
     });
+    return user
+      ? {
+          ...user,
+          status:
+            this.UsersService.getUserByName(name)?.status || Status.OFFLINE,
+        }
+      : null;
   }
   @Query('usersByIds')
   async usersByIds(@Args('ids') ids: string[]): Promise<User[]> {
-    return this.PrismaService.user.findMany({
-      where: {
-        id: { in: ids },
-      },
-      include,
-    });
+    return this.PrismaService.user
+      .findMany({
+        where: {
+          id: { in: ids },
+        },
+        include,
+      })
+      .then((users) => {
+        const modifiedUsers = users.map((user) => {
+          return {
+            status:
+              this.UsersService.getUser(user.id)?.status || Status.OFFLINE,
+            ...user,
+          };
+        });
+        return modifiedUsers;
+      });
   }
 
   @Query('leaderboard')
@@ -60,13 +96,25 @@ export class UsersResolver {
   ): Promise<User[]> {
     skip ??= 0;
     take ??= undefined;
-    return this.PrismaService.user.findMany({
-      skip,
-      take,
-      orderBy: {
-        experience: 'desc',
-      },
-    });
+    return this.PrismaService.user
+      .findMany({
+        skip,
+        take,
+        orderBy: {
+          experience: 'desc',
+        },
+				include
+      })
+      .then((users) => {
+        const modifiedUsers = users.map((user) => {
+          return {
+            status:
+              this.UsersService.getUser(user.id)?.status || Status.OFFLINE,
+            ...user,
+          };
+        });
+        return modifiedUsers;
+      });
   }
 
   @Mutation('updateUser')
@@ -75,7 +123,7 @@ export class UsersResolver {
     @Context() context,
   ): Promise<User> {
     const { id } = context.req.user;
-    return this.PrismaService.user.update({
+    const user = await this.PrismaService.user.update({
       where: { id },
       data: {
         name: input.name,
@@ -91,6 +139,12 @@ export class UsersResolver {
       },
       include,
     });
+    return user
+      ? {
+          ...user,
+          status: this.UsersService.getUser(id)?.status || Status.OFFLINE,
+        }
+      : null;
   }
 
   @Mutation('submit2FA')

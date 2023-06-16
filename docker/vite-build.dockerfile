@@ -3,7 +3,7 @@ FROM node:20-alpine
 WORKDIR /var/www/vitejs
 
 COPY ./frontend .
-COPY ./docker/frontend.env .
+COPY ./docker/frontend.env .env
 
 RUN npm ci --production=false
 

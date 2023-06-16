@@ -43,8 +43,8 @@ export class Ball {
   }
 
   // function to move the ball, and check for collision
-  move( data: any, context: CanvasRenderingContext2D ) {
-	const { x, y } = data
+  move(data: any, context: CanvasRenderingContext2D) {
+    const { x, y } = data
 
     this.x = x
     this.y = y

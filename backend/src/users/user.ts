@@ -1,4 +1,4 @@
-import { IUser, userStatus } from '../interfaces/user.interface';
+import { IUser, Status } from '../interfaces/user.interface';
 import { Socket } from 'socket.io';
 import { PrismaService } from '../prisma/prisma.service';
 
@@ -6,7 +6,7 @@ export class User implements IUser {
   id: string;
   name: string;
   twoFactorNeeded: boolean;
-  status: userStatus;
+  status: Status;
   socket: Socket;
 
   constructor(
@@ -16,7 +16,7 @@ export class User implements IUser {
   ) {
     this.id = id;
     this.twoFactorNeeded = false;
-    this.status = userStatus.OFFLINE;
+    this.status = Status.OFFLINE;
     this.socket = null;
     this.name = name;
   }

@@ -22,8 +22,9 @@ export class GamesService {
     return game;
   }
 
-  addToQueue(user: IUser) {
-    if (this.queue.find((u) => u.id === user.id)) return;
+  addToQueue(user: IUser): boolean {
+    if (!user) return false;
+    if (this.queue.find((u) => u.id === user.id)) return false;
     this.queue.push(user);
     console.log('Queue:', this.queue.length);
     if (this.queue.length >= 2) {
@@ -34,6 +35,11 @@ export class GamesService {
       game.create();
       this.addGame(game);
     }
+    return true;
+  }
+
+  removeFromQueue(user: IUser) {
+    this.queue = this.queue.filter((u) => u.id !== user.id);
   }
 
   removeGame(id: string) {
