@@ -128,14 +128,14 @@ onMounted(() => {
                     <tbody>
 						<tr v-for="game in user.gameHistory">
 							<td class="px-5 py-5 border-b border-green-400 bg-green-300 text-sm w-2/5">
-								<div class="flex items-center">
+								<div class="flex items-center justify-center">
 									<div class="flex-shrink-0 w-10 h-10 hidden sm:table-cell">
 										<img class="w-full h-full rounded-full"
 											:src="user.avatar"
 											alt="" />
 									</div>
 									<div class="ml-3">
-										<p class="text-gray-900 whitespace-no-wrap">
+										<p class="text-gray-900 whitespace-no-wrap text-center">
 											{{ game.winner.name }}
 										</p>
 									</div>
@@ -145,21 +145,21 @@ onMounted(() => {
 								<p class="text-gray-900 whitespace-no-wrap text-center">3-0</p>
 							</td>
 							<td class="px-5 py-5 border-b border-red-400 bg-red-300 text-sm w-2/5">
-								<div class="flex items-center">
+								<div class="flex items-center justify-center">
 									<div class="flex-shrink-0 w-10 h-10 hidden sm:table-cell">
 										<img class="w-full h-full rounded-full"
 											:src="user.avatar"
 											alt="" />
 									</div>
 									<div class="ml-3">
-										<p class="text-gray-900 whitespace-no-wrap">
+										<p class="text-gray-900 whitespace-no-wrap text-center">
 											{{ game.loser.name }}
 										</p>
 									</div>
 								</div>
 							</td>
 						</tr>
-                    </tbody>
+					</tbody>
                 </table>
             </div>
         </div>
