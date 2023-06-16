@@ -10,6 +10,10 @@ const route = useRoute()
 const user = ref({
     name: '',
     id: '',
+	avatar: '',
+	points: 0,
+	nb_win: 0,
+	nb_loose: 0,
 })
 
 function extractQueryParam<T>(paramName: string): T {
@@ -29,8 +33,15 @@ const { result, refetch } = useQuery(
   gql`
   query user($userId: String!) {
     user(id: $userId) {
-      id
+	  avatar
       name
+	  experience
+	  gamesWon {
+        id
+      }
+      gamesLost {
+        id
+      }
     }
   }
   `,
@@ -46,7 +57,13 @@ watch(result, async (res) => {
   if (res) {
     const data = res.user
     if (!data) return
+	const base64 = btoa(String.fromCharCode(...new Uint8Array(data.avatar.data)))
+    const avatar = `data:image/png;base64,${base64}`
     user.value.name = res.user.name
+	user.value.avatar = avatar
+	user.value.points = res.user.experience
+	user.value.nb_win = res.user.gamesWon.length
+	user.value.nb_loose = res.user.gamesLost.length
   }
 }, { immediate: true })
 
@@ -57,8 +74,16 @@ onMounted(() => {
 </script>
 
 <template>
-    <!-- h1 text that print the id -->
-    <h1 class="text-white text-1xl">Id = {{ user.id }}</h1>
-    <h1 class="text-white text-1xl">Name = {{ user.name }}</h1>
-  <!-- <h1 class="text-white text-1xl">show profile component, 2fa status, change username</h1> -->
+  <div class="max-w-lg mx-auto my-10 bg-[#71717a] rounded-lg shadow-md p-5">
+    <img class="w-32 h-32 rounded-full mx-auto" :src="user.avatar" alt="Profile picture">
+    <h2 class="text-center text-2xl font-semibold text-black mt-3">{{ user.name }}</h2>
+    <p class="text-center text-gray-600 mt-1">Points: {{ user.points }}</p>
+	<!-- Wins and Looses -->
+	<p class="text-center text-gray-600 mt-1">Victoires: {{ user.nb_win }} | Defaites: {{ user.nb_loose }}</p>
+    <div class="flex justify-center mt-5">
+      <a href="#" class="text-green-500 hover:text-green-700 mx-3 font-semibold">Add friend</a>
+      <a href="#" class="text-white-500 hover:text-white-700 mx-3 font-semibold">Remove friend</a>
+      <a href="#" class="text-red-500 hover:text-red-700 mx-3 font-semibold">Block</a>
+    </div>
+  </div>
 </template>
