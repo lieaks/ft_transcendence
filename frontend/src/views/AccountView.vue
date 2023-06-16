@@ -112,31 +112,31 @@ onMounted(() => {
                     <thead class="bg-[#564F6F]">
                         <tr>
                             <th
-                                class="px-5 py-3 border-b-2 border-green-400 text-white text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                Winner
+                                class="px-5 py-3 border-b-2 border-[#564F6F] text-white text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                {{ user.name }}
                             </th>
                             <th
-                                class="px-5 py-3 border-b-2 border-white text-white text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                class="px-5 py-3 border-b-2 border-[#564F6F] text-white text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                 Score
                             </th>
                             <th
-                                class="px-5 py-3 border-b-2 border-red-400 text-white text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                Looser
+                                class="px-5 py-3 border-b-2 border-[#564F6F] text-white text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Opponent
                             </th>
                         </tr>
                     </thead>
                     <tbody>
 						<tr v-for="game in user.gameHistory">
-							<td class="px-5 py-5 border-b border-green-400 bg-green-300 text-sm w-2/5">
+							<td class="px-5 py-5 border-b text-sm w-2/5" :class="game.winner.name != user.name ? 'border-red-400 bg-red-300' : 'border-green-400 bg-green-300'">
 								<div class="flex items-center justify-center">
 									<div class="flex-shrink-0 w-10 h-10 hidden sm:table-cell">
-										<img class="w-full h-full rounded-full"
+										<img class="v-w-full h-full rounded-full"
 											:src="user.avatar"
 											alt="" />
 									</div>
 									<div class="ml-3">
 										<p class="text-gray-900 whitespace-no-wrap text-center">
-											{{ game.winner.name }}
+											{{ user.name }}
 										</p>
 									</div>
 								</div>
@@ -144,7 +144,7 @@ onMounted(() => {
 							<td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
 								<p class="text-gray-900 whitespace-no-wrap text-center">3-0</p>
 							</td>
-							<td class="px-5 py-5 border-b border-red-400 bg-red-300 text-sm w-2/5">
+							<td class="px-5 py-5 border-b text-sm w-2/5" :class="game.winner.name == user.name ? 'border-red-400 bg-red-300' : 'border-green-400 bg-green-300'">
 								<div class="flex items-center justify-center">
 									<div class="flex-shrink-0 w-10 h-10 hidden sm:table-cell">
 										<img class="w-full h-full rounded-full"
@@ -153,7 +153,7 @@ onMounted(() => {
 									</div>
 									<div class="ml-3">
 										<p class="text-gray-900 whitespace-no-wrap text-center">
-											{{ game.loser.name }}
+											{{ user.name == game.winner.name ? game.loser.name : game.winner.name }}
 										</p>
 									</div>
 								</div>
