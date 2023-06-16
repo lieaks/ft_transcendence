@@ -28,7 +28,7 @@ export interface Game {
     id: string;
     players: User[];
     winner?: Nullable<User>;
-    looser?: Nullable<User>;
+    loser?: Nullable<User>;
     createdAt: DateTime;
     finishedAt?: Nullable<DateTime>;
 }

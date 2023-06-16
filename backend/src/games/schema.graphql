@@ -5,7 +5,7 @@ type Game {
 	id: String!
 	players: [User!]!
 	winner: User
-	looser: User
+	loser: User
 	createdAt: DateTime!
 	finishedAt: DateTime
 }

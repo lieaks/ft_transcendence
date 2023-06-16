@@ -11,9 +11,9 @@ const include = {
   friendOf: true,
   blocked: true,
   blockedOf: true,
-  gameHistory: { include: { players: true, winner: true, looser: true } },
-  gamesWon: { include: { players: true, winner: true, looser: true } },
-  gamesLost: { include: { players: true, winner: true, looser: true } },
+  gameHistory: { include: { players: true, winner: true, loser: true } },
+  gamesWon: { include: { players: true, winner: true, loser: true } },
+  gamesLost: { include: { players: true, winner: true, loser: true } },
 };
 
 @Resolver('User')
