@@ -37,10 +37,14 @@ const { result, refetch } = useQuery(
       name
 	  experience
 	  gamesWon {
-        id
-      }
-      gamesLost {
-        id
+		winner {
+        	name
+        	avatar
+      	}
+      	looser {
+        	name
+        	avatar
+      	}
       }
     }
   }
@@ -78,7 +82,6 @@ onMounted(() => {
     <img class="w-32 h-32 rounded-full mx-auto" :src="user.avatar" alt="Profile picture">
     <h2 class="text-center text-2xl font-semibold text-black mt-3">{{ user.name }}</h2>
     <p class="text-center text-gray-600 mt-1">Points: {{ user.points }}</p>
-	<!-- Wins and Looses -->
 	<p class="text-center text-gray-600 mt-1">Victoires: {{ user.nb_win }} | Defaites: {{ user.nb_loose }}</p>
     <div class="flex justify-center mt-5">
       <a href="#" class="text-green-500 hover:text-green-700 mx-3 font-semibold">Add friend</a>
@@ -86,4 +89,102 @@ onMounted(() => {
       <a href="#" class="text-red-500 hover:text-red-700 mx-3 font-semibold">Block</a>
     </div>
   </div>
+
+  <div class="container mx-auto px-4 sm:px-8">
+    <div class="py-8">
+        <div>
+            <h2 class="text-2xl font-semibold leading-tight text-center">Matches History</h2>
+        </div>
+        <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+            <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
+                <table class="min-w-full leading-normal">
+                    <thead>
+                        <tr>
+                            <th
+                                class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Winner
+                            </th>
+                            <th
+                                class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Score
+                            </th>
+                            <th
+                                class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Looser
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm w-2/5">
+                                <div class="flex items-center">
+                                    <div class="flex-shrink-0 w-10 h-10 hidden sm:table-cell">
+                                        <img class="w-full h-full rounded-full"
+											:src="user.avatar"
+                                            alt="" />
+                                    </div>
+                                    <div class="ml-3">
+                                        <p class="text-gray-900 whitespace-no-wrap">
+                                            axlamber
+                                        </p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                <p class="text-gray-900 whitespace-no-wrap text-center">0-3</p>
+                            </td>
+                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm w-2/5">
+                                <div class="flex items-center float-right">
+                                    <div class="mr-3">
+                                        <p class="text-gray-900 whitespace-no-wrap text-right">
+                                            Axel Lambert
+                                        </p>
+                                    </div>
+                                    <div class="flex-shrink-0 w-10 h-10 hidden sm:table-cell">
+                                        <img class="w-full h-full rounded-full"
+										:src="user.avatar"
+                                            alt="" />
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm w-2/5">
+                                <div class="flex items-center">
+                                    <div class="flex-shrink-0 w-10 h-10 hidden sm:table-cell">
+                                        <img class="w-full h-full rounded-full"
+										:src="user.avatar"
+                                            alt="" />
+                                    </div>
+                                    <div class="ml-3">
+                                        <p class="text-gray-900 whitespace-no-wrap">
+                                            lguillard
+                                        </p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                <p class="text-gray-900 whitespace-no-wrap text-center">2-1</p>
+                            </td>
+                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm w-2/5">
+                                <div class="flex items-center float-right">
+                                    <div class="mr-3">
+                                        <p class="text-gray-900 whitespace-no-wrap text-right">
+                                            axlamber
+                                        </p>
+                                    </div>
+                                    <div class="flex-shrink-0 w-10 h-10 hidden sm:table-cell">
+                                        <img class="w-full h-full rounded-full"
+										:src="user.avatar"
+                                            alt="" />
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 </template>
