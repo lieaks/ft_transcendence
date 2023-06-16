@@ -5,20 +5,19 @@ import * as passport from 'passport';
 if (
   !process.env.FORTYTWO_CLIENT_ID ||
   !process.env.FORTYTWO_CLIENT_SECRET ||
-  !process.env.FORTYTWO_CALLBACK_URL ||
   !process.env.GOOGLE_CLIENT_ID ||
   !process.env.GOOGLE_CLIENT_SECRET ||
-  !process.env.GOOGLE_CALLBACK_URL ||
+		!process.env.CALLBACK_HOST ||
+		!process.env.DEFAULT_FRONTEND_HOST ||
   !process.env.JWT_SECRET ||
-  !process.env.DATABASE_URL ||
-  !process.env.FRONT_URL
+  !process.env.DATABASE_URL
 ) {
   console.error('Missing environment variables!');
   process.exit(1);
 }
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule)
 
   app.enableCors();
   app.use(passport.initialize());

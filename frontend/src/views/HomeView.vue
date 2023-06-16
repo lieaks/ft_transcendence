@@ -10,7 +10,6 @@ const user = useUserStore()
 const router = useRouter()
 
 function redirectToOAuth(provider: string) {
-  console.log('redirectToOAuth(42)')
   window.location.href = `${import.meta.env.VITE_BACKEND_URL}/auth/${provider}`
 }
 

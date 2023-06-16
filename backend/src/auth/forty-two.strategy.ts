@@ -18,7 +18,7 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
     super({
       clientID: process.env.FORTYTWO_CLIENT_ID,
       clientSecret: process.env.FORTYTWO_CLIENT_SECRET,
-      callbackURL: process.env.FORTYTWO_CALLBACK_URL,
+			callbackURL: process.env.CALLBACK_HOST + '/auth/42/callback',
     });
     this.default_avatar = fs.readFileSync('./src/assets/default_avatar.png');
     if (!this.default_avatar) {
@@ -33,7 +33,6 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
     done: VerifyCallback,
   ): Promise<any> {
     try {
-      // console.log('42 profile:', profile);
       let user = await this.prismaService.user.findFirst({
         where: {
           oauthProvider: profile.provider,

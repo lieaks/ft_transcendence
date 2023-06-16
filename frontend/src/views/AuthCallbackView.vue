@@ -53,12 +53,13 @@ watch(result, async (res) => {
     if (!me) return
     console.log('new user', me.name, 'old one was', user.name) // TODO: debug
     user.name = me.name
-    user.avatar = me.avatar
-    router.replace('/')
-  }
+		const base64 = btoa(String.fromCharCode(...new Uint8Array(me.avatar.data))) // Convert buffer to base64
+		user.avatar = `data:image/png;base64,${base64}`
+		router.replace('/')
+	}
 })
 </script>
 
 <template>
-  <h1 class="text-white text-1xl">{{ route.query }}</h1>
+	<h1 class="text-white text-1xl">{{ route.query }}</h1>
 </template>
