@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
 import gql from 'graphql-tag'
-import { useQuery } from '@vue/apollo-composable'
+import { useQuery, useMutation } from '@vue/apollo-composable'
 import { onMounted, ref, watch } from 'vue'
 import { useUserStore } from '@/stores/userStore'
 
@@ -86,6 +86,22 @@ onMounted(() => {
   refetch()
 })
 
+function addFriend(id: string) {
+  const {mutate} = useMutation(
+    gql`
+      mutation UpdateUser($input: UpdateUserInput!) {
+        updateUser(input: $input) {
+          id
+        }
+      }
+    `
+  );
+
+  const input = { friendsToAdd: [id] };
+
+  mutate({ variables: { input } });
+}
+
 </script>
 
 <template>
@@ -95,7 +111,7 @@ onMounted(() => {
     <p class="text-center text-gray-600 mt-1">Points: {{ user.points }}</p>
 	<p class="text-center text-gray-600 mt-1">Victoires: {{ user.nb_win }} | Defaites: {{ user.nb_loose }}</p>
     <div class="flex justify-center mt-5">
-      <a href="#" class="text-green-500 hover:text-green-700 mx-3 font-semibold">Follow</a>
+      <button class="text-green-500 hover:text-green-700 mx-3 font-semibold" @click="addFriend(user.id)">Add Friend</button>
       <a href="#" class="text-white-500 hover:text-white-700 mx-3 font-semibold">Unfollow</a>
       <a href="#" class="text-red-500 hover:text-red-700 mx-3 font-semibold">Block</a>
     </div>
