@@ -3,12 +3,27 @@ import { useRoute } from 'vue-router'
 import gql from 'graphql-tag'
 import { useQuery } from '@vue/apollo-composable'
 import { onMounted, ref, watch } from 'vue'
+import { useUserStore } from '@/stores/userStore'
 
+const userStore = useUserStore()
 const route = useRoute()
 const user = ref({
     name: '',
     id: '',
 })
+
+function extractQueryParam<T>(paramName: string): T {
+  let value: T = '' as unknown as T
+  const paramValue = route.query[paramName]
+  if (Array.isArray(paramValue) && paramValue.length > 0) {
+    value = paramValue[0]?.toString() as unknown as T
+  } else if (paramValue) {
+    value = paramValue.toString() as unknown as T
+  }
+  return value
+}
+
+user.value.id = extractQueryParam<string>('id') || userStore.id
 
 const { result, refetch } = useQuery(
   gql`
@@ -20,9 +35,7 @@ const { result, refetch } = useQuery(
   }
   `,
   {
-    variables: {
-        userId: "3eb82a25-f26f-41bc-a397-5ae33dc9b2b8"
-    }
+	userId: user.value.id,
   },
   {
 	fetchPolicy: 'cache-and-network',
@@ -30,12 +43,9 @@ const { result, refetch } = useQuery(
 )
 
 watch(result, async (res) => {
-  console.log("test1")
   if (res) {
-    console.log("test2")
     const data = res.user
     if (!data) return
-    console.log("test3")
     user.value.name = res.user.name
   }
 }, { immediate: true })
