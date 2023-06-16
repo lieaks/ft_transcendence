@@ -23,7 +23,7 @@ export class AuthController {
 		@Res() res: Response,
 	) {
 		try {
-			let referer = req.headers.referer || req.headers.referrer || process.env.DEFAULT_FRONTEND_HOST;
+			let referer = req.headers.referer || req.headers.referrer || process.env.DEFAULT_FRONTEND_URL;
 			if (referer[referer.length - 1] !== '/')
 			referer += '/';
 			const user = req.user;
@@ -47,7 +47,7 @@ export class AuthController {
 		@Res() res: Response,
 	) {
 		try {
-			let referer = req.headers.referer || req.headers.referrer || process.env.DEFAULT_FRONTEND_HOST;
+			let referer = req.headers.referer || req.headers.referrer || process.env.DEFAULT_FRONTEND_URL;
 			if (referer[referer.length - 1] !== '/')
 			referer += '/';
 			const user = req.user;

@@ -7,8 +7,8 @@ if (
   !process.env.FORTYTWO_CLIENT_SECRET ||
   !process.env.GOOGLE_CLIENT_ID ||
   !process.env.GOOGLE_CLIENT_SECRET ||
-		!process.env.CALLBACK_HOST ||
-		!process.env.DEFAULT_FRONTEND_HOST ||
+		!process.env.CALLBACK_URL ||
+		!process.env.DEFAULT_FRONTEND_URL ||
   !process.env.JWT_SECRET ||
   !process.env.DATABASE_URL
 ) {

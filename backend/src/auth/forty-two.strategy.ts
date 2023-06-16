@@ -18,7 +18,7 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
     super({
       clientID: process.env.FORTYTWO_CLIENT_ID,
       clientSecret: process.env.FORTYTWO_CLIENT_SECRET,
-			callbackURL: process.env.CALLBACK_HOST + '/auth/42/callback',
+			callbackURL: process.env.CALLBACK_URL + '/auth/42/callback',
     });
     this.default_avatar = fs.readFileSync('./src/assets/default_avatar.png');
     if (!this.default_avatar) {
