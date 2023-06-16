@@ -14,7 +14,7 @@ const user = ref({
     points: 0,
     nb_win: 0,
     nb_loose: 0,
-    gameHistory: [] as { winner: { name: string }, loser: { name: string } }[],
+    gameHistory: [] as { winner: { name: string, avatar: string }, loser: { name: string, avatar: string } }[],
 })
 
 function extractQueryParam<T>(paramName: string): T {
@@ -34,36 +34,38 @@ const { result, refetch } = useQuery(
   gql`
   query user($userId: String!) {
     user(id: $userId) {
-	  avatar
+      avatar
       name
-	  experience
-	  gamesWon {
-	  	id
-	  }
-	  gamesLost {
-	  	id
-	  }
-	  gameHistory {
-      	winner {
-      	  name
-      	}
-      	loser {
-      	  name
-      	}
+      experience
+      gamesWon {
+      	id
+      }
+      gamesLost {
+      	id
+      }
+      gameHistory {
+          winner {
+            name
+          avatar
+          }
+          loser {
+            name
+          avatar
+          }
       }
     }
   }
   `,
   {
-	userId: user.value.id,
+    userId: user.value.id,
   },
   {
-	fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-and-network',
   }
 )
 
 watch(result, async (res) => {
-	if (res) {
+    if (res) {
     const data = res.user
     if (!data) return
     const base64 = btoa(String.fromCharCode(...new Uint8Array(data.avatar.data)))
@@ -74,8 +76,8 @@ watch(result, async (res) => {
     user.value.nb_win = res.user.gamesWon.length
     user.value.nb_loose = res.user.gamesLost.length
     user.value.gameHistory = res.user.gameHistory.map((game: any) => ({
-        winner: { name: game.winner.name },
-        loser: { name: game.loser.name },
+        winner: { name: game.winner.name, avatar: `data:image/png;base64,${btoa(String.fromCharCode(...new Uint8Array(game.winner.avatar.data)))}` },
+        loser: { name: game.loser.name, avatar: `data:image/png;base64,${btoa(String.fromCharCode(...new Uint8Array(game.loser.avatar.data)))}` },
     }))
 }
 }, { immediate: true })
