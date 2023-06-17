@@ -18,7 +18,7 @@ import { forwardRef } from '@nestjs/common';
       signOptions: { expiresIn: '1d' },
     }),
     PrismaModule,
-		forwardRef(() => UsersModule),
+    forwardRef(() => UsersModule),
   ],
   controllers: [AuthController],
   providers: [JwtStrategy, FortyTwoStrategy, GoogleStrategy, AuthService],

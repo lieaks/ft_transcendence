@@ -7,8 +7,8 @@ if (
   !process.env.FORTYTWO_CLIENT_SECRET ||
   !process.env.GOOGLE_CLIENT_ID ||
   !process.env.GOOGLE_CLIENT_SECRET ||
-		!process.env.CALLBACK_URL ||
-		!process.env.DEFAULT_FRONTEND_URL ||
+  !process.env.CALLBACK_URL ||
+  !process.env.DEFAULT_FRONTEND_URL ||
   !process.env.JWT_SECRET ||
   !process.env.DATABASE_URL
 ) {
@@ -17,7 +17,7 @@ if (
 }
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule)
+  const app = await NestFactory.create(AppModule);
 
   app.enableCors();
   app.use(passport.initialize());

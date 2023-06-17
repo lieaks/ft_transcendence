@@ -5,10 +5,7 @@ import { PrismaModule } from 'src/prisma/prisma.module';
 import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
-	imports: [
-		PrismaModule,
-		forwardRef(() => AuthModule),
-	],
+  imports: [PrismaModule, forwardRef(() => AuthModule)],
   providers: [UsersResolver, UsersService],
   exports: [UsersResolver, UsersService],
 })

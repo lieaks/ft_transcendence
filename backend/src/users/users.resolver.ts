@@ -24,22 +24,22 @@ export class UsersResolver {
   constructor(
     private readonly PrismaService: PrismaService,
     private readonly UsersService: UsersService,
-		private readonly AuthService: AuthService,
+    private readonly AuthService: AuthService,
   ) {}
 
-	getUserWithExtraValues(user: User): User {
-		return {
-			status: this.UsersService.getUser(user.id)?.status || Status.OFFLINE,
-			...user,
-			};
-}
+  getUserWithExtraValues(user: User): User {
+    return {
+      status: this.UsersService.getUser(user.id)?.status || Status.OFFLINE,
+      ...user,
+    };
+  }
 
   @Query('users')
   async users(): Promise<User[]> {
     return this.PrismaService.user.findMany({ include }).then((users) => {
       const modifiedUsers = users.map((user) => {
         return this.getUserWithExtraValues(user);
-			});
+      });
       return modifiedUsers;
     });
   }
@@ -50,9 +50,7 @@ export class UsersResolver {
       where: { id },
       include,
     });
-    return user
-      ? this.getUserWithExtraValues(user)
-      : null;
+    return user ? this.getUserWithExtraValues(user) : null;
   }
   @Query('me')
   async me(@Context() context): Promise<User> {
@@ -64,9 +62,7 @@ export class UsersResolver {
       where: { name },
       include,
     });
-    return user
-			? this.getUserWithExtraValues(user)
-      : null;
+    return user ? this.getUserWithExtraValues(user) : null;
   }
   @Query('usersByIds')
   async usersByIds(@Args('ids') ids: string[]): Promise<User[]> {
@@ -79,7 +75,7 @@ export class UsersResolver {
       })
       .then((users) => {
         const modifiedUsers = users.map((user) => {
-					return this.getUserWithExtraValues(user);
+          return this.getUserWithExtraValues(user);
         });
         return modifiedUsers;
       });
@@ -99,11 +95,11 @@ export class UsersResolver {
         orderBy: {
           experience: 'desc',
         },
-				include
+        include,
       })
       .then((users) => {
         const modifiedUsers = users.map((user) => {
-					return this.getUserWithExtraValues(user);
+          return this.getUserWithExtraValues(user);
         });
         return modifiedUsers;
       });
@@ -131,13 +127,11 @@ export class UsersResolver {
       },
       include,
     });
-    return user
-      ? this.getUserWithExtraValues(user)
-			: null;
+    return user ? this.getUserWithExtraValues(user) : null;
   }
 
   @Mutation('submit2FA')
-	@SetMetadata('skipTwoFactorAuth', true)
+  @SetMetadata('skipTwoFactorAuth', true)
   async submit2FA(
     @Args('code') code: string,
     @Context() ctx,
@@ -154,20 +148,20 @@ export class UsersResolver {
       console.log('totpCode', totpCode);
       return false;
     }
-		this.AuthService.removeIdRequireTwoFactor(id)
+    this.AuthService.removeIdRequireTwoFactor(id);
     return true;
   }
 
   @Mutation('enable2FA')
   async enable2FA(@Context() ctx): Promise<string> {
     const { id } = ctx.req.user;
-		let user = await this.PrismaService.user.findUnique({ where: { id } });
-		if (user?.twoFactorSecret) return null;
+    let user = await this.PrismaService.user.findUnique({ where: { id } });
+    if (user?.twoFactorSecret) return null;
 
-		const secret = speakeasy.generateSecret({ length: 20 }).base32
+    const secret = speakeasy.generateSecret({ length: 20 }).base32;
     user = await this.PrismaService.user.update({
-			where: { id },
-      data: { twoFactorSecret: secret }
+      where: { id },
+      data: { twoFactorSecret: secret },
     });
     return user?.twoFactorSecret;
   }
@@ -185,7 +179,7 @@ export class UsersResolver {
       where: { id },
       data: { twoFactorSecret: null },
     });
-		this.AuthService.removeIdRequireTwoFactor(id)
+    this.AuthService.removeIdRequireTwoFactor(id);
     return true;
   }
 }
