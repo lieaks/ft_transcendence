@@ -8,5 +8,6 @@ export interface IUser {
   status: Status;
 
   addExperience(exp: number): Promise<number>;
+  getStatus(): Promise<Status>;
 }
 export { Status };

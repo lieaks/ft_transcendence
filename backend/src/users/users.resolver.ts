@@ -27,21 +27,28 @@ export class UsersResolver {
     private readonly AuthService: AuthService,
   ) {}
 
-  getUserWithExtraValues(user: User): User {
+  async getUserWithExtraValues(user: User): Promise<User> {
     return {
-      status: this.UsersService.getUser(user.id)?.status || Status.OFFLINE,
       ...user,
+      status:
+        (await this.UsersService.getUser(user.id)?.getStatus()) ||
+        Status.OFFLINE,
+      rank: await (async () => {
+        const rank = await this.PrismaService.user.count({
+          where: { experience: { gt: user.experience } },
+        });
+        return rank + 1;
+      })(),
     };
   }
 
   @Query('users')
   async users(): Promise<User[]> {
-    return this.PrismaService.user.findMany({ include }).then((users) => {
-      const modifiedUsers = users.map((user) => {
-        return this.getUserWithExtraValues(user);
-      });
-      return modifiedUsers;
-    });
+    const users = await this.PrismaService.user.findMany({ include });
+    const usersWithExtraValues = Promise.all(
+      users.map(async (user) => this.getUserWithExtraValues(user)),
+    );
+    return usersWithExtraValues;
   }
 
   @Query('user')
@@ -66,19 +73,16 @@ export class UsersResolver {
   }
   @Query('usersByIds')
   async usersByIds(@Args('ids') ids: string[]): Promise<User[]> {
-    return this.PrismaService.user
-      .findMany({
-        where: {
-          id: { in: ids },
-        },
-        include,
-      })
-      .then((users) => {
-        const modifiedUsers = users.map((user) => {
-          return this.getUserWithExtraValues(user);
-        });
-        return modifiedUsers;
-      });
+    const users = await this.PrismaService.user.findMany({
+      where: {
+        id: { in: ids },
+      },
+      include,
+    });
+    const usersWithExtraValues = Promise.all(
+      users.map(async (user) => this.getUserWithExtraValues(user)),
+    );
+    return usersWithExtraValues;
   }
 
   @Query('leaderboard')
@@ -88,21 +92,18 @@ export class UsersResolver {
   ): Promise<User[]> {
     skip ??= 0;
     take ??= undefined;
-    return this.PrismaService.user
-      .findMany({
-        skip,
-        take,
-        orderBy: {
-          experience: 'desc',
-        },
-        include,
-      })
-      .then((users) => {
-        const modifiedUsers = users.map((user) => {
-          return this.getUserWithExtraValues(user);
-        });
-        return modifiedUsers;
-      });
+    const users = await this.PrismaService.user.findMany({
+      skip,
+      take,
+      orderBy: {
+        experience: 'desc',
+      },
+      include,
+    });
+    const usersWithExtraValues = Promise.all(
+      users.map(async (user) => this.getUserWithExtraValues(user)),
+    );
+    return usersWithExtraValues;
   }
 
   @Mutation('updateUser')
@@ -111,11 +112,11 @@ export class UsersResolver {
     @Context() context,
   ): Promise<User> {
     const { id } = context.req.user;
-		function friendsToIds(friends: string[]): { id: string }[] {
-			return friends.map((id) => {
-				if (id !== user.id) return { id };
-			});
-		}
+    function friendsToIds(friends: string[]): { id: string }[] {
+      return friends.map((id) => {
+        if (id !== user.id) return { id };
+      });
+    }
     const user = await this.PrismaService.user.update({
       where: { id },
       data: {

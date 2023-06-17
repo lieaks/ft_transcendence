@@ -9,7 +9,7 @@ export class User implements IUser {
   socket: Socket;
 
   constructor(
-    private readonly prismaService: PrismaService,
+    private readonly PrismaService: PrismaService,
     id: string,
     name?: string,
   ) {
@@ -20,10 +20,14 @@ export class User implements IUser {
   }
 
   async addExperience(exp: number): Promise<number> {
-    const user = await this.prismaService.user.update({
+    const user = await this.PrismaService.user.update({
       where: { id: this.id },
       data: { experience: { increment: exp } },
     });
     return user.experience;
+  }
+
+  async getStatus(): Promise<Status> {
+    return this.status;
   }
 }
