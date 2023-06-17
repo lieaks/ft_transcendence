@@ -5,7 +5,6 @@ import { PrismaService } from '../prisma/prisma.service';
 export class User implements IUser {
   id: string;
   name: string;
-  twoFactorNeeded: boolean;
   status: Status;
   socket: Socket;
 
@@ -15,7 +14,6 @@ export class User implements IUser {
     name?: string,
   ) {
     this.id = id;
-    this.twoFactorNeeded = false;
     this.status = Status.OFFLINE;
     this.socket = null;
     this.name = name;

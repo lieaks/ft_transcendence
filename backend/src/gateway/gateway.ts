@@ -14,6 +14,7 @@ import { Status } from '../interfaces/user.interface';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { GamesService } from 'src/games/games.service';
+import { AuthService } from 'src/auth/auth.service';
 
 @WebSocketGateway({ cors: true })
 export class MyGateway implements OnModuleInit {
@@ -22,6 +23,7 @@ export class MyGateway implements OnModuleInit {
     private readonly gamesService: GamesService,
     private readonly JwtService: JwtService,
     private readonly prismaService: PrismaService,
+		private readonly AuthService: AuthService
   ) {}
 
   @WebSocketServer()
@@ -48,12 +50,17 @@ export class MyGateway implements OnModuleInit {
     const { jwtToken } = body;
     try {
       const payload = this.JwtService.verify(jwtToken);
+			if (this.AuthService.isTokenRequireTwoFactor(jwtToken)) throw "need 2fa";
       const user = new User(this.prismaService, payload.id, payload.name);
+			if (!user) throw "invalid jwttoken"
+
       user.socket = client;
       user.status = Status.ONLINE;
       this.usersService.addUser(user);
+			client.emit('logged')
     } catch (error) {
-      console.error('onAddUser:', error);
+      console.error('login failure:', error);
+			client.emit('denied', error)
     }
   }
 

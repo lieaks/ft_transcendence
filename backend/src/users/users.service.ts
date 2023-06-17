@@ -41,16 +41,6 @@ export class UsersService {
     return this.users;
   }
 
-  requireTwoFactor(id: string) {
-    const user = this.getUser(id);
-    user.twoFactorNeeded = true;
-  }
-
-  removeTwoFactor(id: string) {
-    const user = this.getUser(id);
-    user.twoFactorNeeded = false;
-  }
-
   setSocket(id: string, socket: any) {
     const user = this.getUser(id);
     user.socket = socket;

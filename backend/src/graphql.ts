@@ -57,9 +57,9 @@ export interface IMutation {
     notLoveChirel(): Nullable<string> | Promise<Nullable<string>>;
     test(): Nullable<string> | Promise<Nullable<string>>;
     updateUser(input: UpdateUserInput): User | Promise<User>;
-    submit2FA(token: string): boolean | Promise<boolean>;
-    enable2FA(): string | Promise<string>;
-    disable2FA(token: string): boolean | Promise<boolean>;
+    submit2FA(code: string): boolean | Promise<boolean>;
+    enable2FA(): Nullable<string> | Promise<Nullable<string>>;
+    disable2FA(code: string): boolean | Promise<boolean>;
 }
 
 export interface User {
@@ -69,6 +69,7 @@ export interface User {
     avatar: Byte;
     experience: number;
     status?: Nullable<Status>;
+    rank?: Nullable<number>;
     twoFactorNeeded?: Nullable<boolean>;
     createdAt: DateTime;
     gameHistory?: Nullable<Game[]>;

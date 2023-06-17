@@ -9,9 +9,14 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { Request, Response } from 'express';
 import { IRequestOauthUser } from '../interfaces/request-oauth-user.interface';
+import { AuthService } from './auth.service';
 
 @Controller('auth')
 export class AuthController {
+	constructor(
+		private readonly AuthService: AuthService,
+	) {}
+
 	@Get('42')
 	@UseGuards(AuthGuard('42'))
 	async fortyTwoAuth() {}
@@ -27,8 +32,9 @@ export class AuthController {
 			if (referer[referer.length - 1] !== '/')
 			referer += '/';
 			const user = req.user;
+			const twoFactorAuth = await this.AuthService.isTokenRequireTwoFactor(user.jwtToken);
 			return res.redirect(
-				`${referer}auth/callback?jwtToken=${user.jwtToken}&id=${user.id}&twoFactorAuth=${user.twoFactorAuth}`,
+				`${referer}auth/callback?jwtToken=${user.jwtToken}&id=${user.id}&twoFactorAuth=${twoFactorAuth}`,
 			);
 		} catch (error) {
 			console.error('auth.controller.ts/42:', error);
@@ -51,8 +57,9 @@ export class AuthController {
 			if (referer[referer.length - 1] !== '/')
 			referer += '/';
 			const user = req.user;
+			const twoFactorAuth = await this.AuthService.isTokenRequireTwoFactor(user.jwtToken);
 			return res.redirect(
-				`${referer}auth/callback?jwtToken=${user.jwtToken}&id=${user.id}&twoFactorAuth=${user.twoFactorAuth}`,
+				`${referer}auth/callback?jwtToken=${user.jwtToken}&id=${user.id}&twoFactorAuth=${twoFactorAuth}`,
 			);
 		} catch (error) {
 			console.error('auth.controller.ts/google:', error);

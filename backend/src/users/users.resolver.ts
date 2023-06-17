@@ -1,10 +1,12 @@
-import { UseGuards } from '@nestjs/common';
+import { SetMetadata, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { TwoFactorAuthGuard } from 'src/auth/twoFactor-auth.guard';
 import * as speakeasy from 'speakeasy';
 import { Resolver, Query, Args, Mutation, Context } from '@nestjs/graphql';
 import { User, UpdateUserInput, Status } from 'src/graphql';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UsersService } from './users.service';
+import { AuthService } from '../auth/auth.service';
 
 const include = {
   friends: true,
@@ -17,22 +19,27 @@ const include = {
 };
 
 @Resolver('User')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, TwoFactorAuthGuard)
 export class UsersResolver {
   constructor(
     private readonly PrismaService: PrismaService,
     private readonly UsersService: UsersService,
+		private readonly AuthService: AuthService,
   ) {}
+
+	getUserWithExtraValues(user: User): User {
+		return {
+			status: this.UsersService.getUser(user.id)?.status || Status.OFFLINE,
+			...user,
+			};
+}
 
   @Query('users')
   async users(): Promise<User[]> {
     return this.PrismaService.user.findMany({ include }).then((users) => {
       const modifiedUsers = users.map((user) => {
-        return {
-          status: this.UsersService.getUser(user.id)?.status || Status.OFFLINE,
-          ...user,
-        };
-      });
+        return this.getUserWithExtraValues(user);
+			});
       return modifiedUsers;
     });
   }
@@ -44,10 +51,7 @@ export class UsersResolver {
       include,
     });
     return user
-      ? {
-          ...user,
-          status: this.UsersService.getUser(id)?.status || Status.OFFLINE,
-        }
+      ? this.getUserWithExtraValues(user)
       : null;
   }
   @Query('me')
@@ -61,11 +65,7 @@ export class UsersResolver {
       include,
     });
     return user
-      ? {
-          ...user,
-          status:
-            this.UsersService.getUserByName(name)?.status || Status.OFFLINE,
-        }
+			? this.getUserWithExtraValues(user)
       : null;
   }
   @Query('usersByIds')
@@ -79,11 +79,7 @@ export class UsersResolver {
       })
       .then((users) => {
         const modifiedUsers = users.map((user) => {
-          return {
-            status:
-              this.UsersService.getUser(user.id)?.status || Status.OFFLINE,
-            ...user,
-          };
+					return this.getUserWithExtraValues(user);
         });
         return modifiedUsers;
       });
@@ -107,11 +103,7 @@ export class UsersResolver {
       })
       .then((users) => {
         const modifiedUsers = users.map((user) => {
-          return {
-            status:
-              this.UsersService.getUser(user.id)?.status || Status.OFFLINE,
-            ...user,
-          };
+					return this.getUserWithExtraValues(user);
         });
         return modifiedUsers;
       });
@@ -140,16 +132,14 @@ export class UsersResolver {
       include,
     });
     return user
-      ? {
-          ...user,
-          status: this.UsersService.getUser(id)?.status || Status.OFFLINE,
-        }
-      : null;
+      ? this.getUserWithExtraValues(user)
+			: null;
   }
 
   @Mutation('submit2FA')
+	@SetMetadata('skipTwoFactorAuth', true)
   async submit2FA(
-    @Args('token') token: string,
+    @Args('code') code: string,
     @Context() ctx,
   ): Promise<boolean> {
     const { id } = ctx.req.user;
@@ -160,41 +150,42 @@ export class UsersResolver {
       secret: twoFactorSecret,
       encoding: 'base32',
     });
-    if (token != totpCode) {
+    if (code != totpCode) {
       console.log('totpCode', totpCode);
       return false;
     }
-    this.UsersService.removeTwoFactor(id);
+		this.AuthService.removeIdRequireTwoFactor(id)
     return true;
   }
 
   @Mutation('enable2FA')
   async enable2FA(@Context() ctx): Promise<string> {
     const { id } = ctx.req.user;
-    console.log('id', id);
+		let user = await this.PrismaService.user.findUnique({ where: { id } });
+		if (user?.twoFactorSecret) return null;
 
-    const secret = speakeasy.generateSecret({ length: 20 });
-    await this.PrismaService.user.update({
-      where: { id },
-      data: { twoFactorSecret: secret.base32 },
+		const secret = speakeasy.generateSecret({ length: 20 }).base32
+    user = await this.PrismaService.user.update({
+			where: { id },
+      data: { twoFactorSecret: secret }
     });
-    return secret.base32;
+    return user?.twoFactorSecret;
   }
 
   @Mutation('disable2FA')
   async disable2FA(
-    @Args('token') token: string,
+    @Args('code') code: string,
     @Context() ctx,
   ): Promise<boolean> {
-    if (!(await this.submit2FA(token, ctx))) {
+    if (!(await this.submit2FA(code, ctx))) {
       return false;
     }
     const { id } = ctx.req.user;
-    this.UsersService.removeTwoFactor(id);
     await this.PrismaService.user.update({
       where: { id },
       data: { twoFactorSecret: null },
     });
+		this.AuthService.removeIdRequireTwoFactor(id)
     return true;
   }
 }

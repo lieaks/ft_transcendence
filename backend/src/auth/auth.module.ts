@@ -8,6 +8,7 @@ import { JwtStrategy } from './jwt.strategy';
 import { AuthService } from './auth.service';
 import { UsersModule } from 'src/users/users.module';
 import { PrismaModule } from 'src/prisma/prisma.module';
+import { forwardRef } from '@nestjs/common';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { PrismaModule } from 'src/prisma/prisma.module';
       signOptions: { expiresIn: '1d' },
     }),
     PrismaModule,
-    UsersModule,
+		forwardRef(() => UsersModule),
   ],
   controllers: [AuthController],
   providers: [JwtStrategy, FortyTwoStrategy, GoogleStrategy, AuthService],
