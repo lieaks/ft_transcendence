@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useQuery } from '@vue/apollo-composable'
-import { onMounted, onActivated, onDeactivated } from 'vue'
+import { onMounted } from 'vue'
 import gql from 'graphql-tag'
 
 const players = ref<any[]>([])

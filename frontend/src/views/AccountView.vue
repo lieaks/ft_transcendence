@@ -4,7 +4,6 @@ import gql from 'graphql-tag'
 import { useQuery, useMutation } from '@vue/apollo-composable'
 import { onMounted, ref, watch } from 'vue'
 import { useUserStore } from '@/stores/userStore'
-import { apolloClient } from '@/main'
 
 const userStore = useUserStore()
 const route = useRoute()

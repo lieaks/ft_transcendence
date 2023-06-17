@@ -1,6 +1,3 @@
-import type { Paddle } from './Paddle'
-import type { Scoreboard } from './Scoreboard'
-
 /**
  * Represents a ball in the game.
  */
@@ -43,7 +40,7 @@ export class Ball {
   }
 
   // function to move the ball, and check for collision
-  move(data: any, context: CanvasRenderingContext2D) {
+  move(data: any) {
     const { x, y } = data
 
     this.x = x

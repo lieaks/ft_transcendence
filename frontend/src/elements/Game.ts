@@ -67,7 +67,7 @@ export class Game {
   }
 
   updateBallPosition(data: any) {
-    this.ball.move(data, this.context)
+    this.ball.move(data)
   }
 
   updatePaddlePosition(data: any) {

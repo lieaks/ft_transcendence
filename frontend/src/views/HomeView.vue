@@ -2,8 +2,8 @@
 import { useTestStore } from '@/stores/testStore'
 import { useUserStore } from '@/stores/userStore'
 import { useRouter } from 'vue-router'
-import Matchmaking from '@/components/Matchmaking.vue'
-import Leaderboard from '@/components/LeaderBoard.vue'
+import MatchmakingComponent from '@/components/MatchmakingComponent.vue'
+import LeaderboardComponent from '@/components/LeaderBoardComponent.vue'
 
 // const { fetchChirelData, notLoveChirel, loveChirel, getChirelData } = useTestStore()
 const user = useUserStore()
@@ -33,7 +33,7 @@ user.socket?.on('startGame', (data) => {
     <!-- <button @click="notLoveChirel">Not Love Chirel</button> -->
     <!-- <button @click="loveChirel">Love Chirel</button> -->
     <button class="btn btn-primary m-4" @click="joinQueue">Join Queue</button>
-    <Matchmaking v-if="user.inQueue" />
+    <MatchmakingComponent v-if="user.inQueue" />
   </div>
 
   <div class="p-4">
@@ -50,7 +50,7 @@ user.socket?.on('startGame', (data) => {
     <button class="btn btn-primary m-2" @click="redirectToOAuth('42')">login 42</button>
     <button class="btn btn-primary m-2" @click="redirectToOAuth('google')">login google</button>
   </div>
-  <Leaderboard />
+  <LeaderboardComponent />
 </template>
 
 <style scoped>

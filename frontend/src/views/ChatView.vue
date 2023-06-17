@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ChannelList from '@/components/chat/ChannelList.vue'
-import Chat from '@/components/chat/Chat.vue'
+import ChatComponent from '@/components/chat/ChatComponent.vue'
 </script>
 
 <template>
