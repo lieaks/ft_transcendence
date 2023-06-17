@@ -19,25 +19,32 @@ export class AuthService {
     return token;
   }
 
+	async removeOldTokens() {
+		this.jwtTokenTwoFactor = this.jwtTokenTwoFactor.filter(t => t.date > new Date(Date.now() - 24 * 60 * 60 * 1000))
+	}
+
   addRequireTwoFactor(token: string, id: string) {
-    if (this.isTokenRequireTwoFactor(token)) {
-      return;
-    }
+		this.removeOldTokens()
+		if (this.isTokenRequireTwoFactor(token)) return;
     this.jwtTokenTwoFactor.push({ token, id, date: new Date() });
     return token;
   }
   removeTokenRequireTwoFactor(token: string) {
+		this.removeOldTokens()
     this.jwtTokenTwoFactor = this.jwtTokenTwoFactor.filter(
       (t) => t.token !== token,
     );
   }
   isTokenRequireTwoFactor(token: string) {
+		this.removeOldTokens()
     return this.jwtTokenTwoFactor.some((t) => t.token === token);
   }
   removeIdRequireTwoFactor(id: string) {
+		this.removeOldTokens()
     this.jwtTokenTwoFactor = this.jwtTokenTwoFactor.filter((t) => t.id !== id);
   }
   isIdRequireTwoFactor(id: string) {
+		this.removeOldTokens()
     return this.jwtTokenTwoFactor.some((t) => t.id === id);
   }
 }
