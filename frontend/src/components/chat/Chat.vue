@@ -1,14 +1,19 @@
 <template>
   <div class="flex-row p-4">
     <h3 class="mb-3 mt-3">chanel list</h3>
-	<div class="overflow-scroll" id="msg-list">
-		<div v-for="msg in storeChat.listMessage">{{ msg }}</div>
-	</div>
-    <div class="">
-		<input v-model="storeChat.message" class="" @keydown.enter="storeChat.sendMessage" placeholder="Envoyer un message">
-		<button class="btn btn-primary" @click="storeChat.sendMessage">send</button>
+    <div class="overflow-scroll" id="msg-list">
+      <div v-for="msg in storeChat.listMessage">{{ msg }}</div>
     </div>
-	<div class="chat"> input in storechat.message: {{ storeChat.message }} </div>
+    <div class="">
+      <input
+        v-model="storeChat.message"
+        class=""
+        @keydown.enter="storeChat.sendMessage"
+        placeholder="Envoyer un message"
+      />
+      <button class="btn btn-primary" @click="storeChat.sendMessage">send</button>
+    </div>
+    <div class="chat">input in storechat.message: {{ storeChat.message }}</div>
   </div>
 </template>
 
@@ -20,7 +25,7 @@ import { useChatStore } from '@/stores/chatStore'
 const storeChat = useChatStore()
 // const user = useUserStore()
 // const messageContent = ref("");
- 
+
 // need to add socket.emit to chatStore in actions
 // function sendMessage() {
 // 	user.socket?.emit(messageContent.value);
@@ -30,6 +35,6 @@ const storeChat = useChatStore()
 
 <style>
 #msg-list {
-	height: calc(50vh - 40px - 1rem - 5rem);
-  }
+  height: calc(50vh - 40px - 1rem - 5rem);
+}
 </style>

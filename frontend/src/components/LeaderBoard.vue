@@ -1,26 +1,26 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { useQuery } from '@vue/apollo-composable';
-import { onMounted, onActivated, onDeactivated } from 'vue';
-import gql from 'graphql-tag';
+import { useQuery } from '@vue/apollo-composable'
+import { onMounted, onActivated, onDeactivated } from 'vue'
+import gql from 'graphql-tag'
 
 const players = ref<any[]>([])
 let currentId = 0
 const { result, refetch } = useQuery(
   gql`
-  query leaderboard($skip: Int, $take: Int) {
-    leaderboard(skip: $skip, take: $take) {
-      name
-      avatar
-      experience
-      gamesWon {
-        id
-      }
-      gamesLost {
-        id
+    query leaderboard($skip: Int, $take: Int) {
+      leaderboard(skip: $skip, take: $take) {
+        name
+        avatar
+        experience
+        gamesWon {
+          id
+        }
+        gamesLost {
+          id
+        }
       }
     }
-  }
   `,
   {
     fetchPolicy: 'cache-and-network',
@@ -31,29 +31,32 @@ const { result, refetch } = useQuery(
   }
 )
 
-watch(result, async (res) => {
-  if (res) {
-    const data = res.leaderboard
-    if (!data) return
-    players.value = res.leaderboard.map((player: any) => {
-      const base64 = btoa(String.fromCharCode(...new Uint8Array(player.avatar.data)))
-      const avatar = `data:image/png;base64,${base64}`
-      return {
-        id: currentId++,
-        name: player.name,
-        avatar: avatar,
-        points: player.experience,
-        win: player.gamesWon.length,
-        loose: player.gamesLost.length,
-      }
-    })
-  }
-}, { immediate: true })
+watch(
+  result,
+  async (res) => {
+    if (res) {
+      const data = res.leaderboard
+      if (!data) return
+      players.value = res.leaderboard.map((player: any) => {
+        const base64 = btoa(String.fromCharCode(...new Uint8Array(player.avatar.data)))
+        const avatar = `data:image/png;base64,${base64}`
+        return {
+          id: currentId++,
+          name: player.name,
+          avatar: avatar,
+          points: player.experience,
+          win: player.gamesWon.length,
+          loose: player.gamesLost.length
+        }
+      })
+    }
+  },
+  { immediate: true }
+)
 
 onMounted(() => {
   refetch()
 })
-
 </script>
 
 <template>
@@ -92,6 +95,4 @@ onMounted(() => {
   </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

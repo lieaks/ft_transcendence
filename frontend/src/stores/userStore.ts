@@ -33,28 +33,30 @@ export const useUserStore = defineStore('user', () => {
     }
   })
 
-	watch(socket, (newSocket) => {
-			if (!newSocket) return
-	})
+  watch(socket, (newSocket) => {
+    if (!newSocket) return
+  })
 
-	async function setName(newName: string) {
-		// gpl mutate back
-		name.value = newName
-	}
+  async function setName(newName: string) {
+    // gpl mutate back
+    name.value = newName
+  }
 
-	async function setAvatar(newAvatar: string) {
-		// gpl mutate back
-		avatar.value = newAvatar
-	}
+  async function setAvatar(newAvatar: string) {
+    // gpl mutate back
+    avatar.value = newAvatar
+  }
 
-	function setGameId(id: string) { // TODO: remove if not used
-		gameId.value = id
-		console.log(`Game id set to ${id}`)
-	}
+  function setGameId(id: string) {
+    // TODO: remove if not used
+    gameId.value = id
+    console.log(`Game id set to ${id}`)
+  }
 
-	function setInQueue(val: boolean) { // TODO: remove if not used
-		inQueue.value = val
-	}
+  function setInQueue(val: boolean) {
+    // TODO: remove if not used
+    inQueue.value = val
+  }
 
-	return { id, name, avatar, socket, gameId, inQueue, setName, setAvatar, setGameId, setInQueue }
+  return { id, name, avatar, socket, gameId, inQueue, setName, setAvatar, setGameId, setInQueue }
 })

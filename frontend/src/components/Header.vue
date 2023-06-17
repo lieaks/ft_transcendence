@@ -8,13 +8,16 @@ const user = useUserStore()
 <template>
   <header class="navbar">
     <RouterLink class="navbar-start title lg:text-3xl" to="/">🏓 ⚔️ Pongquistadors</RouterLink>
-    <ul v-if="user.id && user.avatar" class="navbar-center menu menu-horizontal rounded-box bg-base-200">
+    <ul
+      v-if="user.id && user.avatar"
+      class="navbar-center menu menu-horizontal rounded-box bg-base-200"
+    >
       <li><RouterLink class="text-lg mx-2" to="/">Home</RouterLink></li>
       <li><RouterLink class="text-lg mx-2" to="/game">Game</RouterLink></li>
       <li><RouterLink class="text-lg mx-2" to="/chat">Chat</RouterLink></li>
       <li><RouterLink class="text-lg mx-2" to="/social">Social</RouterLink></li>
     </ul>
-		<div v-if="user.id && user.avatar" class="navbar-end">
+    <div v-if="user.id && user.avatar" class="navbar-end">
       <RouterLink
         class="rounded-full h-14 w-48 xl:w-64 xl:h-16 2xl:w-72 2xl:h-18 p-0 menu menu-horizontal flex-nowrap hover:bg-neutral transition bg-base-200"
         to="/account"
