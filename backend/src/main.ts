@@ -5,13 +5,12 @@ import * as passport from 'passport';
 if (
   !process.env.FORTYTWO_CLIENT_ID ||
   !process.env.FORTYTWO_CLIENT_SECRET ||
-  !process.env.FORTYTWO_CALLBACK_URL ||
   !process.env.GOOGLE_CLIENT_ID ||
   !process.env.GOOGLE_CLIENT_SECRET ||
-  !process.env.GOOGLE_CALLBACK_URL ||
+  !process.env.CALLBACK_URL ||
+  !process.env.DEFAULT_FRONTEND_URL ||
   !process.env.JWT_SECRET ||
-  !process.env.DATABASE_URL ||
-  !process.env.FRONT_URL
+  !process.env.DATABASE_URL
 ) {
   console.error('Missing environment variables!');
   process.exit(1);

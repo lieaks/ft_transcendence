@@ -1,11 +1,19 @@
 scalar Byte
 scalar DateTime
 
+enum Status {
+	OFFLINE
+	ONLINE
+	INGAME
+}
+
 type User {
 	id: String!
 	name: String!
 	avatar: Byte!
 	experience: Float!
+	status: Status
+	rank: Int
 	twoFactorNeeded: Boolean
 	createdAt: DateTime!
 	gameHistory: [Game!]
@@ -19,6 +27,7 @@ type User {
 
 type Query {
 	user(id: String!): User
+	me: User
 	userByName(name: String!): User
 	usersByIds(ids: [String!]!): [User!]
 	users: [User!]!
@@ -29,9 +38,9 @@ type Query {
 type Mutation {
 	updateUser(input: UpdateUserInput!): User!
 
-	submit2FA(token: String!): Boolean!
-	enable2FA: String!
-	disable2FA(token: String!): Boolean!
+	submit2FA(code: String!): Boolean!
+	enable2FA: String
+	disable2FA(code: String!): Boolean!
 }
 
 input UpdateUserInput {

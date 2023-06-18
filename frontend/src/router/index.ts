@@ -1,10 +1,18 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, type RouteLocationNormalized } from 'vue-router'
 import GameView from '../views/GameView.vue'
+import LoginView from '../views/LoginView.vue'
 import HomeView from '../views/HomeView.vue'
 import ChatView from '../views/ChatView.vue'
-import FriendsView from '../views/FriendsView.vue'
 import AccountView from '../views/AccountView.vue'
 import AuthCallbackView from '../views/AuthCallbackView.vue'
+import SocialView from '../views/SocialView.vue'
+import { useUserStore } from '@/stores/userStore'
+
+async function checkLogin(to: RouteLocationNormalized) {
+	const user = useUserStore()
+	if ((!user.id || !user.name || !user.avatar) && to.name !== 'login') return { name: 'login' }
+	return true
+}
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,33 +20,43 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: HomeView,
+			beforeEnter: checkLogin
     },
+		{
+			path: '/login',
+			name: 'login',
+			component: LoginView,
+		},
     {
       path: '/game',
       name: 'game',
-      component: GameView
+			component: GameView,
+			beforeEnter: checkLogin
     },
     {
       path: '/chat',
       name: 'chat',
-      component: ChatView
+      component: ChatView,
+			beforeEnter: checkLogin
     },
     {
-      path: '/friends',
-      name: 'friends',
-      component: FriendsView
+      path: '/social',
+      name: 'social',
+      component: SocialView,
+			beforeEnter: checkLogin
     },
     {
       path: '/account',
       name: 'account',
-      component: AccountView
+      component: AccountView,
+			beforeEnter: checkLogin
     },
-		{
-			path: '/auth/callback',
-			name: 'authCallback',
-			component: AuthCallbackView
-		}
+    {
+      path: '/auth/callback',
+      name: 'authCallback',
+      component: AuthCallbackView
+    }
   ]
 })
 

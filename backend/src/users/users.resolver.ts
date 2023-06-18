@@ -1,56 +1,88 @@
-import { UseGuards } from '@nestjs/common';
+import { SetMetadata, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { TwoFactorAuthGuard } from 'src/auth/twoFactor-auth.guard';
 import * as speakeasy from 'speakeasy';
 import { Resolver, Query, Args, Mutation, Context } from '@nestjs/graphql';
-import { User, UpdateUserInput } from 'src/graphql';
+import { User, UpdateUserInput, Status } from 'src/graphql';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UsersService } from './users.service';
+import { AuthService } from '../auth/auth.service';
 
 const include = {
   friends: true,
   friendOf: true,
   blocked: true,
   blockedOf: true,
-  gameHistory: { include: { players: true } },
-  gamesWon: { include: { players: true } },
-  gamesLost: { include: { players: true } },
+  gameHistory: { include: { players: true, winner: true, loser: true } },
+  gamesWon: { include: { players: true, winner: true, loser: true } },
+  gamesLost: { include: { players: true, winner: true, loser: true } },
 };
 
 @Resolver('User')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, TwoFactorAuthGuard)
 export class UsersResolver {
   constructor(
     private readonly PrismaService: PrismaService,
     private readonly UsersService: UsersService,
+    private readonly AuthService: AuthService,
   ) {}
+
+  async getUserWithExtraValues(user: User): Promise<User> {
+    return {
+      ...user,
+      status:
+        (await this.UsersService.getUser(user.id)?.getStatus()) ||
+        Status.OFFLINE,
+      rank: await (async () => {
+        const rank = await this.PrismaService.user.count({
+          where: { experience: { gt: user.experience } },
+        });
+        return rank + 1;
+      })(),
+    };
+  }
 
   @Query('users')
   async users(): Promise<User[]> {
-    return this.PrismaService.user.findMany({ include });
+    const users = await this.PrismaService.user.findMany({ include });
+    const usersWithExtraValues = Promise.all(
+      users.map(async (user) => this.getUserWithExtraValues(user)),
+    );
+    return usersWithExtraValues;
   }
 
   @Query('user')
   async user(@Args('id') id: string): Promise<User> {
-    return this.PrismaService.user.findUnique({
+    const user = await this.PrismaService.user.findUnique({
       where: { id },
       include,
     });
+    return user ? this.getUserWithExtraValues(user) : null;
+  }
+  @Query('me')
+  async me(@Context() context): Promise<User> {
+    return this.user(context.req.user.id);
   }
   @Query('userByName')
   async userByName(@Args('name') name: string): Promise<User> {
-    return this.PrismaService.user.findUnique({
+    const user = await this.PrismaService.user.findUnique({
       where: { name },
       include,
     });
+    return user ? this.getUserWithExtraValues(user) : null;
   }
   @Query('usersByIds')
   async usersByIds(@Args('ids') ids: string[]): Promise<User[]> {
-    return this.PrismaService.user.findMany({
+    const users = await this.PrismaService.user.findMany({
       where: {
         id: { in: ids },
       },
       include,
     });
+    const usersWithExtraValues = Promise.all(
+      users.map(async (user) => this.getUserWithExtraValues(user)),
+    );
+    return usersWithExtraValues;
   }
 
   @Query('leaderboard')
@@ -60,13 +92,18 @@ export class UsersResolver {
   ): Promise<User[]> {
     skip ??= 0;
     take ??= undefined;
-    return this.PrismaService.user.findMany({
+    const users = await this.PrismaService.user.findMany({
       skip,
       take,
       orderBy: {
         experience: 'desc',
       },
+      include,
     });
+    const usersWithExtraValues = Promise.all(
+      users.map(async (user) => this.getUserWithExtraValues(user)),
+    );
+    return usersWithExtraValues;
   }
 
   @Mutation('updateUser')
@@ -75,27 +112,34 @@ export class UsersResolver {
     @Context() context,
   ): Promise<User> {
     const { id } = context.req.user;
-    return this.PrismaService.user.update({
+    function friendsToIds(friends: string[]): { id: string }[] {
+      return friends.map((id) => {
+        if (id !== user.id) return { id };
+      });
+    }
+    const user = await this.PrismaService.user.update({
       where: { id },
       data: {
         name: input.name,
         avatar: input.avatar,
         friends: {
-          connect: input.friendsToAdd?.map((id) => ({ id })),
-          disconnect: input.friendsToRemove?.map((id) => ({ id })),
+          connect: friendsToIds(input.friendsToAdd),
+          disconnect: friendsToIds(input.friendsToRemove),
         },
         blocked: {
-          connect: input.usersToBlock?.map((id) => ({ id })),
-          disconnect: input.usersToUnblock?.map((id) => ({ id })),
+          connect: friendsToIds(input.usersToBlock),
+          disconnect: friendsToIds(input.usersToUnblock),
         },
       },
       include,
     });
+    return user ? this.getUserWithExtraValues(user) : null;
   }
 
   @Mutation('submit2FA')
+  @SetMetadata('skipTwoFactorAuth', true)
   async submit2FA(
-    @Args('token') token: string,
+    @Args('code') code: string,
     @Context() ctx,
   ): Promise<boolean> {
     const { id } = ctx.req.user;
@@ -106,41 +150,42 @@ export class UsersResolver {
       secret: twoFactorSecret,
       encoding: 'base32',
     });
-    if (token != totpCode) {
+    if (code != totpCode) {
       console.log('totpCode', totpCode);
       return false;
     }
-    this.UsersService.removeTwoFactor(id);
+    this.AuthService.removeIdRequireTwoFactor(id);
     return true;
   }
 
   @Mutation('enable2FA')
   async enable2FA(@Context() ctx): Promise<string> {
     const { id } = ctx.req.user;
-    console.log('id', id);
+    let user = await this.PrismaService.user.findUnique({ where: { id } });
+    if (user?.twoFactorSecret) return null;
 
-    const secret = speakeasy.generateSecret({ length: 20 });
-    await this.PrismaService.user.update({
+    const secret = speakeasy.generateSecret({ length: 20 }).base32;
+    user = await this.PrismaService.user.update({
       where: { id },
-      data: { twoFactorSecret: secret.base32 },
+      data: { twoFactorSecret: secret },
     });
-    return secret.base32;
+    return user?.twoFactorSecret;
   }
 
   @Mutation('disable2FA')
   async disable2FA(
-    @Args('token') token: string,
+    @Args('code') code: string,
     @Context() ctx,
   ): Promise<boolean> {
-    if (!(await this.submit2FA(token, ctx))) {
+    if (!(await this.submit2FA(code, ctx))) {
       return false;
     }
     const { id } = ctx.req.user;
-    this.UsersService.removeTwoFactor(id);
     await this.PrismaService.user.update({
       where: { id },
       data: { twoFactorSecret: null },
     });
+    this.AuthService.removeIdRequireTwoFactor(id);
     return true;
   }
 }

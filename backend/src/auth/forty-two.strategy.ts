@@ -11,14 +11,14 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
   private default_avatar: Buffer;
 
   constructor(
-    private readonly prismaService: PrismaService,
-    private readonly authService: AuthService,
-    private readonly usersService: UsersService,
+    private readonly PrismaService: PrismaService,
+    private readonly AuthService: AuthService,
+    private readonly UsersService: UsersService,
   ) {
     super({
       clientID: process.env.FORTYTWO_CLIENT_ID,
       clientSecret: process.env.FORTYTWO_CLIENT_SECRET,
-      callbackURL: process.env.FORTYTWO_CALLBACK_URL,
+      callbackURL: process.env.CALLBACK_URL + '/auth/42/callback',
     });
     this.default_avatar = fs.readFileSync('./src/assets/default_avatar.png');
     if (!this.default_avatar) {
@@ -33,22 +33,21 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
     done: VerifyCallback,
   ): Promise<any> {
     try {
-      // console.log('42 profile:', profile);
-      let user = await this.prismaService.user.findFirst({
+      let user = await this.PrismaService.user.findFirst({
         where: {
           oauthProvider: profile.provider,
           oauthId: profile.id as string,
         },
       });
       if (!user) {
-        const userwithname = await this.prismaService.user.findFirst({
+        const userwithname = await this.PrismaService.user.findFirst({
           where: { name: profile.username },
         });
         const name = userwithname
           ? `${profile.username}${profile.provider}${profile.id}`
           : profile.username;
 
-        user = await this.prismaService.user.create({
+        user = await this.PrismaService.user.create({
           data: {
             name,
             oauthProvider: profile.provider,
@@ -57,9 +56,9 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
           },
         });
       }
-      const jwtToken = await this.authService.generateJwtToken(user);
+      const jwtToken = await this.AuthService.generateJwtToken(user);
       if (user.twoFactorSecret) {
-        this.usersService.requireTwoFactor(user.id);
+        this.AuthService.addRequireTwoFactor(jwtToken, user.id);
       }
       done(null, {
         id: user.id,

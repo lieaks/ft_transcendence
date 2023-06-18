@@ -10,10 +10,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Status {
+  OFFLINE
+  ONLINE
+  INGAME
+}
+
 model User {
   id              String   @id @default(uuid())
-	oauthProvider   String
-	oauthId         String
+  oauthProvider   String
+  oauthId         String
   name            String   @unique
   avatar          Bytes?
   experience      Float    @default(0)
@@ -27,7 +33,7 @@ model User {
   gamesWon        Game[]   @relation("winner")
   gamesLost       Game[]   @relation("loser")
 
-	@@unique([oauthProvider, oauthId])
+  @@unique([oauthProvider, oauthId])
 }
 
 model Game {

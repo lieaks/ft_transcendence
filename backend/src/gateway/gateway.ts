@@ -10,9 +10,11 @@ import {
 import { Server, Socket } from 'socket.io';
 import { UsersService } from 'src/users/users.service';
 import { User } from 'src/users/user';
+import { Status } from '../interfaces/user.interface';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { GamesService } from 'src/games/games.service';
+import { AuthService } from 'src/auth/auth.service';
 
 @WebSocketGateway({ cors: true })
 export class MyGateway implements OnModuleInit {
@@ -21,6 +23,7 @@ export class MyGateway implements OnModuleInit {
     private readonly gamesService: GamesService,
     private readonly JwtService: JwtService,
     private readonly prismaService: PrismaService,
+    private readonly AuthService: AuthService,
   ) {}
 
   @WebSocketServer()
@@ -47,28 +50,48 @@ export class MyGateway implements OnModuleInit {
     const { jwtToken } = body;
     try {
       const payload = this.JwtService.verify(jwtToken);
-      const user = new User(this.prismaService, payload.sub);
+      if (this.AuthService.isTokenRequireTwoFactor(jwtToken))
+        throw '2FA needed for this jwttoken';
+      const user = new User(this.prismaService, payload.id, payload.name);
+      if (!user) throw 'invalid jwttoken';
+
+      user.socket = client;
+      user.status = Status.ONLINE;
       this.usersService.addUser(user);
-      this.usersService.setSocket(payload.sub, client);
+      client.emit('logged', 'success');
     } catch (error) {
-      console.error('onAddUser:', error);
+      console.error('login failure:', error);
+      client.emit('logged', error);
     }
   }
 
   @SubscribeMessage('joinQueue')
   onJoinQueue(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
-    this.gamesService.addToQueue(
+    if (
+      this.gamesService.addToQueue(
+        this.usersService.getUserBySocketId(client.id),
+      )
+    ) {
+      client.emit('joinQueue', {});
+    }
+    console.log('Added to queue');
+  }
+
+  @SubscribeMessage('leaveQueue')
+  onLeaveQueue(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
+    this.gamesService.removeFromQueue(
       this.usersService.getUserBySocketId(client.id),
     );
+    console.log('Removed from queue');
   }
 
   @SubscribeMessage('movePaddle')
   onMovePaddle(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
     const { direction, gameId } = body;
-    let user = this.usersService.getUserBySocketId(client.id);
+    const user = this.usersService.getUserBySocketId(client.id);
     if (!user) return;
-	let game = this.gamesService.getGame(gameId);
-	if (!game) return;
-	game.movePaddle(user, direction);
+    const game = this.gamesService.getGame(gameId);
+    if (!game) return;
+    game.movePaddle(user, direction);
   }
 }

@@ -5,13 +5,13 @@ type Game {
 	id: String!
 	players: [User!]!
 	winner: User
-	looser: User
+	loser: User
 	createdAt: DateTime!
 	finishedAt: DateTime
 }
 
 type Query {
-	games: [Game!]!
+	games: [Game!]
 	game(id: String!): Game!
 	getPlayersByGameId(id: String!): [User!]!
 	getCurrentGames: [Game!]!

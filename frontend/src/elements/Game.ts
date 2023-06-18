@@ -62,19 +62,19 @@ export class Game {
   }
 
   updateScore(data: any) {
-	this.rightScore.score = data.right
-	this.leftScore.score = data.left
+    this.rightScore.score = data.right
+    this.leftScore.score = data.left
   }
 
   updateBallPosition(data: any) {
-    this.ball.move(data, this.context)
+    this.ball.move(data)
   }
 
   updatePaddlePosition(data: any) {
-	if (data.player === 'right') {
-		this.rightPaddle.movePaddle(data.y)
-	} else {
-		this.leftPaddle.movePaddle(data.y)
-  	}
+    if (data.player === 'right') {
+      this.rightPaddle.movePaddle(data.y)
+    } else {
+      this.leftPaddle.movePaddle(data.y)
+    }
   }
 }
