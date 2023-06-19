@@ -19,18 +19,22 @@ export class Chat implements IChat {
 	}
 
 	addMessage(message: IMessage): void {
+		this.updatedAt = new Date();
 		this.messages.push(message);
+		this.emitToUsers("newMessage", message);
 	}
 
 	addUser(user: IUser): void {
 		if (!this.users.find((u) => u.id === user.id)) {
 			this.users.push(user);
+			this.emitToUsers("userJoined", user);
 		}
 	}
 
 	removeUser(user: IUser): void {
 		if (this.users.find((u) => u.id === user.id)) {
 			this.users = this.users.filter((u) => u.id !== user.id);
+			this.emitToUsers("userLeft", user);
 		}
 	}
 
