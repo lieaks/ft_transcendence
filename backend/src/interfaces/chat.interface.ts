@@ -1,3 +1,5 @@
+import { IUser } from "./user.interface";
+
 export enum chatCategory {
 	PUBLIC,
 	PROTECTED,
@@ -16,5 +18,9 @@ export interface IChat {
 	createdAt: Date;
 	updatedAt: Date;
 	messages: IMessage[];
+	users: IUser[];
 	addMessage(message: IMessage): void;
+	addUser(user: IUser): void;
+	removeUser(user: IUser): void;
+	emitToUsers(event: string, data: any): void;
 }
