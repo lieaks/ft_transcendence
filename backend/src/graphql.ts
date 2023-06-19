@@ -31,6 +31,7 @@ export interface Game {
     loser?: Nullable<User>;
     createdAt: DateTime;
     finishedAt?: Nullable<DateTime>;
+    score?: Nullable<number[]>;
 }
 
 export interface IQuery {

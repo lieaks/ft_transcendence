@@ -15,6 +15,7 @@ const user = ref({
   nb_win: 0,
   nb_loose: 0,
   gameHistory: [] as {
+    score: number[]
     winner: { name: string; avatar: string }
     loser: { name: string; avatar: string }
   }[]
@@ -47,6 +48,7 @@ const { result, refetch } = useQuery(
           id
         }
         gameHistory {
+          score
           winner {
             name
             avatar
@@ -92,7 +94,8 @@ watch(
           avatar: `data:image/png;base64,${btoa(
             String.fromCharCode(...new Uint8Array(game.loser.avatar.data))
           )}`
-        }
+        },
+        score: game.winner.name === user.value.name ? game.score : game.score.reverse()
       }))
     }
   },
@@ -188,7 +191,9 @@ function addFriend(id: string) {
                   </div>
                 </td>
                 <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  <p class="text-gray-900 whitespace-no-wrap text-center">3-0</p>
+                  <p class="text-gray-900 whitespace-no-wrap text-center">
+                    {{ game.score[0] }} - {{ game.score[1] }}
+                  </p>
                 </td>
                 <td
                   class="px-5 py-5 border-b text-sm w-2/5"

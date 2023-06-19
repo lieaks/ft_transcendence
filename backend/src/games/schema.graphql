@@ -8,6 +8,7 @@ type Game {
 	loser: User
 	createdAt: DateTime!
 	finishedAt: DateTime
+	score: [Int!]
 }
 
 type Query {
