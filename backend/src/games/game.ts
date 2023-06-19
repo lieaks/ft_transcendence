@@ -80,6 +80,7 @@ export class Game implements IGame {
         createdAt: this.createdAt,
         winner: undefined,
         loser: undefined,
+        score: [this.score.left, this.score.right],
       },
     });
     this.id = game.id;
@@ -106,6 +107,7 @@ export class Game implements IGame {
         winner: { connect: { id: winner.id } },
         loser: { connect: { id: loser.id } },
         finishedAt: new Date(),
+        score: [this.score.left, this.score.right],
       },
     });
   }
