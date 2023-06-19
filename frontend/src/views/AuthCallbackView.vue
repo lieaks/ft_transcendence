@@ -101,6 +101,7 @@ onMounted(async () => {
 	user.socket = io(import.meta.env.VITE_BACKEND_URL)
 	user.socket.on('connect', () => {
 		progress_value.value += 20
+		console.log("JWT Token: " + localStorage.getItem('jwtToken')) 
 		user.socket?.emit('login', { jwtToken: localStorage.getItem('jwtToken') })
 	})
 	user.socket?.on('logged', (data) => {
