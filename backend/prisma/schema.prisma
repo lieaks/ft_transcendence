@@ -45,4 +45,5 @@ model Game {
   loserId    String?
   createdAt  DateTime  @default(now())
   finishedAt DateTime?
+  score      Int[]
 }
