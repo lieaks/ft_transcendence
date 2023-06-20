@@ -5,7 +5,7 @@ import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 
 export const useUserStore = defineStore('user', () => {
-  const id = ''
+  const id = ref('')
   const name = ref('name')
   const avatar = ref('')
   const socket = ref<Socket>()
@@ -18,16 +18,20 @@ export const useUserStore = defineStore('user', () => {
         me {
           name
           avatar
+					id
         }
       }
     `,
     { fetchPolicy: 'cache-and-network' }
   )
   watch(result, async (res) => {
+		console.log('new result')
     if (res) {
       const me = res.me
+			console.log('new result with res', me);
       if (!me) return
       name.value = me.name
+			id.value = me.id
       const base64 = btoa(String.fromCharCode(...new Uint8Array(me.avatar.data))) // Convert buffer to base64
       avatar.value = `data:image/png;base64,${base64}`
     }
