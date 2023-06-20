@@ -77,12 +77,12 @@ watch(
       if (!data) return
       const base64 = btoa(String.fromCharCode(...new Uint8Array(data.avatar.data)))
       const avatar = `data:image/png;base64,${base64}`
-      user.value.name = res.user.name
+      user.value.name = data.name
       user.value.avatar = avatar
-      user.value.points = res.user.experience
-      user.value.nb_win = res.user.gamesWon.length
-      user.value.nb_loose = res.user.gamesLost.length
-      user.value.gameHistory = res.user.gameHistory.map((game: any) => ({
+      user.value.points = data.experience
+      user.value.nb_win = data.gamesWon.length
+      user.value.nb_loose = data.gamesLost.length
+      user.value.gameHistory = data.gameHistory.map((game: any) => ({
         winner: {
           name: game.winner.name,
           avatar: `data:image/png;base64,${btoa(
@@ -95,7 +95,7 @@ watch(
             String.fromCharCode(...new Uint8Array(game.loser.avatar.data))
           )}`
         },
-        score: game.winner.name === user.value.name ? game.score : game.score.reverse()
+        score: game.winner.name === user.value.name ? game.score : game.score?.reverse() ?? []
       }))
     }
   },
