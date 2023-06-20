@@ -10,7 +10,7 @@ import { useUserStore } from '@/stores/userStore'
 
 async function checkLogin(to: RouteLocationNormalized) {
 	const user = useUserStore()
-	if ((!user.id || !user.name || !user.avatar) && to.name !== 'login') return { name: 'login' }
+	// if ((!user.id || !user.name || !user.avatar) && to.name !== 'login') return { name: 'login' }
 	return true
 }
 
