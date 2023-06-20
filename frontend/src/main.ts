@@ -1,5 +1,6 @@
 import { createApp, provide, h } from 'vue'
 import { createPinia } from 'pinia'
+import piniaPluginPersistedState from 'pinia-plugin-persistedstate'
 import { DefaultApolloClient } from '@vue/apollo-composable'
 import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client/core'
 import { setContext } from '@apollo/client/link/context'
@@ -37,4 +38,4 @@ const app = createApp({
   render: () => h(App)
 })
 
-app.use(router).use(createPinia()).mount('#app')
+app.use(router).use(createPinia().use(piniaPluginPersistedState)).mount('#app')
