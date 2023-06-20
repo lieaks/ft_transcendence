@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { useUserStore } from '@/stores/userStore'
 
 export const useChatStore = defineStore({
   id: 'chat',
@@ -8,7 +9,9 @@ export const useChatStore = defineStore({
   }),
   actions: {
     sendMessage() {
-      // storeUser.socket?.emit(this.message)
+      const userStore = useUserStore()
+      console.log(userStore.socket)
+      userStore.socket?.emit('sendMessage', { message: this.message })
       this.listMessage.push(this.message)
       this.message = ''
     }
