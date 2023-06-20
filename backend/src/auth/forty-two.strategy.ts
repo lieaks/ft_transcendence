@@ -39,6 +39,7 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
           oauthId: profile.id as string,
         },
       });
+			// console.log('42 profile', profile);
       if (!user) {
         const userwithname = await this.PrismaService.user.findFirst({
           where: { name: profile.username },
