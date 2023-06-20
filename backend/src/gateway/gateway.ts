@@ -106,4 +106,16 @@ export class MyGateway implements OnModuleInit {
 	if (!chatRoom) return;
 	chatRoom.addMessage({senderId: this.usersService.getUserBySocketId(client.id).id, content: message, createdAt: new Date()});
   }
+
+  @SubscribeMessage('createChannel')
+  onCreateChannel(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
+  const newChannel = this.chatService.createChat(0)
+  this.server.emit('newChannel', newChannel)
+  }
+
+  @SubscribeMessage('channelAvailable')
+  onChannelAvailable(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
+  const listChannel = this.chatService.getChats();
+  this.server.emit('channelAvailable', listChannel)
+  }
 }

@@ -17,8 +17,9 @@ export class ChatService {
 		return this.chats;
 	}
 
-	createChat(id: string, category: chatCategory): IChat {
-		if (this.getChat(id)) return;
+	createChat(category: chatCategory): IChat {
+		// if (this.getChat(id)) return;
+		const id = this.generateRandomId()
 		const chat = new Chat(id, category);
 		this.chats.push(chat);
 		return chat;
