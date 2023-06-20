@@ -27,4 +27,16 @@ export class ChatService {
 	removeChat(id: string): void {
 		this.chats = this.chats.filter((c) => c.id !== id);
 	}
+
+	generateRandomId(): string {
+		let id = '';
+		const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+		do {
+			for (let i = 0; i < 15; i++) {
+				id += characters.charAt(Math.floor(Math.random() * characters.length));
+			}
+		} while (this.getChat(id));
+		return id;
+	}
+	
 }
