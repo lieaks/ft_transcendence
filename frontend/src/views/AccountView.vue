@@ -33,7 +33,7 @@ function extractQueryParam<T>(paramName: string): T {
 
 onMounted(() => {
   const userStore = useUserStore()
-  user.value.id = extractQueryParam<string>('id') || "f9a8b915-911b-421f-8d5c-4ca8cfcf41d2"
+  user.value.id = extractQueryParam<string>('id') || userStore.id
 
   const { result, refetch } = useQuery(
     gql`
@@ -118,8 +118,6 @@ const { mutate } = useMutation(
 
 function addFriend(id: string) {
   const input = { friendsToAdd: [id] }
-  console.log(user)
-  console.log(input)
   mutate({ input })
 }
 </script>
