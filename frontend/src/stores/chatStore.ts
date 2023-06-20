@@ -12,5 +12,6 @@ export const useChatStore = defineStore({
       this.listMessage.push(this.message)
       this.message = ''
     }
-  }
+  },
+  persist: true,
 })

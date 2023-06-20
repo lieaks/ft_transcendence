@@ -8,5 +8,5 @@ import ChatComponent from '@/components/chat/ChatComponent.vue'
 <template>
   <h1 class="text-white text-1xl">chat</h1>
   <!-- <ChannelList /> -->
-  <Chat />
+  <ChatComponent />
 </template>
