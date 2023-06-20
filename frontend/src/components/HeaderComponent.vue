@@ -3,6 +3,7 @@ import { RouterLink } from 'vue-router'
 import { useUserStore } from '@/stores/userStore'
 
 const user = useUserStore()
+user.setupStore()
 </script>
 
 <template>

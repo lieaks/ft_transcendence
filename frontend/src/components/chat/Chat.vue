@@ -16,6 +16,8 @@ import { onMounted, ref } from 'vue'
 import { useUserStore } from '@/stores/userStore'
 
 const user = useUserStore()
+user.setupStore()
+
 const messageContent = ref("");
 
 function sendMessage() {

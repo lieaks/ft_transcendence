@@ -4,63 +4,65 @@ import { Socket } from 'socket.io-client'
 import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 
-export const useUserStore = defineStore('user', () => {
-  const id = ref('')
-  const name = ref('name')
-  const avatar = ref('')
-  const socket = ref<Socket>()
-  const gameId = ref('')
-  const inQueue = ref(false)
+export const useUserStore = defineStore({
+  id: 'user',
+  state: () => ({
+    id: '',
+    name: '',
+    avatar: '',
+    socket: null as Socket | null,
+    gameId: '',
+    inQueue: false,
+  }),
+  actions: {
+    async setName(newName: string) {
+      // gpl mutate back
+      this.name = newName
+    },
 
-  const { result } = useQuery(
-    gql`
-      query me {
-        me {
-          name
-          avatar
-					id
+    async setAvatar(newAvatar: string) {
+      // gpl mutate back
+      this.avatar = newAvatar
+    },
+
+    setGameId(id: string) {
+      // TODO: remove if not used
+      this.gameId = id
+      console.log(`Game id set to ${id}`)
+    },
+
+    setInQueue(val: boolean) {
+      // TODO: remove if not used
+      this.inQueue = val
+    },
+
+    setupStore() {
+      const { result } = useQuery(
+        gql`
+          query me {
+            me {
+              name
+              avatar
+              id
+            }
+          }
+        `,
+        { fetchPolicy: 'cache-and-network' }
+      )
+
+      watch(result, async (res) => {
+        console.log('new result')
+        if (res) {
+          const me = res.me
+          console.log('new result with res', me)
+          if (!me) return
+          this.name = me.name
+          this.id = me.id
+          const base64 = btoa(String.fromCharCode(...new Uint8Array(me.avatar.data))) // Convert buffer to base64
+          this.avatar = `data:image/png;base64,${base64}`
         }
-      }
-    `,
-    { fetchPolicy: 'cache-and-network' }
-  )
-  watch(result, async (res) => {
-		console.log('new result')
-    if (res) {
-      const me = res.me
-			console.log('new result with res', me);
-      if (!me) return
-      name.value = me.name
-			id.value = me.id
-      const base64 = btoa(String.fromCharCode(...new Uint8Array(me.avatar.data))) // Convert buffer to base64
-      avatar.value = `data:image/png;base64,${base64}`
-    }
-  })
-
-  watch(socket, (newSocket) => {
-    if (!newSocket) return
-  })
-
-  async function setName(newName: string) {
-    // gpl mutate back
-    name.value = newName
-  }
-
-  async function setAvatar(newAvatar: string) {
-    // gpl mutate back
-    avatar.value = newAvatar
-  }
-
-  function setGameId(id: string) {
-    // TODO: remove if not used
-    gameId.value = id
-    console.log(`Game id set to ${id}`)
-  }
-
-  function setInQueue(val: boolean) {
-    // TODO: remove if not used
-    inQueue.value = val
-  }
-
-  return { id, name, avatar, socket, gameId, inQueue, setName, setAvatar, setGameId, setInQueue }
+      })
+    },
+  },
+  persist: true,
 })
