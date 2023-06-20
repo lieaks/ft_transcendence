@@ -103,6 +103,7 @@ export class MyGateway implements OnModuleInit {
 	const { message } = body;
 	this.server.emit('newMessage', {message: "message: " + message});
 	let chatRoom = this.chatService.getChat("1");
+	if (!chatRoom) return;
 	chatRoom.addMessage({senderId: this.usersService.getUserBySocketId(client.id).id, content: message, createdAt: new Date()});
   }
 }

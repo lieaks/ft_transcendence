@@ -23,9 +23,12 @@ import { useUserStore } from '@/stores/userStore'
 import { useChatStore } from '@/stores/chatStore'
 
 const storeChat = useChatStore()
-// const user = useUserStore()
+const user = useUserStore()
 // const messageContent = ref("");
 
+user.socket?.on('newMessage', (data) => {
+  console.log(data.message)
+})
 // need to add socket.emit to chatStore in actions
 // function sendMessage() {
 // 	user.socket?.emit(messageContent.value);
