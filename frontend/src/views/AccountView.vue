@@ -120,6 +120,11 @@ function addFriend(id: string) {
   const input = { friendsToAdd: [id] }
   mutate({ input })
 }
+
+function removeFriend(id: string) {
+  const input = { friendsToRemove: [id] }
+  mutate({ input })
+}
 </script>
 
 <template>
@@ -135,9 +140,14 @@ function addFriend(id: string) {
         class="text-green-500 hover:text-green-700 mx-3 font-semibold"
         @click="addFriend(user.id)"
       >
-        Add Friend {{ user.id }}
+        Add Friend
       </button>
-      <a href="#" class="text-white-500 hover:text-white-700 mx-3 font-semibold">Unfollow</a>
+      <button
+        class="text-red-500 hover:text-red-700 mx-3 font-semibold"
+        @click="removeFriend(user.id)"
+      >
+        Remove Friend
+      </button>
       <a href="#" class="text-red-500 hover:text-red-700 mx-3 font-semibold">Block</a>
     </div>
   </div>
