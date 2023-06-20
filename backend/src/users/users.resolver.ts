@@ -112,23 +112,22 @@ export class UsersResolver {
     @Context() context,
   ): Promise<User> {
     const { id } = context.req.user;
-    function friendsToIds(friends: string[]): { id: string }[] {
-      return friends.map((id) => {
-        if (id !== user.id) return { id };
-      });
-    }
+	
+	function friendsToIds(friends: string[] = [], currentUserId: string): { id: string }[] {
+		return friends.filter((friendId) => friendId !== currentUserId).map((friendId) => ({ id: friendId }));
+	  }
     const user = await this.PrismaService.user.update({
       where: { id },
       data: {
         name: input.name,
         avatar: input.avatar,
         friends: {
-          connect: friendsToIds(input.friendsToAdd),
-          disconnect: friendsToIds(input.friendsToRemove),
+          connect: friendsToIds(input.friendsToAdd, id),
+          disconnect: friendsToIds(input.friendsToRemove, id),
         },
         blocked: {
-          connect: friendsToIds(input.usersToBlock),
-          disconnect: friendsToIds(input.usersToUnblock),
+          connect: friendsToIds(input.usersToBlock, id),
+          disconnect: friendsToIds(input.usersToUnblock, id),
         },
       },
       include,

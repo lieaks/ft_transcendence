@@ -5,7 +5,6 @@ import { useQuery, useMutation } from '@vue/apollo-composable'
 import { onMounted, ref, watch } from 'vue'
 import { useUserStore } from '@/stores/userStore'
 
-const userStore = useUserStore()
 const route = useRoute()
 const user = ref({
   name: '',
@@ -32,79 +31,81 @@ function extractQueryParam<T>(paramName: string): T {
   return value
 }
 
-user.value.id = extractQueryParam<string>('id') || userStore.id
+onMounted(() => {
+  const userStore = useUserStore()
+  user.value.id = extractQueryParam<string>('id') || "f9a8b915-911b-421f-8d5c-4ca8cfcf41d2"
 
-const { result, refetch } = useQuery(
-  gql`
-    query user($userId: String!) {
-      user(id: $userId) {
-        avatar
-        name
-        experience
-        gamesWon {
-          id
-        }
-        gamesLost {
-          id
-        }
-        gameHistory {
-          score
-          winner {
-            name
-            avatar
+  const { result, refetch } = useQuery(
+    gql`
+      query user($userId: String!) {
+        user(id: $userId) {
+          avatar
+          name
+          experience
+          gamesWon {
+            id
           }
-          loser {
-            name
-            avatar
+          gamesLost {
+            id
+          }
+          gameHistory {
+            score
+            winner {
+              name
+              avatar
+            }
+            loser {
+              name
+              avatar
+            }
           }
         }
       }
+    `,
+    {
+      userId: user.value.id
+    },
+    {
+      fetchPolicy: 'cache-and-network'
     }
-  `,
-  {
-    userId: user.value.id
-  },
-  {
-    fetchPolicy: 'cache-and-network'
-  }
-)
+  )
 
-watch(
-  result,
-  async (res) => {
-    if (res) {
-      const data = res.user
-      if (!data) return
-      const base64 = btoa(String.fromCharCode(...new Uint8Array(data.avatar.data)))
-      const avatar = `data:image/png;base64,${base64}`
-      user.value.name = data.name
-      user.value.avatar = avatar
-      user.value.points = data.experience
-      user.value.nb_win = data.gamesWon.length
-      user.value.nb_loose = data.gamesLost.length
-      user.value.gameHistory = data.gameHistory.map((game: any) => ({
-        winner: {
-          name: game.winner.name,
-          avatar: `data:image/png;base64,${btoa(
-            String.fromCharCode(...new Uint8Array(game.winner.avatar.data))
-          )}`
-        },
-        loser: {
-          name: game.loser.name,
-          avatar: `data:image/png;base64,${btoa(
-            String.fromCharCode(...new Uint8Array(game.loser.avatar.data))
-          )}`
-        },
-        score: game.winner.name === user.value.name ? game.score : game.score?.reverse() ?? []
-      }))
-    }
-  },
-  { immediate: true }
-)
+  watch(
+    result,
+    async (res) => {
+      if (res) {
+        const data = res.user
+        if (!data) return
+        const base64 = btoa(String.fromCharCode(...new Uint8Array(data.avatar.data)))
+        const avatar = `data:image/png;base64,${base64}`
+        user.value.name = data.name
+        user.value.avatar = avatar
+        user.value.points = data.experience
+        user.value.nb_win = data.gamesWon.length
+        user.value.nb_loose = data.gamesLost.length
+        user.value.gameHistory = data.gameHistory.map((game: any) => ({
+          winner: {
+            name: game.winner.name,
+            avatar: `data:image/png;base64,${btoa(
+              String.fromCharCode(...new Uint8Array(game.winner.avatar.data))
+            )}`
+          },
+          loser: {
+            name: game.loser.name,
+            avatar: `data:image/png;base64,${btoa(
+              String.fromCharCode(...new Uint8Array(game.loser.avatar.data))
+            )}`
+          },
+          score: game.winner.name === user.value.name ? game.score : [game.score[1], game.score[0]] ?? []
+        }))
+      }
+    },
+    { immediate: true }
+  )
 
-onMounted(() => {
   refetch()
 })
+
 const { mutate } = useMutation(
   gql`
     mutation UpdateUser($input: UpdateUserInput!) {
@@ -117,6 +118,7 @@ const { mutate } = useMutation(
 
 function addFriend(id: string) {
   const input = { friendsToAdd: [id] }
+  console.log(user)
   console.log(input)
   mutate({ input })
 }
@@ -135,7 +137,7 @@ function addFriend(id: string) {
         class="text-green-500 hover:text-green-700 mx-3 font-semibold"
         @click="addFriend(user.id)"
       >
-        Add Friend
+        Add Friend {{ user.id }}
       </button>
       <a href="#" class="text-white-500 hover:text-white-700 mx-3 font-semibold">Unfollow</a>
       <a href="#" class="text-red-500 hover:text-red-700 mx-3 font-semibold">Block</a>
