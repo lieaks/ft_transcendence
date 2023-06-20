@@ -6,7 +6,6 @@ import LeaderboardComponent from '@/components/LeaderBoardComponent.vue'
 
 const user = useUserStore()
 const router = useRouter()
-
 function joinQueue() {
   user.socket?.emit('joinQueue', {})
 }

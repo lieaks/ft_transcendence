@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/userStore'
 const user = useUserStore()
+
 function redirectToOAuth(provider: string) {
 	window.location.href = `${import.meta.env.VITE_BACKEND_URL}/auth/${provider}`
 }

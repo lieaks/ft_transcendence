@@ -10,10 +10,6 @@ import router from '@/router'
 const route = useRoute()
 const user = useUserStore()
 
-user.id = ''
-user.name = ''
-user.avatar = ''
-
 const progress_value = ref(10)
 const error = ref('')
 const totpinput = ref('')
