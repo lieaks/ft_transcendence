@@ -29,6 +29,7 @@ const user = useUserStore()
 user.socket?.on('newMessage', (data) => {
   console.log(data.message)
 })
+
 // need to add socket.emit to chatStore in actions
 // function sendMessage() {
 // 	user.socket?.emit(messageContent.value);
