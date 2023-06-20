@@ -12,6 +12,7 @@ import { AuthModule } from './auth/auth.module';
 import { GatewayModule } from './gateway/gateway.module';
 import { TestModule } from './tests/test.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { ChatsModule } from './chat/chats.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { PrismaModule } from './prisma/prisma.module';
     ScheduleModule.forRoot(),
     GatewayModule,
     PrismaModule,
+	ChatsModule,
   ],
   controllers: [HealthController],
   providers: [TestModule],
