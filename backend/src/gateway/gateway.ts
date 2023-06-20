@@ -15,6 +15,7 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { GamesService } from 'src/games/games.service';
 import { AuthService } from 'src/auth/auth.service';
+import { ChatService } from 'src/chat/chats.service';
 
 @WebSocketGateway({ cors: true })
 export class MyGateway implements OnModuleInit {
@@ -24,6 +25,7 @@ export class MyGateway implements OnModuleInit {
     private readonly JwtService: JwtService,
     private readonly prismaService: PrismaService,
     private readonly AuthService: AuthService,
+	private readonly chatService: ChatService,
   ) {}
 
   @WebSocketServer()
@@ -94,5 +96,13 @@ export class MyGateway implements OnModuleInit {
     const game = this.gamesService.getGame(gameId);
     if (!game) return;
     game.movePaddle(user, direction);
+  }
+
+  @SubscribeMessage('sendMessage')
+  onSendMessage(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
+	const { message } = body;
+	this.server.emit('newMessage', {message: "message: " + message});
+	let chatRoom = this.chatService.getChat("1");
+	chatRoom.addMessage({senderId: this.usersService.getUserBySocketId(client.id).id, content: message, createdAt: new Date()});
   }
 }
