@@ -125,6 +125,11 @@ function removeFriend(id: string) {
   const input = { friendsToRemove: [id] }
   mutate({ input })
 }
+
+function blockUser(id: string) {
+  const input = { usersToBlock: [id] }
+  mutate({ input })
+}
 </script>
 
 <template>
@@ -148,7 +153,13 @@ function removeFriend(id: string) {
       >
         Remove Friend
       </button>
-      <a href="#" class="text-red-500 hover:text-red-700 mx-3 font-semibold">Block</a>
+      <!-- write, and grey on hover for the button to block user-->
+      <button
+        class="text-white hover:text-gray-700 mx-3 font-semibold"
+        @click="blockUser(user.id)"
+      >
+        Block User
+      </button>
     </div>
   </div>
 
