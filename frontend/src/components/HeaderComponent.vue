@@ -3,7 +3,6 @@ import { RouterLink } from 'vue-router'
 import { useUserStore } from '@/stores/userStore'
 
 const user = useUserStore()
-user.setupStore()
 </script>
 
 <template>
@@ -27,7 +26,7 @@ user.setupStore()
           :src="user.avatar"
           alt="avatar"
           class="avatar hover:animate-spin m-1 rounded-full"
-          :class="{ loading: !user.avatar }"
+          :class="{ loading: user.loading }"
         />
         <div class="flex items-center justify-center w-32 xl:w-3/4">
           <span class="pl-1 text-center text-xl xl:text-2xl truncate block">{{ user.name }}</span>

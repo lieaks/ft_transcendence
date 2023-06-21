@@ -3,66 +3,80 @@ import { ref, watch } from 'vue'
 import { Socket } from 'socket.io-client'
 import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
+import router from '@/router'
+import { useRoute } from 'vue-router'
 
-export const useUserStore = defineStore({
-  id: 'user',
-  state: () => ({
-    id: '',
-    name: '',
-    avatar: '',
-    socket: null as Socket | null,
-    gameId: '',
-    inQueue: false,
-  }),
-  actions: {
-    async setName(newName: string) {
-      // gpl mutate back
-      this.name = newName
-    },
+export const useUserStore = defineStore('user', () => {
+  const route = useRoute()
+  const id = ref('')
+  const name = ref('name')
+  const avatar = ref('')
+  const socket = ref<Socket>()
+  const gameId = ref('')
+  const inQueue = ref(false)
 
-    async setAvatar(newAvatar: string) {
-      // gpl mutate back
-      this.avatar = newAvatar
-    },
-
-    setGameId(id: string) {
-      // TODO: remove if not used
-      this.gameId = id
-      console.log(`Game id set to ${id}`)
-    },
-
-    setInQueue(val: boolean) {
-      // TODO: remove if not used
-      this.inQueue = val
-    },
-
-    setupStore() {
-      const { result } = useQuery(
-        gql`
-          query me {
-            me {
-              name
-              avatar
-              id
-            }
-          }
-        `,
-        { fetchPolicy: 'cache-and-network' }
-      )
-
-      watch(result, async (res) => {
-        console.log('new result')
-        if (res) {
-          const me = res.me
-          console.log('new result with res', me)
-          if (!me) return
-          this.name = me.name
-          this.id = me.id
-          const base64 = btoa(String.fromCharCode(...new Uint8Array(me.avatar.data))) // Convert buffer to base64
-          this.avatar = `data:image/png;base64,${base64}`
+  const { onResult, onError, loading } = useQuery(
+    gql`
+      query me {
+        me {
+          name
+          avatar
+          id
         }
-      })
-    },
-  },
-  persist: true,
+      }
+    `,
+    { fetchPolicy: 'cache-and-network' }
+  )
+  onResult((res) => {
+    const me = res.data?.me
+    if (!me) return
+    name.value = me.name
+    id.value = me.id
+    const base64 = btoa(String.fromCharCode(...new Uint8Array(me.avatar.data))) // Convert buffer to base64
+    avatar.value = `data:image/png;base64,${base64}`
+  })
+  onError((err) => {
+    if (err.message === 'Unauthorized' && !['login', 'authCallback'].includes(route.name as string))
+      router.push('/login')
+  })
+
+  watch(socket, (newSocket) => {
+    // TODO: remove if not used
+    if (!newSocket) return
+  })
+
+  async function setName(newName: string) {
+    // TODO: gpl mutate back
+    name.value = newName
+  }
+
+  async function setAvatar(newAvatar: string) {
+    // TODO: gpl mutate back
+    avatar.value = newAvatar
+  }
+
+  function setGameId(id: string) {
+    // TODO: remove if not used
+    gameId.value = id
+    console.log(`Game id set to ${id}`)
+  }
+
+  function setInQueue(val: boolean) {
+    // TODO: remove if not used
+    inQueue.value = val
+  }
+
+  return {
+    loading,
+    id,
+    name,
+    avatar,
+    socket,
+    gameId,
+    inQueue,
+    setName,
+    setAvatar,
+    setGameId,
+    setInQueue
+  }
 })
