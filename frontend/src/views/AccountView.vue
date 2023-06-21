@@ -101,16 +101,6 @@ onMounted(() => {
   refetch()
 })
 
-const { mutate } = useMutation(
-  gql`
-    mutation UpdateUser($input: UpdateUserInput!) {
-      updateUser(input: $input) {
-        id
-      }
-    }
-  `
-)
-
 function redirectToUserAccount(userId: string) {
   router.push(`/profil?id=${userId}`)
 }

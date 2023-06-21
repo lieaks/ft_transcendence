@@ -99,6 +99,7 @@ onMounted(async () => {
   user.socket.on('connect', () => {
     progress_value.value += 20
     user.socket?.emit('login', { jwtToken: localStorage.getItem('jwtToken') })
+	console.log('jwtToken: ' + localStorage.getItem('jwtToken'))
   })
   user.socket?.on('logged', (data) => {
     if (data === 'success') {
