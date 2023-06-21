@@ -1,20 +1,21 @@
 import { IUser } from "./user.interface";
 
-export enum chatCategory {
+export enum chatType {
 	PUBLIC,
 	PROTECTED,
 	PRIVATE,
 }
 
 export interface IMessage {
-	senderId: string;
+	sender: IUser;
 	content: string;
 	createdAt: Date;
 }
 
 export interface IChat {
 	id: string;
-	category: chatCategory;
+	name: string;
+	type: chatType;
 	createdAt: Date;
 	updatedAt: Date;
 	messages: IMessage[];

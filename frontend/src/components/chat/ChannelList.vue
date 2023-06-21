@@ -1,34 +1,37 @@
-<template>
-  <div class="flex-row p-4">
-    <h3 class="mb-3 mt-3">chanel list</h3>
-    <div>
-      <button class="btn btn-primary my-4 me-4">friend list</button>
-      <button class="btn btn-primary my-4 me-4" @click="storeChat.createChannel">
-        create channel
-      </button>
-      <button class="btn btn-primary my-4 me-4" @click="storeChat.channelAvailable">
-        channel available
-      </button>
-    </div>
-  </div>
-  <div class="overflow-scroll" it="channel-list"></div>
-</template>
-
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import { useUserStore } from '@/stores/userStore'
-import { useChatStore } from '@/stores/chatStore'
+import type { IChannel, IUser, IMessage } from '@/interfaces/chat.interfaces'
+import { useUserStore } from '@/stores/userStore';
+import { ref, type PropType } from 'vue';
 
-const storeChat = useChatStore()
 const user = useUserStore()
+const newChannelName = ref('')
 
-user.socket?.on('newChannel', (data) => {
-  console.log(data)
-})
+defineProps({
+	availableChannels: {
+		type: Array as PropType<IChannel[]>,
+		required: true
+	},
+});
 
-user.socket?.on('channelAvailable', (data) => {
-  console.log(data)
-})
+function joinChannel(channel: IChannel) {
+	user?.socket.emit('joinChannel', {...channel })
+}
+function createChannel() {
+	user?.socket.emit('createChannel', { name: newChannelName.value })
+	newChannelName.value = ''
+}
+
 </script>
-
-<style></style>
+<template>
+		<ul>
+			<li v-for="channel in availableChannels" :key="channel.id" class="inline">
+				<button class="btn btn-primary m-2 normal-case" @click="joinChannel(channel)">
+					{{ channel.name }}
+				</button>
+			</li>
+			<li class="inline">
+				<input type="text" class="input input-primary m-2" placeholder="new channel name" v-model="newChannelName">
+				<button class="btn btn-primary m-2" @click="createChannel()">create channel</button>
+			</li>
+		</ul>
+</template>
