@@ -3,10 +3,10 @@ updates:
   - package-ecosystem: "npm"
     directory: "/backend"
     schedule:
-      interval: "weekly"
-      day-of-week: "3,6"
+      interval: "daily"
   - package-ecosystem: "npm"
     directory: "/frontend"
     schedule:
-      interval: "weekly"
-      day-of-week: "3,6"
+      interval: "daily"
+
+  
