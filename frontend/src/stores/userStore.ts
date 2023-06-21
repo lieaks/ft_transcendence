@@ -39,16 +39,16 @@ export const useUserStore = defineStore('user', () => {
     if (err.message === 'Unauthorized' && !['login', 'authCallback'].includes(route.name as string))
       router.push('/login')
   })
-	socket.on('connect', () => {
-		socket?.emit('login', { jwtToken: localStorage.getItem('jwtToken') })
-	})
-	socket?.on('logged', (data) => {
-		if (data === 'success') {
-			console.log('socket logged in')
-		} else {
-			console.log('socket login failed')
-		}
-	})
+  socket.on('connect', () => {
+    socket?.emit('login', { jwtToken: localStorage.getItem('jwtToken') })
+  })
+  socket?.on('logged', (data) => {
+    if (data === 'success') {
+      console.log('socket logged in')
+    } else {
+      console.log('socket login failed')
+    }
+  })
 
   async function setName(newName: string) {
     // TODO: gpl mutate back
