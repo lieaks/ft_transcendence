@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
-import { ref, watch } from 'vue'
-import { Socket } from 'socket.io-client'
+import { ref } from 'vue'
+import { io } from 'socket.io-client'
 import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import router from '@/router'
@@ -11,7 +11,7 @@ export const useUserStore = defineStore('user', () => {
   const id = ref('')
   const name = ref('name')
   const avatar = ref('')
-  const socket = ref<Socket>()
+  let socket = io(import.meta.env.VITE_BACKEND_URL)
   const gameId = ref('')
   const inQueue = ref(false)
 
@@ -39,11 +39,16 @@ export const useUserStore = defineStore('user', () => {
     if (err.message === 'Unauthorized' && !['login', 'authCallback'].includes(route.name as string))
       router.push('/login')
   })
-
-  watch(socket, (newSocket) => {
-    // TODO: remove if not used
-    if (!newSocket) return
-  })
+	socket.on('connect', () => {
+		socket?.emit('login', { jwtToken: localStorage.getItem('jwtToken') })
+	})
+	socket?.on('logged', (data) => {
+		if (data === 'success') {
+			console.log('socket logged in')
+		} else {
+			console.log('socket login failed')
+		}
+	})
 
   async function setName(newName: string) {
     // TODO: gpl mutate back
