@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { IUser } from '../interfaces/user.interface';
-import { IMessage, IChat, chatCategory } from "src/interfaces/chat.interface";
+import { IMessage, IChat, chatType } from "src/interfaces/chat.interface";
 import { Chat } from "./chat";
 
 @Injectable()
@@ -12,15 +12,18 @@ export class ChatService {
 	getChat(id: string): IChat {
 		return this.chats.find((c) => c.id === id);
 	}
+	getChatByName(name: string): IChat {
+		return this.chats.find((c) => c.name === name);
+	}
+
 
 	getChats(): IChat[] {
 		return this.chats;
 	}
 
-	createChat(category: chatCategory): IChat {
-		// if (this.getChat(id)) return;
-		const id = this.generateRandomId()
-		const chat = new Chat(id, category);
+	createChat(name: string, type: chatType): IChat {
+		if (this.getChatByName(name)) return null;
+		const chat = new Chat(this.generateRandomId(), name, type);
 		this.chats.push(chat);
 		return chat;
 	}
@@ -28,7 +31,11 @@ export class ChatService {
 	removeChat(id: string): void {
 		this.chats = this.chats.filter((c) => c.id !== id);
 	}
-
+	removeUserFromChannels(user: IUser): void {
+		for (const chat of this.chats) {
+			chat.removeUser(user);
+		}
+	}
 	generateRandomId(): string {
 		let id = '';
 		const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -39,5 +46,4 @@ export class ChatService {
 		} while (this.getChat(id));
 		return id;
 	}
-	
 }

@@ -1,16 +1,15 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
 import HeaderComponent from './components/HeaderComponent.vue'
+import { KeepAlive } from 'vue';
 </script>
 
 <template>
   <HeaderComponent class="mb-2" />
-  <RouterView />
+	<!-- <router-view v-slot="{ Component }"> -->
+	<!-- 	<keep-alive include="chat"> -->
+	<!-- 		<component :is="Component" /> -->
+	<!-- 	</keep-alive> -->
+	<!-- </router-view> -->
+	<RouterView />
 </template>
-
-<style>
-/* To debug */
-/* * {
-	border: 1px solid red;
-} */
-</style>

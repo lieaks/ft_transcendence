@@ -1,44 +1,37 @@
-<template>
-  <div class="flex-row p-4">
-    <h3 class="mb-3 mt-3">chanel list</h3>
-    <div class="overflow-scroll" id="msg-list">
-      <div v-for="msg in storeChat.listMessage">{{ msg }}</div>
-    </div>
-    <div class="">
-      <input
-        v-model="storeChat.message"
-        class=""
-        @keydown.enter="storeChat.sendMessage"
-        placeholder="Envoyer un message"
-      />
-      <button class="btn btn-primary" @click="storeChat.sendMessage">send</button>
-    </div>
-    <div class="chat">input in storechat.message: {{ storeChat.message }}</div>
-  </div>
-</template>
-
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import { useUserStore } from '@/stores/userStore'
-import { useChatStore } from '@/stores/chatStore'
+import type { IChannel, IUser, IMessage } from '@/interfaces/chat.interfaces'
+import { useUserStore } from '@/stores/userStore';
+import { ref, type PropType } from 'vue';
 
-const storeChat = useChatStore()
 const user = useUserStore()
-// const messageContent = ref("");
+const newMessage = ref('')
 
-user.socket?.on('newMessage', (data) => {
-  console.log(data.message)
-})
+const props = defineProps({
+	channel: {
+		type: Object as PropType<IChannel>,
+		required: true
+	},
+});
 
-// need to add socket.emit to chatStore in actions
-// function sendMessage() {
-// 	user.socket?.emit(messageContent.value);
-// 	messageContent.value = "";
-// }
+function sendMessage() {
+	if (!newMessage.value) return
+	user?.socket.emit('sendMessage', { channelId: props.channel.id, content: newMessage.value })
+	newMessage.value = ''
+}
+
 </script>
 
-<style>
-#msg-list {
-  height: calc(50vh - 40px - 1rem - 5rem);
-}
-</style>
+<template>
+	<div>
+		channel {{ channel.name }}
+		<ul>
+			<li v-for="message in channel.messages">
+				{{ message.sender.name }}: {{ message.content }}
+			</li>
+		</ul>
+		<div class="inline">
+			<input type="text" class="input input-secondary m-2" placeholder="new message" v-model="newMessage">
+			<button class="btn btn-secondary m-2" @click="sendMessage()">send</button>
+		</div>
+	</div>
+</template>
