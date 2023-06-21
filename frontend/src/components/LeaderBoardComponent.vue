@@ -3,6 +3,7 @@ import { ref, watch } from 'vue'
 import { useQuery } from '@vue/apollo-composable'
 import { onMounted } from 'vue'
 import gql from 'graphql-tag'
+import router from '@/router'
 
 const players = ref<any[]>([])
 let currentId = 0
@@ -11,6 +12,7 @@ const { result, refetch } = useQuery(
     query leaderboard($skip: Int, $take: Int) {
       leaderboard(skip: $skip, take: $take) {
         name
+		id
         avatar
         experience
         gamesWon {
@@ -42,6 +44,7 @@ watch(
         const avatar = `data:image/png;base64,${base64}`
         return {
           id: currentId++,
+		  userId: player.id,
           name: player.name,
           avatar: avatar,
           points: player.experience,
@@ -57,6 +60,10 @@ watch(
 onMounted(() => {
   refetch()
 })
+
+function redirectToUserAccount(userId: string) {
+	router.push(`/account?id=${userId}`)
+}
 </script>
 
 <template>
@@ -82,7 +89,9 @@ onMounted(() => {
                 </div>
               </div>
               <div>
-                <div className="font-bold">{{ player.name }}</div>
+				<div class="font-bold">
+                  <a href="#" class="font-semibold text-white hover:underline" @click.prevent="redirectToUserAccount(player.userId)">{{ player.name }}</a>
+                </div>
               </div>
             </div>
           </td>
