@@ -21,9 +21,20 @@ const user = ref({
   }[]
 })
 
+function extractQueryParam<T>(paramName: string): T {
+  let value: T = '' as unknown as T
+  const paramValue = route.query[paramName]
+  if (Array.isArray(paramValue) && paramValue.length > 0) {
+    value = paramValue[0]?.toString() as unknown as T
+  } else if (paramValue) {
+    value = paramValue.toString() as unknown as T
+  }
+  return value
+}
+
 const userStore = useUserStore()
 onMounted(() => {
-  user.value.id = userStore.id
+  user.value.id = extractQueryParam<string>('id') || userStore.id
 
   const { result, refetch } = useQuery(
     gql`
@@ -110,8 +121,23 @@ const { mutate } = useMutation(
   `
 )
 
+function addFriend(id: string) {
+  const input = { friendsToAdd: [id] }
+  mutate({ input })
+}
+
+function removeFriend(id: string) {
+  const input = { friendsToRemove: [id] }
+  mutate({ input })
+}
+
+function blockUser(id: string) {
+  const input = { usersToBlock: [id] }
+  mutate({ input })
+}
+
 function redirectToUserAccount(userId: string) {
-	router.push(`/profil?id=${userId}`)
+	router.push(`/account?id=${userId}`)
 }
 </script>
 
@@ -123,6 +149,27 @@ function redirectToUserAccount(userId: string) {
     <p class="text-center text-gray-600 mt-1">
       Victoires: {{ user.nb_win }} | Defaites: {{ user.nb_loose }}
     </p>
+    <div v-if="user.id != userStore.id" class="flex justify-center mt-5">
+      <button
+        class="text-green-500 hover:text-green-700 mx-3 font-semibold"
+        @click="addFriend(user.id)"
+      >
+        Follow
+      </button>
+      <button
+        class="text-red-500 hover:text-red-700 mx-3 font-semibold"
+        @click="removeFriend(user.id)"
+      >
+        Unfollow
+      </button>
+      <!-- write, and grey on hover for the button to block user-->
+      <button
+        class="text-white hover:text-gray-700 mx-3 font-semibold"
+        @click="blockUser(user.id)"
+      >
+        Block User
+      </button>
+    </div>
   </div>
 
   <div class="container mx-auto px-4 sm:px-8">

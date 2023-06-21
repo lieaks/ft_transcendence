@@ -62,7 +62,7 @@ onMounted(() => {
 })
 
 function redirectToUserAccount(userId: string) {
-	router.push(`/account?id=${userId}`)
+	router.push(`/profil?id=${userId}`)
 }
 </script>
 

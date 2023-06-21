@@ -6,6 +6,7 @@ import ChatView from '../views/ChatView.vue'
 import AccountView from '../views/AccountView.vue'
 import AuthCallbackView from '../views/AuthCallbackView.vue'
 import SocialView from '../views/SocialView.vue'
+import ProfilView from '../views/ProfilView.vue'
 import { useUserStore } from '@/stores/userStore'
 
 async function checkLogin(to: RouteLocationNormalized) {
@@ -56,7 +57,14 @@ const router = createRouter({
       path: '/auth/callback',
       name: 'authCallback',
       component: AuthCallbackView
-    }
+    },
+	{
+		path: '/profil',
+		name: 'profil',
+		component: ProfilView,
+			beforeEnter: checkLogin
+	}
+	
   ]
 })
 
