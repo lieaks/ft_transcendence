@@ -163,7 +163,6 @@ function redirectToUserAccount(userId: string) {
       >
         Unfollow
       </button>
-      <!-- write, and grey on hover for the button to block user-->
       <button class="text-white hover:text-gray-700 mx-3 font-semibold" @click="blockUser(user.id)">
         Block User
       </button>
