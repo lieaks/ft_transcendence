@@ -106,6 +106,19 @@ export class UsersResolver {
     return usersWithExtraValues;
   }
 
+  @Query('isFriend')
+  async isFriend(
+	@Args('id') id: string,
+	@Context() context,
+  ): Promise<boolean> {
+	const { id: currentUserId } = context.req.user;
+	const user = await this.PrismaService.user.findUnique({
+	  where: { id: currentUserId },
+	  include,
+	});
+	return user.friends.some((friend) => friend.id === id);
+  }
+
   @Mutation('updateUser')
   async updateUser(
     @Args('input') input: UpdateUserInput,

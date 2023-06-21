@@ -31,7 +31,7 @@ type Query {
 	userByName(name: String!): User
 	usersByIds(ids: [String!]!): [User!]
 	users: [User!]!
-
+	isFriend(id: String!): Boolean!
 	leaderboard(skip: Int, take: Int): [User!]
 }
 

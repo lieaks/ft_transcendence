@@ -48,6 +48,7 @@ export interface IQuery {
     userByName(name: string): Nullable<User> | Promise<Nullable<User>>;
     usersByIds(ids: string[]): Nullable<User[]> | Promise<Nullable<User[]>>;
     users(): User[] | Promise<User[]>;
+    isFriend(id: string): boolean | Promise<boolean>;
     leaderboard(skip?: Nullable<number>, take?: Nullable<number>): Nullable<User[]> | Promise<Nullable<User[]>>;
 }
 
