@@ -145,13 +145,13 @@ function blockUser(id: string) {
         class="text-green-500 hover:text-green-700 mx-3 font-semibold"
         @click="addFriend(user.id)"
       >
-        Add Friend
+        Follow
       </button>
       <button
         class="text-red-500 hover:text-red-700 mx-3 font-semibold"
         @click="removeFriend(user.id)"
       >
-        Remove Friend
+        Unfollow
       </button>
       <!-- write, and grey on hover for the button to block user-->
       <button
