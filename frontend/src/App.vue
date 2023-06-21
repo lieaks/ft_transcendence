@@ -6,10 +6,11 @@ import { KeepAlive } from 'vue';
 
 <template>
   <HeaderComponent class="mb-2" />
-	<!-- <router-view v-slot="{ Component }"> -->
-	<!-- 	<keep-alive include="chat"> -->
-	<!-- 		<component :is="Component" /> -->
-	<!-- 	</keep-alive> -->
-	<!-- </router-view> -->
-	<RouterView />
+
+	<router-view v-slot="{ Component }">
+		<keep-alive include="ChatView">
+			<component :is="Component" />
+		</keep-alive>
+	</router-view>
+
 </template>

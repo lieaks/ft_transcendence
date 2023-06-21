@@ -23,7 +23,7 @@ function createChannel() {
 
 </script>
 <template>
-		<ul>
+		<ul class="m-2">
 			<li v-for="channel in availableChannels" :key="channel.id" class="inline">
 				<button class="btn btn-primary m-2 normal-case" @click="joinChannel(channel)">
 					{{ channel.name }}
