@@ -4,6 +4,7 @@ import gql from 'graphql-tag'
 import { useQuery, useMutation } from '@vue/apollo-composable'
 import { onMounted, ref, watch } from 'vue'
 import { useUserStore } from '@/stores/userStore'
+import router from '@/router'
 
 const route = useRoute()
 const user = ref({
@@ -15,8 +16,8 @@ const user = ref({
   nb_loose: 0,
   gameHistory: [] as {
     score: number[]
-    winner: { name: string; avatar: string }
-    loser: { name: string; avatar: string }
+    winner: { name: string; avatar: string; id: string }
+    loser: { name: string; avatar: string; id: string }
   }[]
 })
 
@@ -51,10 +52,12 @@ onMounted(() => {
           gameHistory {
             score
             winner {
+			  id
               name
               avatar
             }
             loser {
+			  id
               name
               avatar
             }
@@ -88,13 +91,15 @@ onMounted(() => {
             name: game.winner.name,
             avatar: `data:image/png;base64,${btoa(
               String.fromCharCode(...new Uint8Array(game.winner.avatar.data))
-            )}`
+            )}`,
+			id: game.winner.id
           },
           loser: {
             name: game.loser.name,
             avatar: `data:image/png;base64,${btoa(
               String.fromCharCode(...new Uint8Array(game.loser.avatar.data))
-            )}`
+            )}`,
+			id: game.loser.id
           },
           score: game.winner.name === user.value.name ? game.score : [game.score[1], game.score[0]] ?? []
         }))
@@ -129,6 +134,10 @@ function removeFriend(id: string) {
 function blockUser(id: string) {
   const input = { usersToBlock: [id] }
   mutate({ input })
+}
+
+function redirectToUserAccount(userId: string) {
+	router.push(`/account?id=${userId}`)
 }
 </script>
 
@@ -205,7 +214,7 @@ function blockUser(id: string) {
                       <img class="v-w-full h-full rounded-full" :src="user.avatar" alt="" />
                     </div>
                     <div class="ml-3">
-                      <p class="text-gray-900 whitespace-no-wrap text-center">
+                      <p class="font-semibold text-gray-900 whitespace-no-wrap text-center">
                         {{ user.name }}
                       </p>
                     </div>
@@ -229,9 +238,10 @@ function blockUser(id: string) {
                       <img class="w-full h-full rounded-full" :src="user.avatar" alt="" />
                     </div>
                     <div class="ml-3">
-                      <p class="text-gray-900 whitespace-no-wrap text-center">
-                        {{ user.name == game.winner.name ? game.loser.name : game.winner.name }}
-                      </p>
+					  <a href="#" class="font-semibold text-gray-900 hover:underline hover:text-gray-700"
+					  	@click.prevent="redirectToUserAccount(user.id == game.winner.id ? game.loser.id : game.winner.id)">
+					  	{{ user.name == game.winner.name ? game.loser.name : game.winner.name }}
+					  </a>
                     </div>
                   </div>
                 </td>
