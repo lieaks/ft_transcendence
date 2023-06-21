@@ -1,18 +1,17 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import { useQuery } from '@vue/apollo-composable'
-import { onMounted } from 'vue'
 import gql from 'graphql-tag'
 import router from '@/router'
 
 const players = ref<any[]>([])
 let currentId = 0
-const { result, refetch } = useQuery(
+const { onResult } = useQuery(
   gql`
     query leaderboard($skip: Int, $take: Int) {
       leaderboard(skip: $skip, take: $take) {
         name
-		id
+				id
         avatar
         experience
         gamesWon {
@@ -32,33 +31,22 @@ const { result, refetch } = useQuery(
     }
   }
 )
-
-watch(
-  result,
-  async (res) => {
-    if (res) {
-      const data = res.leaderboard
-      if (!data) return
-      players.value = res.leaderboard.map((player: any) => {
-        const base64 = btoa(String.fromCharCode(...new Uint8Array(player.avatar.data)))
-        const avatar = `data:image/png;base64,${base64}`
-        return {
-          id: currentId++,
-		  userId: player.id,
-          name: player.name,
-          avatar: avatar,
-          points: player.experience,
-          win: player.gamesWon.length,
-          loose: player.gamesLost.length
-        }
-      })
-    }
-  },
-  { immediate: true }
-)
-
-onMounted(() => {
-  refetch()
+onResult(res => {
+	const leaderboard = res.data?.leaderboard
+	if (!leaderboard) return
+	players.value = leaderboard.map((player: any) => {
+		const base64 = btoa(String.fromCharCode(...new Uint8Array(player.avatar.data)))
+		const avatar = `data:image/png;base64,${base64}`
+		return {
+			id: currentId++,
+			userId: player.id,
+			name: player.name,
+			avatar: avatar,
+			points: player.experience,
+			win: player.gamesWon.length,
+			loose: player.gamesLost.length
+		}
+	})
 })
 
 function redirectToUserAccount(userId: string) {

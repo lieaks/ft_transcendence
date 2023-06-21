@@ -1,17 +1,17 @@
 import { createRouter, createWebHistory, type RouteLocationNormalized } from 'vue-router'
-import GameView from '../views/GameView.vue'
-import LoginView from '../views/LoginView.vue'
-import HomeView from '../views/HomeView.vue'
-import ChatView from '../views/ChatView.vue'
-import AccountView from '../views/AccountView.vue'
-import AuthCallbackView from '../views/AuthCallbackView.vue'
-import SocialView from '../views/SocialView.vue'
-import ProfilView from '../views/ProfilView.vue'
+import GameView from '@/views/GameView.vue'
+import LoginView from '@/views/LoginView.vue'
+import HomeView from '@/views/HomeView.vue'
+import ChatView from '@/views/ChatView.vue'
+import AccountView from '@/views/AccountView.vue'
+import AuthCallbackView from '@/views/AuthCallbackView.vue'
+import SocialView from '@/views/SocialView.vue'
+import ProfilView from '@/views/ProfilView.vue'
 import { useUserStore } from '@/stores/userStore'
 
 async function checkLogin(to: RouteLocationNormalized) {
 	const user = useUserStore()
-	if ((!user.id) && to.name !== 'login') return { name: 'login' }
+	if (!user.id && !user.loading) return { name: 'login' }
 	return true
 }
 

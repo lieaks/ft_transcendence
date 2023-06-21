@@ -16,16 +16,13 @@ const httpLink = createHttpLink({
 
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem('jwtToken')
-  // console.log('token is ' + token) // TODO: debub to see new query to the server, not cached
-
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : ''
+      authorization: `Bearer ${token}`
     }
   }
 })
-
 export const apolloClient = new ApolloClient({
   link: authLink.concat(httpLink),
   cache: new InMemoryCache()
@@ -38,4 +35,6 @@ const app = createApp({
   render: () => h(App)
 })
 
-app.use(router).use(createPinia().use(piniaPluginPersistedState)).mount('#app')
+app.use(router)
+app.use(createPinia().use(piniaPluginPersistedState))
+app.mount('#app')

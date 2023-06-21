@@ -8,7 +8,7 @@ function redirectToOAuth(provider: string) {
 </script>
 
 <template>
-	<div v-if="!user.id || !user.name">
+	<div>
 		<button class="btn btn-primary m-2" @click="redirectToOAuth('42')">login 42</button>
 		<button class="btn btn-primary m-2" @click="redirectToOAuth('google')">login google</button>
 	</div>
