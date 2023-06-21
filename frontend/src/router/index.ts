@@ -10,9 +10,9 @@ import ProfilView from '@/views/ProfilView.vue'
 import { useUserStore } from '@/stores/userStore'
 
 async function checkLogin(to: RouteLocationNormalized) {
-	const user = useUserStore()
-	if (!user.id && !user.loading) return { name: 'login' }
-	return true
+  const user = useUserStore()
+  if (!user.id && !user.loading) return { name: 'login' }
+  return true
 }
 
 const router = createRouter({
@@ -22,49 +22,48 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
-			beforeEnter: checkLogin
+      beforeEnter: checkLogin
     },
-		{
-			path: '/login',
-			name: 'login',
-			component: LoginView,
-		},
+    {
+      path: '/login',
+      name: 'login',
+      component: LoginView
+    },
     {
       path: '/game',
       name: 'game',
-			component: GameView,
-			beforeEnter: checkLogin
+      component: GameView,
+      beforeEnter: checkLogin
     },
     {
       path: '/chat',
       name: 'chat',
       component: ChatView,
-			beforeEnter: checkLogin
+      beforeEnter: checkLogin
     },
     {
       path: '/social',
       name: 'social',
       component: SocialView,
-			beforeEnter: checkLogin
+      beforeEnter: checkLogin
     },
     {
       path: '/account',
       name: 'account',
       component: AccountView,
-			beforeEnter: checkLogin
+      beforeEnter: checkLogin
     },
     {
       path: '/auth/callback',
       name: 'authCallback',
       component: AuthCallbackView
     },
-	{
-		path: '/profil',
-		name: 'profil',
-		component: ProfilView,
-			beforeEnter: checkLogin
-	}
-	
+    {
+      path: '/profil',
+      name: 'profil',
+      component: ProfilView,
+      beforeEnter: checkLogin
+    }
   ]
 })
 

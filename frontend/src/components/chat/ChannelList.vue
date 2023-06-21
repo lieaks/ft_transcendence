@@ -3,8 +3,12 @@
     <h3 class="mb-3 mt-3">chanel list</h3>
     <div>
       <button class="btn btn-primary my-4 me-4">friend list</button>
-      <button class="btn btn-primary my-4 me-4" @click="storeChat.createChannel">create channel</button>
-      <button class="btn btn-primary my-4 me-4" @click="storeChat.channelAvailable">channel available</button>
+      <button class="btn btn-primary my-4 me-4" @click="storeChat.createChannel">
+        create channel
+      </button>
+      <button class="btn btn-primary my-4 me-4" @click="storeChat.channelAvailable">
+        channel available
+      </button>
     </div>
   </div>
   <div class="overflow-scroll" it="channel-list"></div>
