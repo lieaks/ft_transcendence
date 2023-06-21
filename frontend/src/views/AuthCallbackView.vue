@@ -64,81 +64,82 @@ const { onDone: onDone2FA, mutate: submit2FA } = useMutation(
     mutation submit2FA($code: String!) {
       submit2FA(code: $code)
     }
-  `, { fetchPolicy: 'no-cache' }
+  `,
+  { fetchPolicy: 'no-cache' }
 )
 
 onDone2FA(async (res) => {
-	if (res.data?.submit2FA) {
-		totpmodal = document.getElementById('totpmodal') as HTMLDialogElement
-		totpmodal?.close()
-		twoFactorAuth = false
-	}
+  if (res.data?.submit2FA) {
+    totpmodal = document.getElementById('totpmodal') as HTMLDialogElement
+    totpmodal?.close()
+    twoFactorAuth = false
+  }
 })
 
 watch(totpinput, async (value) => {
-	totpinput.value = value.replace(/\D/g, '')
-	if (value.toString().length === 6) {
-		submit2FA({ code: value.toString() })
-	}
+  totpinput.value = value.replace(/\D/g, '')
+  if (value.toString().length === 6) {
+    submit2FA({ code: value.toString() })
+  }
 })
 
 onMounted(async () => {
-	if (twoFactorAuth) {
-		const totpmodal = document.getElementById('totpmodal') as HTMLDialogElement
-		totpmodal?.showModal()
-		while (twoFactorAuth) {
-			await new Promise((r) => setTimeout(r, 100))
-		}
-	}
-	progress_value.value += 20
+  if (twoFactorAuth) {
+    const totpmodal = document.getElementById('totpmodal') as HTMLDialogElement
+    totpmodal?.showModal()
+    while (twoFactorAuth) {
+      await new Promise((r) => setTimeout(r, 100))
+    }
+  }
+  progress_value.value += 20
 
-	loadMe()
+  loadMe()
 
-	user.socket = io(import.meta.env.VITE_BACKEND_URL)
-	user.socket.on('connect', () => {
-		progress_value.value += 20
-		user.socket?.emit('login', { jwtToken: localStorage.getItem('jwtToken') })
-	})
-	user.socket?.on('logged', (data) => {
-		if (data === 'success') {
-			progress_value.value += 20
-		} else {
-			error.value += data + '\n'
-		}
-	})
+  user.socket = io(import.meta.env.VITE_BACKEND_URL)
+  user.socket.on('connect', () => {
+    progress_value.value += 20
+    user.socket?.emit('login', { jwtToken: localStorage.getItem('jwtToken') })
+  })
+  user.socket?.on('logged', (data) => {
+    if (data === 'success') {
+      progress_value.value += 20
+    } else {
+      error.value += data + '\n'
+    }
+  })
 })
 
 watch(progress_value, (value) => {
-	if (value >= 100) {
-		router.push('/')
-	}
+  if (value >= 100) {
+    router.push('/')
+  }
 })
 </script>
 
 <template>
-	<div class="h-screen">
-		<dialog class="modal" id="totpmodal">
-			<div class="modal-box">
-				<h3 class="font-bold text-lg text-center m-2">a 2FA TOTP is needed</h3>
-				<div>
-					<input
-						type="text"
-						maxlength="6"
-						class="input input-primary input-bordered m-2 w-full"
-						v-model="totpinput"
-						placeholder="code"
-					/>
-				</div>
-			</div>
-		</dialog>
-		<span class="loading loading-infinity scale-[4] text-primary absolute left-1/2 top-1/3"></span>
-		<progress
-			class="progress w-1/2 progress-primary absolute left-1/4 top-1/2"
-			:value="progress_value"
-			max="100"
-		></progress>
-		<span v-if="error" class="text-red-500 absolute text-center w-screen text-2xl top-3/4">{{
-			error
-			}}</span>
-	</div>
+  <div class="h-screen">
+    <dialog class="modal" id="totpmodal">
+      <div class="modal-box">
+        <h3 class="font-bold text-lg text-center m-2">a 2FA TOTP is needed</h3>
+        <div>
+          <input
+            type="text"
+            maxlength="6"
+            class="input input-primary input-bordered m-2 w-full"
+            v-model="totpinput"
+            placeholder="code"
+          />
+        </div>
+      </div>
+    </dialog>
+    <span class="loading loading-infinity scale-[4] text-primary absolute left-1/2 top-1/3"></span>
+    <progress
+      class="progress w-1/2 progress-primary absolute left-1/4 top-1/2"
+      :value="progress_value"
+      max="100"
+    ></progress>
+    <span v-if="error" class="text-red-500 absolute text-center w-screen text-2xl top-3/4">{{
+      error
+    }}</span>
+  </div>
 </template>

@@ -41,12 +41,12 @@ onMounted(() => {
           gameHistory {
             score
             winner {
-			  id
+              id
               name
               avatar
             }
             loser {
-			  id
+              id
               name
               avatar
             }
@@ -81,16 +81,17 @@ onMounted(() => {
             avatar: `data:image/png;base64,${btoa(
               String.fromCharCode(...new Uint8Array(game.winner.avatar.data))
             )}`,
-			id: game.winner.id
+            id: game.winner.id
           },
           loser: {
             name: game.loser.name,
             avatar: `data:image/png;base64,${btoa(
               String.fromCharCode(...new Uint8Array(game.loser.avatar.data))
             )}`,
-			id: game.loser.id
+            id: game.loser.id
           },
-          score: game.winner.name === user.value.name ? game.score : [game.score[1], game.score[0]] ?? []
+          score:
+            game.winner.name === user.value.name ? game.score : [game.score[1], game.score[0]] ?? []
         }))
       }
     },
@@ -111,7 +112,7 @@ const { mutate } = useMutation(
 )
 
 function redirectToUserAccount(userId: string) {
-	router.push(`/profil?id=${userId}`)
+  router.push(`/profil?id=${userId}`)
 }
 </script>
 
@@ -191,10 +192,17 @@ function redirectToUserAccount(userId: string) {
                       <img class="w-full h-full rounded-full" :src="user.avatar" alt="" />
                     </div>
                     <div class="ml-3">
-					  <a href="#" class="font-semibold text-gray-900 hover:underline hover:text-gray-700"
-					  	@click.prevent="redirectToUserAccount(user.id == game.winner.id ? game.loser.id : game.winner.id)">
-					  	{{ user.name == game.winner.name ? game.loser.name : game.winner.name }}
-					  </a>
+                      <a
+                        href="#"
+                        class="font-semibold text-gray-900 hover:underline hover:text-gray-700"
+                        @click.prevent="
+                          redirectToUserAccount(
+                            user.id == game.winner.id ? game.loser.id : game.winner.id
+                          )
+                        "
+                      >
+                        {{ user.name == game.winner.name ? game.loser.name : game.winner.name }}
+                      </a>
                     </div>
                   </div>
                 </td>

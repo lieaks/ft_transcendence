@@ -19,7 +19,9 @@ user.socket?.on('startGame', (data) => {
 </script>
 
 <template>
-	<button class="btn btn-primary" onclick="localStorage.removeItem('jwtToken')">remove jwtToken (debug)</button>
+  <button class="btn btn-primary" onclick="localStorage.removeItem('jwtToken')">
+    remove jwtToken (debug)
+  </button>
   <div class="flex justify-center items-center">
     <button v-if="!user.inQueue" class="btn btn-primary m-4" @click="joinQueue">Join Queue</button>
     <MatchmakingComponent v-if="user.inQueue" />

@@ -11,7 +11,7 @@ const { onResult } = useQuery(
     query leaderboard($skip: Int, $take: Int) {
       leaderboard(skip: $skip, take: $take) {
         name
-				id
+        id
         avatar
         experience
         gamesWon {
@@ -31,26 +31,26 @@ const { onResult } = useQuery(
     }
   }
 )
-onResult(res => {
-	const leaderboard = res.data?.leaderboard
-	if (!leaderboard) return
-	players.value = leaderboard.map((player: any) => {
-		const base64 = btoa(String.fromCharCode(...new Uint8Array(player.avatar.data)))
-		const avatar = `data:image/png;base64,${base64}`
-		return {
-			id: currentId++,
-			userId: player.id,
-			name: player.name,
-			avatar: avatar,
-			points: player.experience,
-			win: player.gamesWon.length,
-			loose: player.gamesLost.length
-		}
-	})
+onResult((res) => {
+  const leaderboard = res.data?.leaderboard
+  if (!leaderboard) return
+  players.value = leaderboard.map((player: any) => {
+    const base64 = btoa(String.fromCharCode(...new Uint8Array(player.avatar.data)))
+    const avatar = `data:image/png;base64,${base64}`
+    return {
+      id: currentId++,
+      userId: player.id,
+      name: player.name,
+      avatar: avatar,
+      points: player.experience,
+      win: player.gamesWon.length,
+      loose: player.gamesLost.length
+    }
+  })
 })
 
 function redirectToUserAccount(userId: string) {
-	router.push(`/profil?id=${userId}`)
+  router.push(`/profil?id=${userId}`)
 }
 </script>
 
@@ -77,8 +77,13 @@ function redirectToUserAccount(userId: string) {
                 </div>
               </div>
               <div>
-				<div class="font-bold">
-                  <a href="#" class="font-semibold text-white hover:underline" @click.prevent="redirectToUserAccount(player.userId)">{{ player.name }}</a>
+                <div class="font-bold">
+                  <a
+                    href="#"
+                    class="font-semibold text-white hover:underline"
+                    @click.prevent="redirectToUserAccount(player.userId)"
+                    >{{ player.name }}</a
+                  >
                 </div>
               </div>
             </div>

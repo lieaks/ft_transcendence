@@ -26,5 +26,5 @@ export const useChatStore = defineStore({
       userStore.socket?.emit('channelAvailable')
     }
   },
-  persist: true,
+  persist: true
 })

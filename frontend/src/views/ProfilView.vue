@@ -52,12 +52,12 @@ onMounted(() => {
           gameHistory {
             score
             winner {
-			  id
+              id
               name
               avatar
             }
             loser {
-			  id
+              id
               name
               avatar
             }
@@ -92,16 +92,17 @@ onMounted(() => {
             avatar: `data:image/png;base64,${btoa(
               String.fromCharCode(...new Uint8Array(game.winner.avatar.data))
             )}`,
-			id: game.winner.id
+            id: game.winner.id
           },
           loser: {
             name: game.loser.name,
             avatar: `data:image/png;base64,${btoa(
               String.fromCharCode(...new Uint8Array(game.loser.avatar.data))
             )}`,
-			id: game.loser.id
+            id: game.loser.id
           },
-          score: game.winner.name === user.value.name ? game.score : [game.score[1], game.score[0]] ?? []
+          score:
+            game.winner.name === user.value.name ? game.score : [game.score[1], game.score[0]] ?? []
         }))
       }
     },
@@ -137,7 +138,7 @@ function blockUser(id: string) {
 }
 
 function redirectToUserAccount(userId: string) {
-	router.push(`/account?id=${userId}`)
+  router.push(`/account?id=${userId}`)
 }
 </script>
 
@@ -163,10 +164,7 @@ function redirectToUserAccount(userId: string) {
         Unfollow
       </button>
       <!-- write, and grey on hover for the button to block user-->
-      <button
-        class="text-white hover:text-gray-700 mx-3 font-semibold"
-        @click="blockUser(user.id)"
-      >
+      <button class="text-white hover:text-gray-700 mx-3 font-semibold" @click="blockUser(user.id)">
         Block User
       </button>
     </div>
@@ -238,10 +236,17 @@ function redirectToUserAccount(userId: string) {
                       <img class="w-full h-full rounded-full" :src="user.avatar" alt="" />
                     </div>
                     <div class="ml-3">
-					  <a href="#" class="font-semibold text-gray-900 hover:underline hover:text-gray-700"
-					  	@click.prevent="redirectToUserAccount(user.id == game.winner.id ? game.loser.id : game.winner.id)">
-					  	{{ user.name == game.winner.name ? game.loser.name : game.winner.name }}
-					  </a>
+                      <a
+                        href="#"
+                        class="font-semibold text-gray-900 hover:underline hover:text-gray-700"
+                        @click.prevent="
+                          redirectToUserAccount(
+                            user.id == game.winner.id ? game.loser.id : game.winner.id
+                          )
+                        "
+                      >
+                        {{ user.name == game.winner.name ? game.loser.name : game.winner.name }}
+                      </a>
                     </div>
                   </div>
                 </td>
