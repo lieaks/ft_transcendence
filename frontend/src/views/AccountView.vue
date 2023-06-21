@@ -31,8 +31,8 @@ function extractQueryParam<T>(paramName: string): T {
   return value
 }
 
+const userStore = useUserStore()
 onMounted(() => {
-  const userStore = useUserStore()
   user.value.id = extractQueryParam<string>('id') || userStore.id
 
   const { result, refetch } = useQuery(
@@ -140,7 +140,7 @@ function blockUser(id: string) {
     <p class="text-center text-gray-600 mt-1">
       Victoires: {{ user.nb_win }} | Defaites: {{ user.nb_loose }}
     </p>
-    <div class="flex justify-center mt-5">
+    <div v-if="user.id != userStore.id" class="flex justify-center mt-5">
       <button
         class="text-green-500 hover:text-green-700 mx-3 font-semibold"
         @click="addFriend(user.id)"
