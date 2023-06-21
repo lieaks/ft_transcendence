@@ -18,7 +18,8 @@ const user = ref({
     score: number[]
     winner: { name: string; avatar: string; id: string }
     loser: { name: string; avatar: string; id: string }
-  }[]
+  }[],
+  isFriend: false,
 })
 
 function extractQueryParam<T>(paramName: string): T {
@@ -36,7 +37,7 @@ const userStore = useUserStore()
 onMounted(() => {
   user.value.id = extractQueryParam<string>('id') || userStore.id
 
-  const { result, refetch } = useQuery(
+  const { result: userResult, refetch: userRefetch } = useQuery(
     gql`
       query user($userId: String!) {
         user(id: $userId) {
@@ -73,20 +74,35 @@ onMounted(() => {
     }
   )
 
+  const { result: friendResult, refetch: friendRefetch } = useQuery(
+    gql`
+      query isFriend($friendId: String!) {
+        isFriend(id: $friendId)
+      }
+    `,
+    {
+      friendId: user.value.id
+    },
+    {
+      fetchPolicy: 'cache-and-network'
+    }
+  )
+
   watch(
-    result,
-    async (res) => {
-      if (res) {
-        const data = res.user
-        if (!data) return
-        const base64 = btoa(String.fromCharCode(...new Uint8Array(data.avatar.data)))
+    [userResult, friendResult],
+    async ([userRes, friendRes]) => {
+      if (userRes && friendRes) {
+        const userData = userRes.user
+        const friendData = friendRes.isFriend
+        if (!userData) return
+        const base64 = btoa(String.fromCharCode(...new Uint8Array(userData.avatar.data)))
         const avatar = `data:image/png;base64,${base64}`
-        user.value.name = data.name
+        user.value.name = userData.name
         user.value.avatar = avatar
-        user.value.points = data.experience
-        user.value.nb_win = data.gamesWon.length
-        user.value.nb_loose = data.gamesLost.length
-        user.value.gameHistory = data.gameHistory.map((game: any) => ({
+        user.value.points = userData.experience
+        user.value.nb_win = userData.gamesWon.length
+        user.value.nb_loose = userData.gamesLost.length
+        user.value.gameHistory = userData.gameHistory.map((game: any) => ({
           winner: {
             name: game.winner.name,
             avatar: `data:image/png;base64,${btoa(
@@ -104,12 +120,14 @@ onMounted(() => {
           score:
             game.winner.name === user.value.name ? game.score : [game.score[1], game.score[0]] ?? []
         }))
+        user.value.isFriend = friendData
       }
     },
     { immediate: true }
   )
 
-  refetch()
+  userRefetch()
+  friendRefetch()
 })
 
 const { mutate } = useMutation(
@@ -125,11 +143,13 @@ const { mutate } = useMutation(
 function addFriend(id: string) {
   const input = { friendsToAdd: [id] }
   mutate({ input })
+  user.value.isFriend = true
 }
 
 function removeFriend(id: string) {
   const input = { friendsToRemove: [id] }
   mutate({ input })
+  user.value.isFriend = false
 }
 
 function blockUser(id: string) {
@@ -152,12 +172,14 @@ function redirectToUserAccount(userId: string) {
     </p>
     <div v-if="user.id != userStore.id" class="flex justify-center mt-5">
       <button
+		v-if="!user.isFriend"
         class="text-green-500 hover:text-green-700 mx-3 font-semibold"
         @click="addFriend(user.id)"
       >
         Follow
       </button>
       <button
+	  	v-if="user.isFriend"
         class="text-red-500 hover:text-red-700 mx-3 font-semibold"
         @click="removeFriend(user.id)"
       >
