@@ -9,7 +9,7 @@ import router from '@/router'
 const route = useRoute()
 const user = ref({
   name: '',
-  id: '',
+  id: 'ce8f04c0-db2d-4e40-a9ec-60d3a4b1dd81',
   avatar: '',
   points: 0,
   nb_win: 0,
@@ -18,12 +18,14 @@ const user = ref({
     score: number[]
     winner: { name: string; avatar: string; id: string }
     loser: { name: string; avatar: string; id: string }
-  }[]
+  }[],
+  friends: [] as { name: string; avatar: string; id: string }[],
+  friendOf: [] as { name: string; avatar: string; id: string }[]
 })
 
 const userStore = useUserStore()
 onMounted(() => {
-  user.value.id = userStore.id
+//   user.value.id = userStore.id
 
   const { result, refetch } = useQuery(
     gql`
@@ -51,6 +53,16 @@ onMounted(() => {
               avatar
             }
           }
+		  friendOf {
+			id
+			name
+			avatar
+		  }
+		  friends {
+			id
+			name
+			avatar
+		  }
         }
       }
     `,
@@ -93,6 +105,8 @@ onMounted(() => {
           score:
             game.winner.name === user.value.name ? game.score : [game.score[1], game.score[0]] ?? []
         }))
+		user.value.friends = data.friends
+		user.value.friendOf = data.friendOf
       }
     },
     { immediate: true }
@@ -114,6 +128,10 @@ function redirectToUserAccount(userId: string) {
     <p class="text-center text-gray-600 mt-1">
       Victoires: {{ user.nb_win }} | Defaites: {{ user.nb_loose }}
     </p>
+    <p class="font-semibold text-center text-gray-900 mt-1">
+		Followers: {{ user.friendOf.length }} <br>
+		Following: {{ user.friends.length }}
+	</p>
   </div>
 
   <div class="container mx-auto px-4 sm:px-8">
