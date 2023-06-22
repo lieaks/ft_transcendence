@@ -95,19 +95,7 @@ onMounted(async () => {
 
   loadMe()
 
-  user.socket = io(import.meta.env.VITE_BACKEND_URL)
-  user.socket.on('connect', () => {
-    progress_value.value += 20
-    user.socket?.emit('login', { jwtToken: localStorage.getItem('jwtToken') })
-	console.log('jwtToken: ' + localStorage.getItem('jwtToken'))
-  })
-  user.socket?.on('logged', (data) => {
-    if (data === 'success') {
-      progress_value.value += 20
-    } else {
-      error.value += data + '\n'
-    }
-  })
+  progress_value.value += 40
 })
 
 watch(progress_value, (value) => {
