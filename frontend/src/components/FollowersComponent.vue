@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/userStore'
+import router from '@/router'
 
 const user  = useUserStore()
+
+function redirectToUserAccount(userId: string) {
+  router.push(`/profil?id=${userId}`)
+}
 </script>
 
 <template>
@@ -11,7 +16,9 @@ const user  = useUserStore()
 			<li v-for="follower in user.friendOf" className="menu-title">
 				<div className="flex items-center">
 					<!-- <img :src="follower.avatar" className="w-8 h-8 rounded-full" /> -->
-					<span className="ml-2 text-sm text-white font-semibold">{{ follower.name }}</span>
+					<a href="#" class="font-semibold text-white hover:underline" @click.prevent="redirectToUserAccount(follower.id)">
+						{{ follower.name }}
+					</a>
 				</div>
 			</li>
 			<li v-if="user.friendOf.length === 0" className="menu-title">
@@ -25,7 +32,9 @@ const user  = useUserStore()
 			<li v-for="follow in user.friends" className="menu">
 				<div className="flex items-center">
 					<!-- <img :src="follow.avatar" className="w-8 h-8 rounded-full" /> -->
-					<span className="ml-2 text-sm text-white font-semibold">{{ follow.name }}</span>
+					<a href="#" class="font-semibold text-white hover:underline" @click.prevent="redirectToUserAccount(follow.id)">
+						{{ follow.name }}
+					</a>
 				</div>
 			</li>
 			<li v-if="user.friends.length === 0" className="menu-title">
