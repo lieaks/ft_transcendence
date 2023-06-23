@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, watchEffect } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import router from '@/router'
@@ -42,6 +42,7 @@ const { onResult, refetch } = useQuery(
     }
   }
 )
+
 onResult((res) => {
   const leaderboard = res.data?.leaderboard
   if (!leaderboard) return

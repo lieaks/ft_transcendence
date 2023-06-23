@@ -1,13 +1,10 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
 import gql from 'graphql-tag'
-import { useQuery, useMutation, useLazyQuery } from '@vue/apollo-composable'
+import { useQuery } from '@vue/apollo-composable'
 import { onMounted, ref, watch } from 'vue'
-import { useUserStore } from '@/stores/userStore'
 import router from '@/router'
 import FollowersComponent from '@/components/FollowersComponent.vue'
 
-const userStore = useUserStore()
 const user = ref({
   name: '',
   id: '',
