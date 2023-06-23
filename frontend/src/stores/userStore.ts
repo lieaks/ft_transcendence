@@ -76,7 +76,7 @@ export const useUserStore = defineStore('user', () => {
     id.value = me.id
     const base64 = btoa(String.fromCharCode(...new Uint8Array(me.avatar.data))) // Convert buffer to base64
     avatar.value = `data:image/png;base64,${base64}`
-	points.value = me.points
+	points.value = me.experience
     gameHistory.value = me.gameHistory
     nb_win.value = me.gameHistory.filter((game: Game) => game.winner.id === me.id).length
     nb_loose.value = me.gameHistory.filter((game: Game) => game.loser.id === me.id).length
