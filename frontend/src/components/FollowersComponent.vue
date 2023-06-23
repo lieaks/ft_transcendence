@@ -71,6 +71,9 @@ watch(
 					<span className="ml-2 text-sm text-white font-semibold">{{ follower.name }}</span>
 				</div>
 			</li>
+			<li v-if="user.friendOf.length === 0" className="menu-title">
+				<span className="ml-2 text-sm text-white font-semibold">No followers</span>
+			</li>
   	</ul>
   </div>
 	<div className="dropdown dropdown-hover">
@@ -81,6 +84,9 @@ watch(
 					<img :src="follow.avatar" className="w-8 h-8 rounded-full" />
 					<span className="ml-2 text-sm text-white font-semibold">{{ follow.name }}</span>
 				</div>
+			</li>
+			<li v-if="user.friends.length === 0" className="menu-title">
+				<span className="ml-2 text-sm text-white font-semibold">No following</span>
 			</li>
   	</ul>
   </div>
