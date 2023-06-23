@@ -1,6 +1,6 @@
 <template tabindex>
   <canvas ref="pongCanvas" width="1600" height="800" class="mx-auto bg-black"></canvas>
-  <EndGameComponent v-if="user.gameEnded" :card-type="user.gameWon ? 'win' : 'lose'" />
+  <EndGameComponent v-if="user.gameEnded" :card-type="user.gameWon ? 'win' : 'lose'" :score="user.score"/>
 </template>
 
 <script setup lang="ts">
@@ -16,6 +16,7 @@ const userStore = useUserStore()
 const user = ref({
   gameEnded: false,
   gameWon: false,
+  score: [0, 0],
 })
 
 let keydownHandler: (event: KeyboardEvent) => void
@@ -61,6 +62,7 @@ onMounted(() => {
   userStore.socket?.on('finishGame', (data) => {
     user.value.gameEnded = true
     user.value.gameWon = data.isWinner
+    user.value.score = data.score
   })
   setInterval(() => {
     game.draw()

@@ -9,11 +9,16 @@ const props = defineProps({
     required: true,
     validator: (value: string) => ['win', 'lose'].includes(value),
   },
+  score: {
+    type: Array,
+    required: true,
+    validator: (value: number[]) => value.length === 2,
+  },
 })
 
 const cardImage = props.cardType === 'win' ? winImg : loseImg
 const cardAlt = props.cardType === 'win' ? 'win' : 'lose'
-const cardTitle = props.cardType === 'win' ? 'You Win!' : 'You Lose!'
+const cardTitle = props.score
 
 function backHome() {
   router.push(`/`)
@@ -27,7 +32,7 @@ function backHome() {
         <img :src="cardImage" :alt="cardAlt" />
       </figure>
       <div class="card-body items-center text-center">
-        <h2 class="card-title">{{ cardTitle }}</h2>
+        <h2 class="card-title">{{ cardTitle[0] }} - {{ cardTitle[1] }}</h2>
         <button class="btn btn-primary" @click="backHome">Back Home</button>
       </div>
     </div>

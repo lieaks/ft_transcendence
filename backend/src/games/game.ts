@@ -114,9 +114,11 @@ export class Game implements IGame {
 	  loser.addExperience(-10);
     this.players[0].socket.emit('finishGame', {
       isWinner: winner.id === this.players[0].id,
+      score: [this.score.left, this.score.right],
     });
     this.players[1].socket.emit('finishGame', {
       isWinner: winner.id === this.players[1].id,
+      score: [this.score.left, this.score.right],
     });
   }
 
