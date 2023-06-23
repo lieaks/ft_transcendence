@@ -67,7 +67,8 @@ export class MyGateway implements OnModuleInit {
 	onLogin(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
 		const { jwtToken } = body;
 		try {
-			const payload = this.JwtService.verify(jwtToken);
+			if (!jwtToken) throw 'no jwttoken provided';
+			const payload = this.JwtService.verify(jwtToken)
 			if (this.AuthService.isTokenRequireTwoFactor(jwtToken))
 			throw '2FA needed for this jwttoken';
 			const user = new User(this.prismaService, payload.id, payload.name);
