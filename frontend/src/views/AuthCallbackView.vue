@@ -31,7 +31,7 @@ if (id) user.id = id
 
 const jwtToken = extractQueryParam<string>('jwtToken')
 if (jwtToken) localStorage.setItem('jwtToken', jwtToken)
-
+console.log("JwtToken: " + jwtToken)
 let twoFactorAuth: Boolean = extractQueryParam<string>('twoFactorAuth') === 'true'
 
 const { onResult: onResultMe, load: loadMe } = useLazyQuery(

@@ -1,12 +1,23 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref, watchEffect } from 'vue'
 import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import router from '@/router'
 
-const players = ref<any[]>([])
+interface Player {
+  id: number
+  userId: string
+  name: string
+  avatar: string
+  points: number
+  win: number
+  loose: number
+}
+
+const players = ref<Player[]>([])
 let currentId = 0
-const { onResult } = useQuery(
+
+const { onResult, refetch } = useQuery(
   gql`
     query leaderboard($skip: Int, $take: Int) {
       leaderboard(skip: $skip, take: $take) {
@@ -47,6 +58,10 @@ onResult((res) => {
       loose: player.gamesLost.length
     }
   })
+})
+
+onMounted(() => {
+  refetch()
 })
 
 function redirectToUserAccount(userId: string) {
