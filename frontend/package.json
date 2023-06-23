@@ -12,7 +12,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
-    "@vue/apollo-composable": "^4.0.0-beta.5",
+    "@vue/apollo-composable": "^4.0.0-beta.7",
     "axios": "^1.4.0",
     "graphql-scalars": "^1.22.2",
     "pinia": "^2.0.36",
