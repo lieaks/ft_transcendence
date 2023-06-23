@@ -21,7 +21,7 @@ function backHome() {
 </script>
 
 <template>
-  <div class="card w-96 bg-base-100 shadow-xl">
+  <div class="card w-96 bg-base-100 shadow-xl z-[1]">
     <figure>
       <img :src="cardImage" :alt="cardAlt" />
     </figure>
