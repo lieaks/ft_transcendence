@@ -2,10 +2,12 @@ version: 2
 updates:
   - package-ecosystem: "npm"
     directory: "/backend"
+    target-branch: "dev"
     schedule:
       interval: "daily"
   - package-ecosystem: "npm"
     directory: "/frontend"
+    target-branch: "dev"
     schedule:
       interval: "daily"
 
