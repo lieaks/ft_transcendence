@@ -158,7 +158,7 @@ function blockUser(id: string) {
 }
 
 function redirectToUserAccount(userId: string) {
-  router.push(`/account?id=${userId}`)
+  router.push(`/profil?id=${userId}`)
 }
 </script>
 

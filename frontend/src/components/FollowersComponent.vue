@@ -4,10 +4,16 @@ import { useQuery } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
 import { ref, watch } from 'vue';
 
+interface User {
+	name: string
+	avatar: string
+	id: string
+}
+
 const userStore = useUserStore()
 const user = ref({
-  friends: [] as { name: string; avatar: string; id: string }[],
-  friendOf: [] as { name: string; avatar: string; id: string }[]
+  friends: [] as User[],
+  friendOf: [] as User[]
 })
 
 const { result, refetch } = useQuery(

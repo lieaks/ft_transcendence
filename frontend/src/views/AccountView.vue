@@ -1,120 +1,14 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
 import gql from 'graphql-tag'
-import { useQuery, useMutation } from '@vue/apollo-composable'
+import { useQuery, useMutation, useLazyQuery } from '@vue/apollo-composable'
 import { onMounted, ref, watch } from 'vue'
 import { useUserStore } from '@/stores/userStore'
 import router from '@/router'
 import FollowersComponent from '@/components/FollowersComponent.vue'
 
 const route = useRoute()
-const user = ref({
-  name: '',
-  id: '',
-  avatar: '',
-  points: 0,
-  nb_win: 0,
-  nb_loose: 0,
-  gameHistory: [] as {
-    score: number[]
-    winner: { name: string; avatar: string; id: string }
-    loser: { name: string; avatar: string; id: string }
-  }[],
-  friends: [] as { name: string; avatar: string; id: string }[],
-  friendOf: [] as { name: string; avatar: string; id: string }[]
-})
-
-const userStore = useUserStore()
-onMounted(() => {
-  user.value.id = userStore.id
-
-  const { result, refetch } = useQuery(
-    gql`
-      query user($userId: String!) {
-        user(id: $userId) {
-          avatar
-          name
-          experience
-          gamesWon {
-            id
-          }
-          gamesLost {
-            id
-          }
-          gameHistory {
-            score
-            winner {
-              id
-              name
-              avatar
-            }
-            loser {
-              id
-              name
-              avatar
-            }
-          }
-		  friendOf {
-			id
-			name
-			avatar
-		  }
-		  friends {
-			id
-			name
-			avatar
-		  }
-        }
-      }
-    `,
-    {
-      userId: user.value.id
-    },
-    {
-      fetchPolicy: 'cache-and-network'
-    }
-  )
-
-  watch(
-    result,
-    async (res) => {
-      if (res) {
-        const data = res.user
-        if (!data) return
-        const base64 = btoa(String.fromCharCode(...new Uint8Array(data.avatar.data)))
-        const avatar = `data:image/png;base64,${base64}`
-        user.value.name = data.name
-        user.value.avatar = avatar
-        user.value.points = data.experience
-        user.value.nb_win = data.gamesWon.length
-        user.value.nb_loose = data.gamesLost.length
-        user.value.gameHistory = data.gameHistory.map((game: any) => ({
-          winner: {
-            name: game.winner.name,
-            avatar: `data:image/png;base64,${btoa(
-              String.fromCharCode(...new Uint8Array(game.winner.avatar.data))
-            )}`,
-            id: game.winner.id
-          },
-          loser: {
-            name: game.loser.name,
-            avatar: `data:image/png;base64,${btoa(
-              String.fromCharCode(...new Uint8Array(game.loser.avatar.data))
-            )}`,
-            id: game.loser.id
-          },
-          score:
-            game.winner.name === user.value.name ? game.score : [game.score[1], game.score[0]] ?? []
-        }))
-		user.value.friends = data.friends
-		user.value.friendOf = data.friendOf
-      }
-    },
-    { immediate: true }
-  )
-
-  refetch()
-})
+const user = useUserStore()
 
 function redirectToUserAccount(userId: string) {
   router.push(`/profil?id=${userId}`)
@@ -123,15 +17,15 @@ function redirectToUserAccount(userId: string) {
 
 <template>
   <div class="max-w-lg mx-auto my-10 bg-[#71717a] rounded-lg shadow-md p-5">
-    <img class="w-32 h-32 rounded-full mx-auto" :src="user.avatar" alt="Profile picture" />
-    <h2 class="text-center text-2xl font-semibold text-black mt-3">{{ user.name }}</h2>
-    <p class="text-center text-gray-600 mt-1">Points: {{ user.points }}</p>
-    <p class="text-center text-gray-600 mt-1">
-      Victoires: {{ user.nb_win }} | Defaites: {{ user.nb_loose }}
-    </p>
-	<div class="text-center text-gray-600 mt-1">
-		<FollowersComponent/>
-	</div>
+      <img class="w-32 h-32 rounded-full mx-auto" :src="user.avatar" alt="Profile picture" />
+      <h2 class="text-center text-2xl font-semibold text-black mt-3">{{ user.name }}</h2>
+      <p class="text-center text-gray-600 mt-1">Points: {{ user.points }}</p>
+      <p class="text-center text-gray-600 mt-1">
+        Victoires: {{ user.nb_win }} | Defaites: {{ user.nb_loose }}
+      </p>
+    <div class="text-center text-gray-600 mt-1">
+      <FollowersComponent/>
+    </div>
   </div>
 
   <div class="container mx-auto px-4 sm:px-8">
