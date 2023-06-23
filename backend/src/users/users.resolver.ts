@@ -111,12 +111,25 @@ export class UsersResolver {
 	@Args('id') id: string,
 	@Context() context,
   ): Promise<boolean> {
-	const { id: currentUserId } = context.req.user;
-	const user = await this.PrismaService.user.findUnique({
-	  where: { id: currentUserId },
-	  include,
-	});
-	return user.friends.some((friend) => friend.id === id);
+	  const { id: currentUserId } = context.req.user;
+	  const user = await this.PrismaService.user.findUnique({
+	    where: { id: currentUserId },
+	    include,
+	  });
+	  return user.friends.some((friend) => friend.id === id);
+  }
+
+  @Query('isBlocked')
+  async isBlocked(
+	@Args('id') id: string,
+	@Context() context,
+  ): Promise<boolean> {
+	  const { id: currentUserId } = context.req.user;
+	  const user = await this.PrismaService.user.findUnique({
+	    where: { id: currentUserId },
+	    include,
+	  });
+	  return user.blocked.some((friend) => friend.id === id);
   }
 
   @Mutation('updateUser')
