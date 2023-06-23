@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import gql from 'graphql-tag'
 import { useQuery } from '@vue/apollo-composable'
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref } from 'vue'
 import router from '@/router'
 import FollowersComponent from '@/components/FollowersComponent.vue'
 
@@ -23,8 +23,6 @@ const user = ref({
     winner: User
     loser: User
   }[],
-  friends: [] as User[],
-  friendOf: [] as User[]
 })
 
 const { onResult, refetch } = useQuery(
@@ -33,6 +31,7 @@ const { onResult, refetch } = useQuery(
     me {
       avatar
       name
+      id
       experience
       gamesWon {
         id
@@ -53,16 +52,6 @@ const { onResult, refetch } = useQuery(
           avatar
         }
       }
-	    friendOf {
-	      id
-	      name
-	      avatar
-	    }
-	    friends {
-	      id
-	      name
-	      avatar
-	    }
     }
   }
   `,
@@ -76,6 +65,7 @@ onResult((res) => {
   if (!userRes) return
   const base64 = btoa(String.fromCharCode(...new Uint8Array(userRes.avatar.data)))
   const avatar = `data:image/png;base64,${base64}`
+  user.value.id = userRes.id
   user.value.name = userRes.name
   user.value.avatar = avatar
   user.value.points = userRes.experience
@@ -96,7 +86,7 @@ onResult((res) => {
       )}`,
       id: game.loser.id
     },
-    score: game.winner.name === user.value.name ? game.score : [game.score[1], game.score[0]] ?? []
+    score: game.winner.id === userRes.id ? game.score : [game.score[1], game.score[0]]
   }))
 })
 
