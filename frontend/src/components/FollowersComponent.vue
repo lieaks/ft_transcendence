@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useUserStore } from '@/stores/userStore'
 import router from '@/router'
 import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
