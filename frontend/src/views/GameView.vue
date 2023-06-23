@@ -1,5 +1,6 @@
 <template tabindex>
   <canvas ref="pongCanvas" width="1600" height="800" class="mx-auto bg-black"></canvas>
+  <EndGameComponent v-if="user.gameEnded" :card-type="user.gameWon ? 'win' : 'lose'" />
 </template>
 
 <script setup lang="ts">
@@ -7,9 +8,15 @@ import { onMounted, ref } from 'vue'
 import { Game } from '@/elements/Game.js'
 import { useUserStore } from '@/stores/userStore'
 import { onBeforeRouteLeave } from 'vue-router'
+import EndGameComponent from '@/components/EndGameComponent.vue'
 
 const pongCanvas = ref<HTMLCanvasElement | null>(null)
 const userStore = useUserStore()
+
+const user = ref({
+  gameEnded: false,
+  gameWon: false,
+})
 
 let keydownHandler: (event: KeyboardEvent) => void
 
@@ -51,6 +58,10 @@ onMounted(() => {
   userStore.socket?.on('updateBallPosition', (data) => game.updateBallPosition(data))
   userStore.socket?.on('updatePaddlePosition', (data) => game.updatePaddlePosition(data))
   userStore.socket?.on('updateScore', (data) => game.updateScore(data))
+  userStore.socket?.on('finishGame', (data) => {
+    user.value.gameEnded = true
+    user.value.gameWon = data.isWinner
+  })
   setInterval(() => {
     game.draw()
   }, 1000 / 60)

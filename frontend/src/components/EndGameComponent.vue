@@ -21,13 +21,15 @@ function backHome() {
 </script>
 
 <template>
-  <div class="card w-96 bg-base-100 shadow-xl z-[1]">
-    <figure>
-      <img :src="cardImage" :alt="cardAlt" />
-    </figure>
-    <div class="card-body items-center text-center">
-      <h2 class="card-title">{{ cardTitle }}</h2>
-      <button class="btn btn-primary" @click="backHome">Back Home</button>
+  <div class="popup fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
+    <div class="card w-96 bg-base-100 shadow-xl">
+      <figure>
+        <img :src="cardImage" :alt="cardAlt" />
+      </figure>
+      <div class="card-body items-center text-center">
+        <h2 class="card-title">{{ cardTitle }}</h2>
+        <button class="btn btn-primary" @click="backHome">Back Home</button>
+      </div>
     </div>
   </div>
 </template>
