@@ -5,11 +5,12 @@ import { useQuery, useMutation } from '@vue/apollo-composable'
 import { onMounted, ref, watch } from 'vue'
 import { useUserStore } from '@/stores/userStore'
 import router from '@/router'
+import FollowersComponent from '@/components/FollowersComponent.vue'
 
 const route = useRoute()
 const user = ref({
   name: '',
-  id: 'ce8f04c0-db2d-4e40-a9ec-60d3a4b1dd81',
+  id: '',
   avatar: '',
   points: 0,
   nb_win: 0,
@@ -25,7 +26,7 @@ const user = ref({
 
 const userStore = useUserStore()
 onMounted(() => {
-//   user.value.id = userStore.id
+  user.value.id = userStore.id
 
   const { result, refetch } = useQuery(
     gql`
@@ -128,10 +129,9 @@ function redirectToUserAccount(userId: string) {
     <p class="text-center text-gray-600 mt-1">
       Victoires: {{ user.nb_win }} | Defaites: {{ user.nb_loose }}
     </p>
-    <p class="font-semibold text-center text-gray-900 mt-1">
-		Followers: {{ user.friendOf.length }} <br>
-		Following: {{ user.friends.length }}
-	</p>
+	<div class="text-center text-gray-600 mt-1">
+		<FollowersComponent/>
+	</div>
   </div>
 
   <div class="container mx-auto px-4 sm:px-8">
