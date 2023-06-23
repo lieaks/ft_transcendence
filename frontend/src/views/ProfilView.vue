@@ -3,11 +3,17 @@ import { useRoute } from 'vue-router'
 import gql from 'graphql-tag'
 import { useQuery, useMutation } from '@vue/apollo-composable'
 import { onMounted, ref, watch } from 'vue'
-import { useUserStore } from '@/stores/userStore'
 import router from '@/router'
+
+interface User {
+  name: string
+  id: string
+  avatar: string
+}
 
 const route = useRoute()
 const user = ref({
+  storeId: '',
   name: '',
   id: '',
   avatar: '',
@@ -16,8 +22,8 @@ const user = ref({
   nb_loose: 0,
   gameHistory: [] as {
     score: number[]
-    winner: { name: string; avatar: string; id: string }
-    loser: { name: string; avatar: string; id: string }
+    winner: User
+    loser: User
   }[],
   isFriend: false,
   isBlocked: false,
@@ -34,103 +40,121 @@ function extractQueryParam<T>(paramName: string): T {
   return value
 }
 
-const userStore = useUserStore()
-onMounted(() => {
-  user.value.id = extractQueryParam<string>('id') || userStore.id
+user.value.id = extractQueryParam<string>('id')
 
-  const { result: userResult, refetch: userRefetch } = useQuery(
-    gql`
-      query user($userId: String!) {
-        user(id: $userId) {
-          avatar
-          name
-          experience
-          gamesWon {
+const { result: meResult, refetch: meRefetch } = useQuery(
+  gql`
+    query me {
+      me {
+        id
+      }
+    }
+  `,
+  {
+    fetchPolicy: 'cache-and-network'
+  }
+)
+
+const { result: userResult, refetch: userRefetch } = useQuery(
+  gql`
+    query user($userId: String!) {
+      user(id: $userId) {
+        avatar
+        name
+        experience
+        gamesWon {
+          id
+        }
+        gamesLost {
+          id
+        }
+        gameHistory {
+          score
+          winner {
             id
+            name
+            avatar
           }
-          gamesLost {
+          loser {
             id
-          }
-          gameHistory {
-            score
-            winner {
-              id
-              name
-              avatar
-            }
-            loser {
-              id
-              name
-              avatar
-            }
+            name
+            avatar
           }
         }
       }
-    `,
-    {
-      userId: user.value.id
-    },
-    {
-      fetchPolicy: 'cache-and-network'
     }
-  )
+  `,
+  {
+    userId: user.value.id
+  },
+  {
+    fetchPolicy: 'cache-and-network',
+  }
+)
 
-  const { result: friendResult, refetch: friendRefetch } = useQuery(
-    gql`
-      query isFriend($friendId: String!) {
-        isFriend(id: $friendId)
-        isBlocked(id: $friendId)
-      }
-    `,
-    {
-      friendId: user.value.id,
-      blockedId: user.value.id
-    },
-    {
-      fetchPolicy: 'cache-and-network'
+const { result: friendResult, refetch: friendRefetch } = useQuery(
+  gql`
+    query isFriend($friendId: String!) {
+      isFriend(id: $friendId)
+      isBlocked(id: $friendId)
     }
-  )
+  `,
+  {
+    friendId: user.value.id,
+    blockedId: user.value.id
+  },
+  {
+    fetchPolicy: 'cache-and-network'
+  }
+)
 
-  watch(
-    [userResult, friendResult],
-    async ([userRes, friendRes]) => {
-      if (userRes && friendRes) {
-        const userData = userRes.user
-        if (!userData) return
-        const base64 = btoa(String.fromCharCode(...new Uint8Array(userData.avatar.data)))
-        const avatar = `data:image/png;base64,${base64}`
-        user.value.name = userData.name
-        user.value.avatar = avatar
-        user.value.points = userData.experience
-        user.value.nb_win = userData.gamesWon.length
-        user.value.nb_loose = userData.gamesLost.length
-        user.value.gameHistory = userData.gameHistory.map((game: any) => ({
-          winner: {
-            name: game.winner.name,
-            avatar: `data:image/png;base64,${btoa(
-              String.fromCharCode(...new Uint8Array(game.winner.avatar.data))
-            )}`,
-            id: game.winner.id
-          },
-          loser: {
-            name: game.loser.name,
-            avatar: `data:image/png;base64,${btoa(
-              String.fromCharCode(...new Uint8Array(game.loser.avatar.data))
-            )}`,
-            id: game.loser.id
-          },
-          score:
-            game.winner.name === user.value.name ? game.score : [game.score[1], game.score[0]] ?? []
-        }))
-        user.value.isFriend = friendRes.isFriend
-        user.value.isBlocked = friendRes.isBlocked
-      }
-    },
-    { immediate: true }
-  )
+watch(
+  [userResult, friendResult, meResult],
+  async ([userRes, friendRes, meRes]) => {
+    if (userRes && friendRes && meRes) {
+      user.value.storeId = meRes.me.id
+      const userData = userRes.user
+      if (!userData) return
+      const base64 = btoa(String.fromCharCode(...new Uint8Array(userData.avatar.data)))
+      const avatar = `data:image/png;base64,${base64}`
+      user.value.name = userData.name
+      user.value.avatar = avatar
+      user.value.points = userData.experience
+      user.value.nb_win = userData.gamesWon.length
+      user.value.nb_loose = userData.gamesLost.length
+      user.value.gameHistory = userData.gameHistory.map((game: any) => ({
+        winner: {
+          name: game.winner.name,
+          avatar: `data:image/png;base64,${btoa(
+            String.fromCharCode(...new Uint8Array(game.winner.avatar.data))
+          )}`,
+          id: game.winner.id
+        },
+        loser: {
+          name: game.loser.name,
+          avatar: `data:image/png;base64,${btoa(
+            String.fromCharCode(...new Uint8Array(game.loser.avatar.data))
+          )}`,
+          id: game.loser.id
+        },
+        score:
+          game.winner.name === user.value.name ? game.score : [game.score[1], game.score[0]] ?? []
+      }))
+      user.value.isFriend = friendRes.isFriend
+      user.value.isBlocked = friendRes.isBlocked
+    }
+  },
+  { immediate: true }
+)
 
+function allRefetch() {
   userRefetch()
   friendRefetch()
+  meRefetch()
+}
+
+onMounted(() => {
+  allRefetch()
 })
 
 const { mutate } = useMutation(
@@ -181,7 +205,7 @@ function redirectToUserAccount(userId: string) {
     <p class="text-center text-gray-600 mt-1">
       Victoires: {{ user.nb_win }} | Defaites: {{ user.nb_loose }}
     </p>
-    <div v-if="user.id != userStore.id" class="flex justify-center mt-5">
+    <div v-if="user.id != user.storeId" class="flex justify-center mt-5">
       <div v-if="!user.isBlocked">
         <button v-if="!user.isFriend" class="text-green-500 hover:text-green-700 mx-3 font-semibold" @click="addFriend(user.id)">
           Follow
