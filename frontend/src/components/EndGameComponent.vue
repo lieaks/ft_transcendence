@@ -27,7 +27,7 @@ function backHome() {
 
 <template>
   <div class="popup fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
-    <div class="card w-96 bg-base-100 shadow-xl">
+    <div class="card w-96 bg-base-100 shadow-xl border border-white bg-black">
       <figure>
         <img :src="cardImage" :alt="cardAlt" />
       </figure>

@@ -1,6 +1,6 @@
 <template tabindex>
+  <EndGameComponent :card-type="user.gameWon ? 'win' : 'lose'" :score="user.score"/>
   <canvas ref="pongCanvas" width="1600" height="800" class="mx-auto bg-black"></canvas>
-  <EndGameComponent v-if="user.gameEnded" :card-type="user.gameWon ? 'win' : 'lose'" :score="user.score"/>
 </template>
 
 <script setup lang="ts">
