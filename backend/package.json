@@ -31,7 +31,7 @@
     "@nestjs/platform-socket.io": "^9.4.2",
     "@nestjs/platform-ws": "^9.4.2",
     "@nestjs/schedule": "^2.2.3",
-    "@prisma/client": "^4.15.0",
+    "@prisma/client": "^4.16.1",
     "graphql": "^16.6.0",
     "graphql-scalar": "^0.1.0",
     "graphql-scalars": "^1.22.1",
