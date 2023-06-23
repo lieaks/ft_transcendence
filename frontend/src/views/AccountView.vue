@@ -5,6 +5,12 @@ import { onMounted, ref, watch } from 'vue'
 import router from '@/router'
 import FollowersComponent from '@/components/FollowersComponent.vue'
 
+interface User {
+  name: string
+  id: string
+  avatar: string
+}
+
 const user = ref({
   name: '',
   id: '',
@@ -14,96 +20,88 @@ const user = ref({
   nb_loose: 0,
   gameHistory: [] as {
     score: number[]
-    winner: { name: string; avatar: string; id: string }
-    loser: { name: string; avatar: string; id: string }
+    winner: User
+    loser: User
   }[],
-  friends: [] as { name: string; avatar: string; id: string }[],
-  friendOf: [] as { name: string; avatar: string; id: string }[]
+  friends: [] as User[],
+  friendOf: [] as User[]
+})
+
+const { onResult, refetch } = useQuery(
+  gql`
+  query user {
+    me {
+      avatar
+      name
+      experience
+      gamesWon {
+        id
+      }
+      gamesLost {
+        id
+      }
+      gameHistory {
+        score
+        winner {
+          id
+          name
+          avatar
+        }
+        loser {
+          id
+          name
+          avatar
+        }
+      }
+	    friendOf {
+	      id
+	      name
+	      avatar
+	    }
+	    friends {
+	      id
+	      name
+	      avatar
+	    }
+    }
+  }
+  `,
+  {
+    fetchPolicy: 'cache-and-network'
+  }
+)
+
+onResult((res) => {
+  const userRes = res.data?.me
+  if (!userRes) return
+  const base64 = btoa(String.fromCharCode(...new Uint8Array(userRes.avatar.data)))
+  const avatar = `data:image/png;base64,${base64}`
+  user.value.name = userRes.name
+  user.value.avatar = avatar
+  user.value.points = userRes.experience
+  user.value.nb_win = userRes.gamesWon.length
+  user.value.nb_loose = userRes.gamesLost.length
+  user.value.gameHistory = userRes.gameHistory.map((game: any) => ({
+    winner: {
+      name: game.winner.name,
+      avatar: `data:image/png;base64,${btoa(
+        String.fromCharCode(...new Uint8Array(game.winner.avatar.data))
+      )}`,
+      id: game.winner.id
+    },
+    loser: {
+      name: game.loser.name,
+      avatar: `data:image/png;base64,${btoa(
+        String.fromCharCode(...new Uint8Array(game.loser.avatar.data))
+      )}`,
+      id: game.loser.id
+    },
+    score: game.winner.name === user.value.name ? game.score : [game.score[1], game.score[0]] ?? []
+  }))
 })
 
 onMounted(() => {
-  console.log('mounted')
-  const { result } = useQuery(
-    gql`
-      query user {
-        me {
-          avatar
-          name
-          experience
-          gamesWon {
-            id
-          }
-          gamesLost {
-            id
-          }
-          gameHistory {
-            score
-            winner {
-              id
-              name
-              avatar
-            }
-            loser {
-              id
-              name
-              avatar
-            }
-          }
-		      friendOf {
-			      id
-			      name
-			      avatar
-		      }
-		        friends {
-			      id
-			      name
-			      avatar
-		      }
-        }
-      }
-    `,
-    {
-      fetchPolicy: 'cache-and-network'
-    }
-  )
-
-  watch(
-    result,
-    async (res) => {
-      if (res) {
-        const data = res.me
-        if (!data) return
-        const base64 = btoa(String.fromCharCode(...new Uint8Array(data.avatar.data)))
-        const avatar = `data:image/png;base64,${base64}`
-        user.value.name = data.name
-        user.value.avatar = avatar
-        user.value.points = data.experience
-        user.value.nb_win = data.gamesWon.length
-        user.value.nb_loose = data.gamesLost.length
-        user.value.gameHistory = data.gameHistory.map((game: any) => ({
-          winner: {
-            name: game.winner.name,
-            avatar: `data:image/png;base64,${btoa(
-              String.fromCharCode(...new Uint8Array(game.winner.avatar.data))
-            )}`,
-            id: game.winner.id
-          },
-          loser: {
-            name: game.loser.name,
-            avatar: `data:image/png;base64,${btoa(
-              String.fromCharCode(...new Uint8Array(game.loser.avatar.data))
-            )}`,
-            id: game.loser.id
-          },
-          score:
-            game.winner.name === user.value.name ? game.score : [game.score[1], game.score[0]] ?? []
-        }))
-		    user.value.friends = data.friends
-		    user.value.friendOf = data.friendOf
-      }
-    },
-    { immediate: true }
-  )
+  refetch()
 })
 
 function redirectToUserAccount(userId: string) {
