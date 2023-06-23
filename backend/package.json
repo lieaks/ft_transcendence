@@ -45,7 +45,7 @@
     "rxjs": "^7.2.0",
     "socket.io-client": "^4.6.2",
     "speakeasy": "^2.0.0",
-    "ts-morph": "^18.0.0",
+    "ts-morph": "^19.0.0",
     "ws": "^8.13.0"
   },
   "devDependencies": {
