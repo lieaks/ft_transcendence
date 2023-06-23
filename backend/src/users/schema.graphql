@@ -32,6 +32,7 @@ type Query {
 	usersByIds(ids: [String!]!): [User!]
 	users: [User!]!
 	isFriend(id: String!): Boolean!
+	isBlocked(id: String!): Boolean!
 	leaderboard(skip: Int, take: Int): [User!]
 }
 

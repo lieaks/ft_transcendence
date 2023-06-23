@@ -20,6 +20,7 @@ const user = ref({
     loser: { name: string; avatar: string; id: string }
   }[],
   isFriend: false,
+  isBlocked: false,
 })
 
 function extractQueryParam<T>(paramName: string): T {
@@ -78,10 +79,12 @@ onMounted(() => {
     gql`
       query isFriend($friendId: String!) {
         isFriend(id: $friendId)
+        isBlocked(id: $friendId)
       }
     `,
     {
-      friendId: user.value.id
+      friendId: user.value.id,
+      blockedId: user.value.id
     },
     {
       fetchPolicy: 'cache-and-network'
@@ -93,7 +96,6 @@ onMounted(() => {
     async ([userRes, friendRes]) => {
       if (userRes && friendRes) {
         const userData = userRes.user
-        const friendData = friendRes.isFriend
         if (!userData) return
         const base64 = btoa(String.fromCharCode(...new Uint8Array(userData.avatar.data)))
         const avatar = `data:image/png;base64,${base64}`
@@ -120,7 +122,8 @@ onMounted(() => {
           score:
             game.winner.name === user.value.name ? game.score : [game.score[1], game.score[0]] ?? []
         }))
-        user.value.isFriend = friendData
+        user.value.isFriend = friendRes.isFriend
+        user.value.isBlocked = friendRes.isBlocked
       }
     },
     { immediate: true }
@@ -154,7 +157,15 @@ function removeFriend(id: string) {
 
 function blockUser(id: string) {
   const input = { usersToBlock: [id] }
+  removeFriend(id)
   mutate({ input })
+  user.value.isBlocked = true
+}
+
+function unblockUser(id: string) {
+  const input = { usersToUnblock: [id] }
+  mutate({ input })
+  user.value.isBlocked = false
 }
 
 function redirectToUserAccount(userId: string) {
@@ -171,27 +182,26 @@ function redirectToUserAccount(userId: string) {
       Victoires: {{ user.nb_win }} | Defaites: {{ user.nb_loose }}
     </p>
     <div v-if="user.id != userStore.id" class="flex justify-center mt-5">
-      <button
-		v-if="!user.isFriend"
-        class="text-green-500 hover:text-green-700 mx-3 font-semibold"
-        @click="addFriend(user.id)"
-      >
-        Follow
-      </button>
-      <button
-	  	v-if="user.isFriend"
-        class="text-red-500 hover:text-red-700 mx-3 font-semibold"
-        @click="removeFriend(user.id)"
-      >
-        Unfollow
-      </button>
-      <button class="text-white hover:text-gray-700 mx-3 font-semibold" @click="blockUser(user.id)">
+      <div v-if="!user.isBlocked">
+        <button v-if="!user.isFriend" class="text-green-500 hover:text-green-700 mx-3 font-semibold" @click="addFriend(user.id)">
+          Follow
+        </button>
+
+        <button v-if="user.isFriend" class="text-red-500 hover:text-red-700 mx-3 font-semibold" @click="removeFriend(user.id)">
+          Unfollow
+        </button>
+      </div>
+      <button v-if="!user.isBlocked" class="text-white hover:text-gray-700 mx-3 font-semibold" @click="blockUser(user.id)">
         Block User
+      </button>
+
+      <button v-if="user.isBlocked" class="text-white hover:text-gray-700 mx-3 font-semibold" @click="unblockUser(user.id)">
+        Unblock User
       </button>
     </div>
   </div>
 
-  <div class="container mx-auto px-4 sm:px-8">
+  <div v-if="!user.isBlocked" class="container mx-auto px-4 sm:px-8">
     <div class="py-8">
       <div>
         <h2 class="text-2xl font-semibold leading-tight text-center">Matches History</h2>
