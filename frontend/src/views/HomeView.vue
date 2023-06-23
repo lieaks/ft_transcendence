@@ -17,7 +17,6 @@ user.socket?.on('startGame', (data) => {
   user.setGameId(data.id)
   router.push('/game')
 })
-
 </script>
 
 <template>
@@ -29,5 +28,4 @@ user.socket?.on('startGame', (data) => {
     <MatchmakingComponent v-if="user.inQueue" />
   </div>
   <LeaderboardComponent />
-  <FollowersComponent />
 </template>

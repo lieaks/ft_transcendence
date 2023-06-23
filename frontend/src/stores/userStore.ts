@@ -6,11 +6,29 @@ import gql from 'graphql-tag'
 import router from '@/router'
 import { useRoute } from 'vue-router'
 
+interface Player {
+	name: string
+	avatar: string
+	id: string
+}
+
+interface Game {
+	score: number[]
+	winner: Player
+	loser: Player
+}
+
 export const useUserStore = defineStore('user', () => {
   const route = useRoute()
   const id = ref('')
   const name = ref('name')
   const avatar = ref('')
+  const points = ref(0)
+  const nb_win = ref(0)
+  const nb_loose = ref(0)
+  const gameHistory = ref<Game[]>([])
+  const friends = ref<Player[]>([])
+  const friendOf = ref<Player[]>([])
   let socket = io(import.meta.env.VITE_BACKEND_URL)
   const gameId = ref('')
   const inQueue = ref(false)
@@ -19,9 +37,33 @@ export const useUserStore = defineStore('user', () => {
     gql`
       query me {
         me {
-          name
-          avatar
-          id
+		  name
+		  avatar
+		  id
+		  experience
+		  gameHistory {
+		    score
+		    winner {
+		  		name
+		  		avatar
+		  		id
+		    }
+		    loser {
+		  		name
+		  		avatar
+		  		id
+		    }
+		  }
+		  friends {
+		    name
+		    avatar
+		    id
+		  }
+		  friendOf {
+		    name
+		    avatar
+		    id
+		  }
         }
       }
     `,
@@ -34,11 +76,18 @@ export const useUserStore = defineStore('user', () => {
     id.value = me.id
     const base64 = btoa(String.fromCharCode(...new Uint8Array(me.avatar.data))) // Convert buffer to base64
     avatar.value = `data:image/png;base64,${base64}`
+	points.value = me.points
+    gameHistory.value = me.gameHistory
+    nb_win.value = me.gameHistory.filter((game: Game) => game.winner.id === me.id).length
+    nb_loose.value = me.gameHistory.filter((game: Game) => game.loser.id === me.id).length
+    friends.value = me.friends
+    friendOf.value = me.friendOf
   })
   onError((err) => {
     if (err.message === 'Unauthorized' && !['login', 'authCallback'].includes(route.name as string))
       router.push('/login')
   })
+
   socket.on('connect', () => {
     socket?.emit('login', { jwtToken: localStorage.getItem('jwtToken') })
   })
@@ -79,6 +128,12 @@ export const useUserStore = defineStore('user', () => {
     socket,
     gameId,
     inQueue,
+	points,
+	nb_win,
+	nb_loose,
+	gameHistory,
+	friends,
+	friendOf,
     setName,
     setAvatar,
     setGameId,
