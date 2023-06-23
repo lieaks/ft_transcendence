@@ -110,6 +110,8 @@ export class Game implements IGame {
         score: [this.score.left, this.score.right],
       },
     });
+	winner.addExperience(10);
+	loser.addExperience(-10);
   }
 
   startGame(): void {
