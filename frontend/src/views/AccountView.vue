@@ -90,10 +90,6 @@ onResult((res) => {
   }))
 })
 
-onMounted(() => {
-  refetch()
-})
-
 function redirectToUserAccount(userId: string) {
   router.push(`/profil/${userId}`)
 }
