@@ -2,8 +2,9 @@
 import { useRoute } from 'vue-router'
 import gql from 'graphql-tag'
 import { useQuery, useMutation } from '@vue/apollo-composable'
-import { onMounted, ref, watch } from 'vue'
+import {ref, watch } from 'vue'
 import router from '@/router'
+import { useUserStore } from '@/stores/userStore'
 
 interface User {
   name: string
@@ -12,8 +13,8 @@ interface User {
 }
 
 const route = useRoute()
+const userStore = useUserStore()
 const user = ref({
-  storeId: '',
   name: '',
   id: '',
   avatar: '',
@@ -42,20 +43,7 @@ function extractQueryParam<T>(paramName: string): T {
 
 user.value.id = extractQueryParam<string>('id')
 
-const { result: meResult, refetch: meRefetch } = useQuery(
-  gql`
-    query me {
-      me {
-        id
-      }
-    }
-  `,
-  {
-    fetchPolicy: 'cache-and-network'
-  }
-)
-
-const { result: userResult, refetch: userRefetch } = useQuery(
+const { result: userResult, refetch: refetchUser, onResult: onUserResult } = useQuery(
   gql`
     query user($userId: String!) {
       user(id: $userId) {
@@ -92,7 +80,7 @@ const { result: userResult, refetch: userRefetch } = useQuery(
   }
 )
 
-const { result: friendResult, refetch: friendRefetch } = useQuery(
+const { result: friendResult, refetch: refetchFriend, onResult: onFriendResult } = useQuery(
   gql`
     query isFriend($friendId: String!) {
       isFriend(id: $friendId)
@@ -109,10 +97,9 @@ const { result: friendResult, refetch: friendRefetch } = useQuery(
 )
 
 watch(
-  [userResult, friendResult, meResult],
-  async ([userRes, friendRes, meRes]) => {
-    if (userRes && friendRes && meRes) {
-      user.value.storeId = meRes.me.id
+  [userResult, friendResult],
+  async ([userRes, friendRes]) => {
+    if (userRes && friendRes) {
       const userData = userRes.user
       if (!userData) return
       const base64 = btoa(String.fromCharCode(...new Uint8Array(userData.avatar.data)))
@@ -146,16 +133,6 @@ watch(
   },
   { immediate: true }
 )
-
-function allRefetch() {
-  userRefetch()
-  friendRefetch()
-  meRefetch()
-}
-
-onMounted(() => {
-  allRefetch()
-})
 
 const { mutate } = useMutation(
   gql`
@@ -194,6 +171,9 @@ function unblockUser(id: string) {
 
 function redirectToUserAccount(userId: string) {
   router.push(`/profil?id=${userId}`)
+	user.value.id = extractQueryParam<string>('id')
+	refetchUser()
+	refetchFriend()
 }
 </script>
 
@@ -205,7 +185,7 @@ function redirectToUserAccount(userId: string) {
     <p class="text-center text-gray-600 mt-1">
       Victoires: {{ user.nb_win }} | Defaites: {{ user.nb_loose }}
     </p>
-    <div v-if="user.id != user.storeId" class="flex justify-center mt-5">
+    <div v-if="userStore.id && user.id && userStore.id !== user.id" class="flex justify-center mt-5">
       <div v-if="!user.isBlocked">
         <button v-if="!user.isFriend" class="text-green-500 hover:text-green-700 mx-3 font-semibold" @click="addFriend(user.id)">
           Follow

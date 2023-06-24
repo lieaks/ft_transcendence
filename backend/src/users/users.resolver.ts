@@ -114,7 +114,7 @@ export class UsersResolver {
 	  const { id: currentUserId } = context.req.user;
 	  const user = await this.PrismaService.user.findUnique({
 	    where: { id: currentUserId },
-	    include,
+			include: { friends: true, }
 	  });
 	  return user.friends.some((friend) => friend.id === id);
   }
@@ -127,7 +127,7 @@ export class UsersResolver {
 	  const { id: currentUserId } = context.req.user;
 	  const user = await this.PrismaService.user.findUnique({
 	    where: { id: currentUserId },
-	    include,
+			include: { blocked: true, }
 	  });
 	  return user.blocked.some((friend) => friend.id === id);
   }
