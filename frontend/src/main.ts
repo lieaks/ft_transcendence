@@ -40,6 +40,6 @@ app.use(router)
 app.use(createPinia().use(piniaPluginPersistedState))
 app.use(Vue3Toastify, {
   autoClose: 3000,
-  position: 'top-left',
+  position: 'top-right',
 } as ToastContainerOptions)
 app.mount('#app')

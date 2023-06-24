@@ -4,6 +4,8 @@
 
   const notify = () => {
     toast('Axel t\'as invite a rejoindre sa partie', {
+      type: 'info',
+      icon: '👏',
     });
   };
 </script>
