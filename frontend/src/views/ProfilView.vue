@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter, type RouteLocationNormalizedLoaded } from 'vue-router'
 import gql from 'graphql-tag'
 import { useQuery, useMutation } from '@vue/apollo-composable'
 import {ref, watch } from 'vue'
-import router from '@/router'
 import { useUserStore } from '@/stores/userStore'
 
 interface User {
@@ -13,6 +12,7 @@ interface User {
 }
 
 const route = useRoute()
+const router = useRouter()
 const userStore = useUserStore()
 const user = ref({
   name: '',
@@ -30,7 +30,7 @@ const user = ref({
   isBlocked: false,
 })
 
-function extractQueryParam<T>(paramName: string): T {
+function extractQueryParam<T>(route: RouteLocationNormalizedLoaded, paramName: string): T {
   let value: T = '' as unknown as T
   const paramValue = route.query[paramName]
   if (Array.isArray(paramValue) && paramValue.length > 0) {
@@ -41,7 +41,7 @@ function extractQueryParam<T>(paramName: string): T {
   return value
 }
 
-user.value.id = extractQueryParam<string>('id')
+user.value.id = extractQueryParam<string>(route, 'id')
 
 const { result: userResult, refetch: refetchUser, onResult: onUserResult } = useQuery(
   gql`
@@ -170,11 +170,18 @@ function unblockUser(id: string) {
 }
 
 function redirectToUserAccount(userId: string) {
-  router.push(`/profil?id=${userId}`)
-	user.value.id = extractQueryParam<string>('id')
-	refetchUser()
-	refetchFriend()
+	router.push({
+		path: '/profil',
+		query: { id: userId }
+	})
 }
+
+router.afterEach(route => {
+	user.value.id = extractQueryParam<string>(route, 'id')
+	refetchUser({userId: user.value.id})
+	refetchFriend({friendId: user.value.id, blockedId: user.value.id})
+})
+
 </script>
 
 <template>
