@@ -2,7 +2,7 @@
 import { useRoute, useRouter, type RouteLocationNormalizedLoaded } from 'vue-router'
 import gql from 'graphql-tag'
 import { useQuery, useMutation } from '@vue/apollo-composable'
-import {computed, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useUserStore } from '@/stores/userStore'
 
 interface User {
@@ -12,12 +12,11 @@ interface User {
 }
 
 const props = defineProps({
-	userId: {
-		required: true,
-		type: String,
-	}
-});
-
+  userId: {
+    required: true,
+    type: String
+  }
+})
 
 const route = useRoute()
 const router = useRouter()
@@ -35,10 +34,10 @@ const user = ref({
     loser: User
   }[],
   isFriend: false,
-  isBlocked: false,
+  isBlocked: false
 })
 
-const { result: userResult, refetch: refetchUser, onResult: onUserResult } = useQuery(
+const { onResult: onUserResult } = useQuery(
   gql`
     query user($userId: String!) {
       user(id: $userId) {
@@ -66,66 +65,62 @@ const { result: userResult, refetch: refetchUser, onResult: onUserResult } = use
         }
       }
     }
-  `, props,
+  `,
+  props,
   {
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-and-network'
   }
 )
 
-const friendQueryVariables = computed(() => {
-	return { friendId: props.userId }
+onUserResult((res) => {
+  if (!res.data?.user) return
+  const userData = res.data.user
+  const base64 = btoa(String.fromCharCode(...new Uint8Array(userData.avatar.data)))
+  const avatar = `data:image/png;base64,${base64}`
+  user.value.id = props.userId
+  user.value.name = userData.name
+  user.value.avatar = avatar
+  user.value.points = userData.experience
+  user.value.nb_win = userData.gamesWon.length
+  user.value.nb_loose = userData.gamesLost.length
+  user.value.gameHistory = userData.gameHistory.map((game: any) => ({
+    winner: {
+      name: game.winner.name,
+      avatar: `data:image/png;base64,${btoa(
+        String.fromCharCode(...new Uint8Array(game.winner.avatar.data))
+      )}`,
+      id: game.winner.id
+    },
+    loser: {
+      name: game.loser.name,
+      avatar: `data:image/png;base64,${btoa(
+        String.fromCharCode(...new Uint8Array(game.loser.avatar.data))
+      )}`,
+      id: game.loser.id
+    },
+    score: game.winner.name === user.value.name ? game.score : [game.score[1], game.score[0]] ?? []
+  }))
 })
-const { result: friendResult, refetch: refetchFriend, onResult: onFriendResult } = useQuery(
+
+const { onResult: onFriendResult } = useQuery(
   gql`
     query isFriend($friendId: String!) {
       isFriend(id: $friendId)
       isBlocked(id: $friendId)
     }
   `,
-	friendQueryVariables,
+  computed(() => {
+    return { friendId: props.userId }
+  }),
   {
     fetchPolicy: 'cache-and-network'
   }
 )
 
-watch(
-  [userResult, friendResult],
-  async ([userRes, friendRes]) => {
-    if (userRes && friendRes) {
-      const userData = userRes.user
-      if (!userData) return
-      const base64 = btoa(String.fromCharCode(...new Uint8Array(userData.avatar.data)))
-      const avatar = `data:image/png;base64,${base64}`
-			user.value.id = props.userId
-      user.value.name = userData.name
-      user.value.avatar = avatar
-      user.value.points = userData.experience
-      user.value.nb_win = userData.gamesWon.length
-      user.value.nb_loose = userData.gamesLost.length
-      user.value.gameHistory = userData.gameHistory.map((game: any) => ({
-        winner: {
-          name: game.winner.name,
-          avatar: `data:image/png;base64,${btoa(
-            String.fromCharCode(...new Uint8Array(game.winner.avatar.data))
-          )}`,
-          id: game.winner.id
-        },
-        loser: {
-          name: game.loser.name,
-          avatar: `data:image/png;base64,${btoa(
-            String.fromCharCode(...new Uint8Array(game.loser.avatar.data))
-          )}`,
-          id: game.loser.id
-        },
-        score:
-          game.winner.name === user.value.name ? game.score : [game.score[1], game.score[0]] ?? []
-      }))
-      user.value.isFriend = friendRes.isFriend
-      user.value.isBlocked = friendRes.isBlocked
-    }
-  },
-  { immediate: true }
-)
+onFriendResult((res) => {
+  if (res.data?.isFriend) user.value.isFriend = res.data.isFriend
+  if (res.data?.isBlocked) user.value.isBlocked = res.data.isBlocked
+})
 
 const { mutate } = useMutation(
   gql`
@@ -163,12 +158,11 @@ function unblockUser(id: string) {
 }
 
 function redirectToUserAccount(userId: string) {
-	router.push({
-		name: 'profil',
-		params: { id: userId }
-	})
+  router.push({
+    name: 'profil',
+    params: { id: userId }
+  })
 }
-
 </script>
 
 <template>
@@ -179,21 +173,40 @@ function redirectToUserAccount(userId: string) {
     <p class="text-center text-gray-600 mt-1">
       Victoires: {{ user.nb_win }} | Defaites: {{ user.nb_loose }}
     </p>
-    <div v-if="userStore.id && user.id && userStore.id !== user.id" class="flex justify-center mt-5">
+    <div
+      v-if="userStore.id && user.id && userStore.id !== user.id"
+      class="flex justify-center mt-5"
+    >
       <div v-if="!user.isBlocked">
-        <button v-if="!user.isFriend" class="text-green-500 hover:text-green-700 mx-3 font-semibold" @click="addFriend(user.id)">
+        <button
+          v-if="!user.isFriend"
+          class="text-green-500 hover:text-green-700 mx-3 font-semibold"
+          @click="addFriend(user.id)"
+        >
           Follow
         </button>
 
-        <button v-if="user.isFriend" class="text-red-500 hover:text-red-700 mx-3 font-semibold" @click="removeFriend(user.id)">
+        <button
+          v-if="user.isFriend"
+          class="text-red-500 hover:text-red-700 mx-3 font-semibold"
+          @click="removeFriend(user.id)"
+        >
           Unfollow
         </button>
       </div>
-      <button v-if="!user.isBlocked" class="text-white hover:text-gray-700 mx-3 font-semibold" @click="blockUser(user.id)">
+      <button
+        v-if="!user.isBlocked"
+        class="text-white hover:text-gray-700 mx-3 font-semibold"
+        @click="blockUser(user.id)"
+      >
         Block User
       </button>
 
-      <button v-if="user.isBlocked" class="text-white hover:text-gray-700 mx-3 font-semibold" @click="unblockUser(user.id)">
+      <button
+        v-if="user.isBlocked"
+        class="text-white hover:text-gray-700 mx-3 font-semibold"
+        @click="unblockUser(user.id)"
+      >
         Unblock User
       </button>
     </div>
