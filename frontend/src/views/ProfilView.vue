@@ -2,7 +2,7 @@
 import { useRoute, useRouter, type RouteLocationNormalizedLoaded } from 'vue-router'
 import gql from 'graphql-tag'
 import { useQuery, useMutation } from '@vue/apollo-composable'
-import {ref, watch } from 'vue'
+import {computed, ref, watch } from 'vue'
 import { useUserStore } from '@/stores/userStore'
 
 interface User {
@@ -10,6 +10,14 @@ interface User {
   id: string
   avatar: string
 }
+
+const props = defineProps({
+	userId: {
+		required: true,
+		type: String,
+	}
+});
+
 
 const route = useRoute()
 const router = useRouter()
@@ -29,19 +37,6 @@ const user = ref({
   isFriend: false,
   isBlocked: false,
 })
-
-function extractQueryParam<T>(route: RouteLocationNormalizedLoaded, paramName: string): T {
-  let value: T = '' as unknown as T
-  const paramValue = route.query[paramName]
-  if (Array.isArray(paramValue) && paramValue.length > 0) {
-    value = paramValue[0]?.toString() as unknown as T
-  } else if (paramValue) {
-    value = paramValue.toString() as unknown as T
-  }
-  return value
-}
-
-user.value.id = extractQueryParam<string>(route, 'id')
 
 const { result: userResult, refetch: refetchUser, onResult: onUserResult } = useQuery(
   gql`
@@ -71,15 +66,15 @@ const { result: userResult, refetch: refetchUser, onResult: onUserResult } = use
         }
       }
     }
-  `,
-  {
-    userId: user.value.id
-  },
+  `, props,
   {
     fetchPolicy: 'cache-and-network',
   }
 )
 
+const friendQueryVariables = computed(() => {
+	return { friendId: props.userId }
+})
 const { result: friendResult, refetch: refetchFriend, onResult: onFriendResult } = useQuery(
   gql`
     query isFriend($friendId: String!) {
@@ -87,10 +82,7 @@ const { result: friendResult, refetch: refetchFriend, onResult: onFriendResult }
       isBlocked(id: $friendId)
     }
   `,
-  {
-    friendId: user.value.id,
-    blockedId: user.value.id
-  },
+	friendQueryVariables,
   {
     fetchPolicy: 'cache-and-network'
   }
@@ -104,6 +96,7 @@ watch(
       if (!userData) return
       const base64 = btoa(String.fromCharCode(...new Uint8Array(userData.avatar.data)))
       const avatar = `data:image/png;base64,${base64}`
+			user.value.id = props.userId
       user.value.name = userData.name
       user.value.avatar = avatar
       user.value.points = userData.experience
@@ -171,16 +164,10 @@ function unblockUser(id: string) {
 
 function redirectToUserAccount(userId: string) {
 	router.push({
-		path: '/profil',
-		query: { id: userId }
+		name: 'profil',
+		params: { id: userId }
 	})
 }
-
-router.afterEach(route => {
-	user.value.id = extractQueryParam<string>(route, 'id')
-	refetchUser({userId: user.value.id})
-	refetchFriend({friendId: user.value.id, blockedId: user.value.id})
-})
 
 </script>
 

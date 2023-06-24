@@ -59,10 +59,11 @@ const router = createRouter({
       component: AuthCallbackView
     },
     {
-      path: '/profil',
+      path: '/profil/:id',
       name: 'profil',
       component: ProfilView,
-      beforeEnter: checkLogin
+			props: route => ({ userId: route.params.id }),
+			beforeEnter: checkLogin
     }
   ]
 })
