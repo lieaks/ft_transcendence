@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import gql from 'graphql-tag'
 import { useQuery } from '@vue/apollo-composable'
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import router from '@/router'
 import FollowersComponent from '@/components/FollowersComponent.vue'
 
@@ -25,7 +25,7 @@ const user = ref({
   }[]
 })
 
-const { onResult, refetch } = useQuery(
+const { onResult } = useQuery(
   gql`
     query user {
       me {
@@ -96,16 +96,20 @@ function redirectToUserAccount(userId: string) {
 </script>
 
 <template>
-  <div class="max-w-lg mx-auto my-10 bg-[#71717a] rounded-lg shadow-md p-5">
-    <img class="w-32 h-32 rounded-full mx-auto" :src="user.avatar" alt="Profile picture" />
-    <h2 class="text-center text-2xl font-semibold text-black mt-3">{{ user.name }}</h2>
-    <p class="text-center text-gray-600 mt-1">Points: {{ user.points }}</p>
-    <p class="text-center text-gray-600 mt-1">
-      Victoires: {{ user.nb_win }} | Defaites: {{ user.nb_loose }}
-    </p>
-    <div class="text-center text-gray-600 mt-1">
-      <FollowersComponent />
-    </div>
+	<div class="card md:card-side bg-neutral shadow-xl md:w-3/4 xl:w-/ w-1/2 mx-auto">
+		<figure>
+			<img class="w-full md:h-full md:w-auto" :src="user.avatar" alt="Profile picture" />
+		</figure>
+		<div class="card-body">
+			<h2 class="card-title mb-2 font-bold text-2xl">{{ user.name }}</h2>
+			<p>Points: {{ user.points }}</p>
+			<p>
+				Victoires: {{ user.nb_win }} | Defaites: {{ user.nb_loose }}
+			</p>
+			<div>
+				<FollowersComponent />
+			</div>
+		</div>
   </div>
 
   <div class="container mx-auto px-4 sm:px-8">
@@ -119,17 +123,17 @@ function redirectToUserAccount(userId: string) {
             <thead class="bg-[#564F6F]">
               <tr>
                 <th
-                  class="px-5 py-3 border-b-2 border-[#564F6F] text-white text-center text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                  class="px-5 text-white border-b-2 border-[#564F6F] text-center text-xs font-semibold uppercase tracking-wider"
                 >
                   {{ user.name }}
                 </th>
                 <th
-                  class="px-5 py-3 border-b-2 border-[#564F6F] text-white text-center text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                  class="px-5 py-3 border-b-2 border-[#564F6F] text-center text-xs font-semibold text-white uppercase tracking-wider"
                 >
                   Score
                 </th>
                 <th
-                  class="px-5 py-3 border-b-2 border-[#564F6F] text-white text-center text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                  class="px-5 py-3 border-b-2 border-[#564F6F] text-center text-xs font-semibold text-white uppercase tracking-wider"
                 >
                   Opponent
                 </th>

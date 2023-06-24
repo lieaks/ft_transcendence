@@ -15,7 +15,7 @@ const followers = ref({
   friends: [] as Player[]
 })
 
-const { onResult, refetch } = useQuery(
+const { onResult } = useQuery(
   gql`
     query me {
       me {
@@ -51,7 +51,7 @@ function redirectToUserAccount(userId: string) {
 
 <template>
   <div className="dropdown dropdown-hover dropdown-end ">
-    <label tabIndex="{0}" className="btn m-1">Followers</label>
+    <label tabIndex="{0}" className="btn md:mr-2 mb-1">Followers</label>
     <ul
       tabIndex="{0}"
       className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
@@ -74,7 +74,7 @@ function redirectToUserAccount(userId: string) {
     </ul>
   </div>
   <div className="dropdown dropdown-hover">
-    <label tabIndex="{0}" className="btn m-1">Following</label>
+    <label tabIndex="{0}" className="btn">Following</label>
     <ul
       tabIndex="{0}"
       className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
