@@ -1,5 +1,5 @@
 <template tabindex>
-  <EndGameComponent :card-type="user.gameWon ? 'win' : 'lose'" :score="user.score"/>
+  <EndGameComponent :card-type="user.gameWon ? 'win' : 'lose'" :score="user.score" />
   <canvas ref="pongCanvas" width="1600" height="800" class="mx-auto bg-black"></canvas>
 </template>
 
@@ -16,7 +16,7 @@ const userStore = useUserStore()
 const user = ref({
   gameEnded: false,
   gameWon: false,
-  score: [0, 0],
+  score: [0, 0]
 })
 
 let keydownHandler: (event: KeyboardEvent) => void

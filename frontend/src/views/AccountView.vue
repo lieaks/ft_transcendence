@@ -22,38 +22,38 @@ const user = ref({
     score: number[]
     winner: User
     loser: User
-  }[],
+  }[]
 })
 
 const { onResult, refetch } = useQuery(
   gql`
-  query user {
-    me {
-      avatar
-      name
-      id
-      experience
-      gamesWon {
+    query user {
+      me {
+        avatar
+        name
         id
-      }
-      gamesLost {
-        id
-      }
-      gameHistory {
-        score
-        winner {
+        experience
+        gamesWon {
           id
-          name
-          avatar
         }
-        loser {
+        gamesLost {
           id
-          name
-          avatar
+        }
+        gameHistory {
+          score
+          winner {
+            id
+            name
+            avatar
+          }
+          loser {
+            id
+            name
+            avatar
+          }
         }
       }
     }
-  }
   `,
   {
     fetchPolicy: 'cache-and-network'
@@ -95,7 +95,7 @@ onMounted(() => {
 })
 
 function redirectToUserAccount(userId: string) {
-	router.push(`/profil/${userId}`)
+  router.push(`/profil/${userId}`)
 }
 </script>
 
@@ -107,9 +107,9 @@ function redirectToUserAccount(userId: string) {
     <p class="text-center text-gray-600 mt-1">
       Victoires: {{ user.nb_win }} | Defaites: {{ user.nb_loose }}
     </p>
-	<div class="text-center text-gray-600 mt-1">
-		<FollowersComponent/>
-	</div>
+    <div class="text-center text-gray-600 mt-1">
+      <FollowersComponent />
+    </div>
   </div>
 
   <div class="container mx-auto px-4 sm:px-8">

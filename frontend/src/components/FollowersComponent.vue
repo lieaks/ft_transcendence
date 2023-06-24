@@ -2,7 +2,7 @@
 import router from '@/router'
 import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
-import { onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue'
 
 interface Player {
   id: string
@@ -16,32 +16,32 @@ const followers = ref({
 })
 
 const { onResult, refetch } = useQuery(
-    gql`
-      query me {
-        me {
-		      friendOf {
-			      id
-			      name
-			      avatar
-		      }
-		        friends {
-			      id
-			      name
-			      avatar
-		      }
+  gql`
+    query me {
+      me {
+        friendOf {
+          id
+          name
+          avatar
+        }
+        friends {
+          id
+          name
+          avatar
         }
       }
-    `,
-    {
-      fetchPolicy: 'cache-and-network',
     }
-  )
+  `,
+  {
+    fetchPolicy: 'cache-and-network'
+  }
+)
 
 onResult((res) => {
   const followersRes = res.data?.me
   if (!followersRes) return
-  followers.value.friendOf = followersRes.friendOf;
-  followers.value.friends = followersRes.friends;
+  followers.value.friendOf = followersRes.friendOf
+  followers.value.friends = followersRes.friends
 })
 
 onMounted(() => {
@@ -49,41 +49,55 @@ onMounted(() => {
 })
 
 function redirectToUserAccount(userId: string) {
-	router.push(`/profil/${userId}`)
+  router.push(`/profil/${userId}`)
 }
 </script>
 
 <template>
-	<div className="dropdown dropdown-hover dropdown-end ">
-		<label tabIndex={0} className="btn m-1">Followers</label>
-  	<ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
-			<li v-for="follower in followers.friendOf" className="menu-title">
-				<div className="flex items-center">
-					<!-- <img :src="follower.avatar" className="w-8 h-8 rounded-full" /> -->
-					<a href="#" class="font-semibold text-white hover:underline" @click.prevent="redirectToUserAccount(follower.id)">
-						{{ follower.name }}
-					</a>
-				</div>
-			</li>
-			<li v-if="followers.friendOf.length === 0" className="menu-title">
-				<span className="ml-2 text-sm text-white font-semibold">No followers</span>
-			</li>
-  	</ul>
+  <div className="dropdown dropdown-hover dropdown-end ">
+    <label tabIndex="{0}" className="btn m-1">Followers</label>
+    <ul
+      tabIndex="{0}"
+      className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+    >
+      <li v-for="follower in followers.friendOf" className="menu-title">
+        <div className="flex items-center">
+          <!-- <img :src="follower.avatar" className="w-8 h-8 rounded-full" /> -->
+          <a
+            href="#"
+            class="font-semibold text-white hover:underline"
+            @click.prevent="redirectToUserAccount(follower.id)"
+          >
+            {{ follower.name }}
+          </a>
+        </div>
+      </li>
+      <li v-if="followers.friendOf.length === 0" className="menu-title">
+        <span className="ml-2 text-sm text-white font-semibold">No followers</span>
+      </li>
+    </ul>
   </div>
-	<div className="dropdown dropdown-hover">
-		<label tabIndex={0} className="btn m-1">Following</label>
-  	<ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
-			<li v-for="follow in followers.friends" className="menu">
-				<div className="flex items-center">
-					<!-- <img :src="follow.avatar" className="w-8 h-8 rounded-full" /> -->
-					<a href="#" class="font-semibold text-white hover:underline" @click.prevent="redirectToUserAccount(follow.id)">
-						{{ follow.name }}
-					</a>
-				</div>
-			</li>
-			<li v-if="followers.friends.length === 0" className="menu-title">
-				<span className="ml-2 text-sm text-white font-semibold">No following</span>
-			</li>
-  	</ul>
+  <div className="dropdown dropdown-hover">
+    <label tabIndex="{0}" className="btn m-1">Following</label>
+    <ul
+      tabIndex="{0}"
+      className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+    >
+      <li v-for="follow in followers.friends" className="menu">
+        <div className="flex items-center">
+          <!-- <img :src="follow.avatar" className="w-8 h-8 rounded-full" /> -->
+          <a
+            href="#"
+            class="font-semibold text-white hover:underline"
+            @click.prevent="redirectToUserAccount(follow.id)"
+          >
+            {{ follow.name }}
+          </a>
+        </div>
+      </li>
+      <li v-if="followers.friends.length === 0" className="menu-title">
+        <span className="ml-2 text-sm text-white font-semibold">No following</span>
+      </li>
+    </ul>
   </div>
 </template>

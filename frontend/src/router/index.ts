@@ -62,8 +62,8 @@ const router = createRouter({
       path: '/profil/:id',
       name: 'profil',
       component: ProfilView,
-			props: route => ({ userId: route.params.id }),
-			beforeEnter: checkLogin
+      props: (route) => ({ userId: route.params.id }),
+      beforeEnter: checkLogin
     }
   ]
 })

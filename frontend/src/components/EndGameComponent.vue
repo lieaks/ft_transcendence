@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import router from '@/router';
-import winImg from '@/assets/win.jpg';
-import loseImg from '@/assets/lose.jpg';
+import router from '@/router'
+import winImg from '@/assets/win.jpg'
+import loseImg from '@/assets/lose.jpg'
 
 const props = defineProps({
   cardType: {
     type: String,
     required: true,
-    validator: (value: string) => ['win', 'lose'].includes(value),
+    validator: (value: string) => ['win', 'lose'].includes(value)
   },
   score: {
     type: Array,
     required: true,
-    validator: (value: number[]) => value.length === 2,
-  },
+    validator: (value: number[]) => value.length === 2
+  }
 })
 
 const cardImage = props.cardType === 'win' ? winImg : loseImg

@@ -62,7 +62,7 @@ onResult((res) => {
 })
 
 function redirectToUserAccount(userId: string) {
-	router.push(`/profil/${userId}`)
+  router.push(`/profil/${userId}`)
 }
 </script>
 

@@ -7,15 +7,15 @@ import router from '@/router'
 import { useRoute } from 'vue-router'
 
 interface Player {
-	name: string
-	avatar: string
-	id: string
+  name: string
+  avatar: string
+  id: string
 }
 
 interface Game {
-	score: number[]
-	winner: Player
-	loser: Player
+  score: number[]
+  winner: Player
+  loser: Player
 }
 
 export const useUserStore = defineStore('user', () => {
@@ -37,33 +37,33 @@ export const useUserStore = defineStore('user', () => {
     gql`
       query me {
         me {
-		  name
-		  avatar
-		  id
-		  experience
-		  gameHistory {
-		    score
-		    winner {
-		  		name
-		  		avatar
-		  		id
-		    }
-		    loser {
-		  		name
-		  		avatar
-		  		id
-		    }
-		  }
-		  friends {
-		    name
-		    avatar
-		    id
-		  }
-		  friendOf {
-		    name
-		    avatar
-		    id
-		  }
+          name
+          avatar
+          id
+          experience
+          gameHistory {
+            score
+            winner {
+              name
+              avatar
+              id
+            }
+            loser {
+              name
+              avatar
+              id
+            }
+          }
+          friends {
+            name
+            avatar
+            id
+          }
+          friendOf {
+            name
+            avatar
+            id
+          }
         }
       }
     `,
@@ -76,7 +76,7 @@ export const useUserStore = defineStore('user', () => {
     id.value = me.id
     const base64 = btoa(String.fromCharCode(...new Uint8Array(me.avatar.data)))
     avatar.value = `data:image/png;base64,${base64}`
-	  points.value = me.experience
+    points.value = me.experience
     gameHistory.value = me.gameHistory
     nb_win.value = me.gameHistory.filter((game: Game) => game.winner.id === me.id).length
     nb_loose.value = me.gameHistory.filter((game: Game) => game.loser.id === me.id).length
@@ -128,12 +128,12 @@ export const useUserStore = defineStore('user', () => {
     socket,
     gameId,
     inQueue,
-	  points,
-	  nb_win,
-	  nb_loose,
-	  gameHistory,
-	  friends,
-	  friendOf,
+    points,
+    nb_win,
+    nb_loose,
+    gameHistory,
+    friends,
+    friendOf,
     setName,
     setAvatar,
     setGameId,
