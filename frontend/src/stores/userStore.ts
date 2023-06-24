@@ -5,6 +5,9 @@ import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import router from '@/router'
 import { useRoute } from 'vue-router'
+import * as Notifications from "@/elements/Notifications";
+
+const notifs = Notifications.useNotifications();
 
 interface Player {
   name: string
@@ -98,6 +101,11 @@ export const useUserStore = defineStore('user', () => {
       console.log('socket login failed')
     }
   })
+  socket?.on('gameInvite', (data) => {
+    console.log('gameInvite', data)
+    notifs.notifyGameInvite("New game invite")
+  })
+
 
   async function setName(newName: string) {
     // TODO: gpl mutate back

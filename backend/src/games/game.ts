@@ -126,6 +126,7 @@ export class Game implements IGame {
     this.status = gameStatus.PLAYING;
     this.players.forEach((p) => (p.status = Status.INGAME));
     this.emitToPlayers('startGame', { id: this.id });
+    this.emitToPlayers('gameInvite', { id: this.id });
   }
 
   updateScore(): void {
