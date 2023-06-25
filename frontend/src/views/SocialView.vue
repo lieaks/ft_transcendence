@@ -22,7 +22,12 @@ const currentRelation: Ref<IRelation> = ref('friends')
       <ul class="menu rounded-box w-full whitespace-nowrap menu-lg">
         <template v-for="relation in relations">
           <li>
-            <a @click="currentRelation = relation.relation">{{ relation.name }} </a>
+						<a
+							:class="{ active: currentRelation === relation.relation }"
+							@click="currentRelation = relation.relation"
+							>
+							{{ relation.name }}
+						</a>
           </li>
         </template>
       </ul>

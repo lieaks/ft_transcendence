@@ -3,7 +3,6 @@ import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { type PropType, type Ref, ref } from 'vue'
 
-console.log('in search')
 interface IUser {
   id: string
   name: string
@@ -27,6 +26,7 @@ const { onResult } = useQuery(
   gql`
 		query relations {
 			me {
+				id
 				${props.relation} {
 					id
 					name
