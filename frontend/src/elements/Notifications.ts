@@ -2,7 +2,7 @@ import { toast, type ToastPosition, type ToastTransition, type ToastType } from 
 import 'vue3-toastify/dist/index.css';
 
 const defaultToastOptions = {
-  autoClose: 5000,
+  autoClose: 3500,
   position: 'top-right' as ToastPosition,
   closeOnClick: true,
   pauseOnHover: true,
@@ -48,8 +48,29 @@ export const useNotifications = () => {
 
   const notifyFollow = (name: string) => {
     notify(`Started following ${name}`, 'info', {
-      type: 'warning',
-      icon: '🔔',
+      type: 'info',
+      icon: '✨',
+    });
+  }
+
+  const notifyUnfollow = (name: string) => {
+    notify(`Unfollowed ${name}`, 'info', {
+      type: 'info',
+      icon: '🗑️',
+    });
+  }
+
+  const notifyBlock = (name: string) => {
+    notify(`Blocked ${name}`, 'info', {
+      type: 'info',
+      icon: '🚫',
+    });
+  }
+
+  const notifyUnblock = (name: string) => {
+    notify(`Unblocked ${name}`, 'info', {
+      type: 'info',
+      icon: '🏳️',
     });
   }
 
@@ -61,5 +82,8 @@ export const useNotifications = () => {
     notifyAuthError,
     notifyGameInvite,
     notifyFollow,
+    notifyUnfollow,
+    notifyBlock,
+    notifyUnblock,
   };
 };

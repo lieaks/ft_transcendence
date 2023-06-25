@@ -144,19 +144,23 @@ function removeFriend(id: string) {
   const input = { friendsToRemove: [id] }
   mutate({ input })
   user.value.isFriend = false
+  notifs.notifyUnfollow(user.value.name);
 }
 
 function blockUser(id: string) {
   const input = { usersToBlock: [id] }
-  removeFriend(id)
+  if (user.value.isFriend)
+    removeFriend(id)
   mutate({ input })
   user.value.isBlocked = true
+  notifs.notifyBlock(user.value.name);
 }
 
 function unblockUser(id: string) {
   const input = { usersToUnblock: [id] }
   mutate({ input })
   user.value.isBlocked = false
+  notifs.notifyUnblock(user.value.name);
 }
 
 function redirectToUserAccount(userId: string) {
