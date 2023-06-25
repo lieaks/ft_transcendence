@@ -104,8 +104,9 @@ export const useUserStore = defineStore('user', () => {
 
   socket?.on('gameInvite', (data) => {
     const name = data.name
+    const id = data.id
     console.log('gameInvite', data)
-    notifs.notifyGameInvite(name)
+    notifs.notifyGameInvite(name, id)
   })
 
   socket?.on('joinQueue', () => setInQueue(true))

@@ -1,5 +1,6 @@
 import { toast, type ToastPosition, type ToastTransition, type ToastType } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
+import { useUserStore } from '@/stores/userStore';
 
 const defaultToastOptions = {
   autoClose: 3500,
@@ -18,33 +19,14 @@ export const useNotifications = () => {
     });
   };
 
-  const notifyError = (message: string) => {
-    notify(message, 'error');
-  };
-
-  const notifySuccess = (message: string) => {
-    notify(message, 'success');
-  };
-
-  const notifyInfo = (message: string) => {
-    notify(message, 'info');
-  };
-
-  const notifyWarning = (message: string) => {
-    notify(message, 'warning');
-  };
-
-  const notifyAuthError = (message: string) => {
-    notifyError(message);
-  };
-
-  const notifyGameInvite = (name: string) => {
+  const notifyGameInvite = (name: string, id: string) => {
+    const user = useUserStore();
     notify(`Invited by ${name}`, 'info', {
       icon: '🔔',
       autoClose: 10000,
       type: 'default',
       onClick: () => {
-        console.log('clicked');
+        user.socket?.emit('acceptInvite', { id });
       }
     });
   };
@@ -78,11 +60,6 @@ export const useNotifications = () => {
   }
 
   return {
-    notifyError,
-    notifySuccess,
-    notifyInfo,
-    notifyWarning,
-    notifyAuthError,
     notifyGameInvite,
     notifyFollow,
     notifyUnfollow,
