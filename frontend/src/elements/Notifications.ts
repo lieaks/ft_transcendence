@@ -43,6 +43,9 @@ export const useNotifications = () => {
       icon: '🔔',
       autoClose: 10000,
       type: 'default',
+      onClick: () => {
+        console.log('clicked');
+      }
     });
   };
 

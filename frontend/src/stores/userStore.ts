@@ -101,10 +101,19 @@ export const useUserStore = defineStore('user', () => {
       console.log('socket login failed')
     }
   })
+
   socket?.on('gameInvite', (data) => {
     const name = data.name
     console.log('gameInvite', data)
     notifs.notifyGameInvite(name)
+  })
+
+  socket?.on('joinQueue', () => setInQueue(true))
+
+  socket?.on('startGame', (data) => {
+    setInQueue(false)
+    setGameId(data.id)
+    router.push('/game')
   })
 
 

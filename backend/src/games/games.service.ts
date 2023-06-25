@@ -38,6 +38,14 @@ export class GamesService {
     return true;
   }
 
+  createCustomGame(firstPlayer: IUser, secondPlayer: IUser) {
+    const game = new Game(this.prismaService);
+    game.addPlayer(firstPlayer);
+    game.addPlayer(secondPlayer);
+    game.create();
+    this.addGame(game);
+  }
+
   removeFromQueue(user: IUser) {
     this.queue = this.queue.filter((u) => u.id !== user.id);
   }

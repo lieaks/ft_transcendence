@@ -10,13 +10,6 @@ const router = useRouter()
 function joinQueue() {
   user.socket?.emit('joinQueue', {})
 }
-
-user.socket?.on('joinQueue', () => user.setInQueue(true))
-user.socket?.on('startGame', (data) => {
-  user.setInQueue(false)
-  user.setGameId(data.id)
-  router.push('/game')
-})
 </script>
 
 <template>
