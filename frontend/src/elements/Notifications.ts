@@ -46,6 +46,13 @@ export const useNotifications = () => {
     });
   };
 
+  const notifyFollow = (name: string) => {
+    notify(`Started following ${name}`, 'info', {
+      type: 'warning',
+      icon: '🔔',
+    });
+  }
+
   return {
     notifyError,
     notifySuccess,
@@ -53,5 +60,6 @@ export const useNotifications = () => {
     notifyWarning,
     notifyAuthError,
     notifyGameInvite,
+    notifyFollow,
   };
 };

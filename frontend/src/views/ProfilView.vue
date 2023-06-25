@@ -4,6 +4,8 @@ import gql from 'graphql-tag'
 import { useQuery, useMutation } from '@vue/apollo-composable'
 import { computed, ref } from 'vue'
 import { useUserStore } from '@/stores/userStore'
+import * as Notifications from "@/elements/Notifications";
+const notifs = Notifications.useNotifications();
 
 interface User {
   name: string
@@ -135,6 +137,7 @@ function addFriend(id: string) {
   const input = { friendsToAdd: [id] }
   mutate({ input })
   user.value.isFriend = true
+  notifs.notifyFollow(user.value.name);
 }
 
 function removeFriend(id: string) {
