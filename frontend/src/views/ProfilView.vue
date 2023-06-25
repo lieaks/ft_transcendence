@@ -202,15 +202,15 @@ function redirectToUserAccount(userId: string) {
         >
           Unfollow
         </button>
+        
+        <button
+          class="text-white hover:text-gray-700 mx-3 font-semibold"
+          @click="blockUser(user.id)"
+        >
+          Block User
+        </button>
+        <button class="btn btn-primary" @click="blockUser(user.id)">Invite</button>
       </div>
-      <button
-        v-if="!user.isBlocked"
-        class="text-white hover:text-gray-700 mx-3 font-semibold"
-        @click="blockUser(user.id)"
-      >
-        Block User
-      </button>
-
       <button
         v-if="user.isBlocked"
         class="text-white hover:text-gray-700 mx-3 font-semibold"
