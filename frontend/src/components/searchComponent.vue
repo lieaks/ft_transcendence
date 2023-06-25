@@ -46,7 +46,24 @@ onResult((res) => {
 </script>
 
 <template>
-	<div>
-		{{ relations }}
+	<input type="text" placeholder="regex expression">
+	<div class="overflow-x-auto">
+		<table class="table">
+			<!-- head -->
+			<thead>
+				<tr>
+					<th></th>
+					<th>Name</th>
+					<th>Status</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr v-for="(user, index) in relations" :key="user.id">
+					<th>{{index + 1}}</th>
+					<td>avatar {{ user.name }}</td>
+					<td>{{ user.status }}</td>
+				</tr>
+			</tbody>
+		</table>
 	</div>
 </template>
