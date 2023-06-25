@@ -23,7 +23,7 @@
     "vue3-toastify": "^0.1.11"
   },
   "devDependencies": {
-    "@rushstack/eslint-patch": "^1.2.0",
+    "@rushstack/eslint-patch": "^1.3.2",
     "@tsconfig/node18": "^2.0.1",
     "@types/node": "^20.3.1",
     "@vitejs/plugin-vue": "^4.2.3",
