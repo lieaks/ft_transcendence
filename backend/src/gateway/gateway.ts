@@ -144,4 +144,14 @@ export class MyGateway implements OnModuleInit {
 		const listChannel = this.chatService.getChats();
 		this.server.emit('channelAvailable', getShortChannels(listChannel))
 	}
+
+	@SubscribeMessage('inviteToGame')
+	onInviteToGame(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
+		const invitedId = body.id;
+		const user = this.usersService.getUserBySocketId(client.id);
+		if (!user) return;
+		const invited = this.usersService.getUser(invitedId);
+		if (!invited) return;
+		invited.socket.emit('gameInvite', { name: user.name });
+	}
 }

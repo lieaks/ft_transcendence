@@ -102,8 +102,9 @@ export const useUserStore = defineStore('user', () => {
     }
   })
   socket?.on('gameInvite', (data) => {
+    const name = data.name
     console.log('gameInvite', data)
-    notifs.notifyGameInvite("New game invite")
+    notifs.notifyGameInvite(name)
   })
 
 

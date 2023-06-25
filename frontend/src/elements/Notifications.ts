@@ -38,8 +38,8 @@ export const useNotifications = () => {
     notifyError(message);
   };
 
-  const notifyGameInvite = (message: string) => {
-    notify(message, 'info', {
+  const notifyGameInvite = (name: string) => {
+    notify(`Invited by ${name}`, 'info', {
       icon: '🔔',
       autoClose: 10000,
       type: 'default',

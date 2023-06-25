@@ -169,6 +169,11 @@ function redirectToUserAccount(userId: string) {
     params: { id: userId }
   })
 }
+
+function inviteToGame(userId: string) {
+  userStore.socket.emit('inviteToGame', { id: userId })
+}
+
 </script>
 
 <template>
@@ -209,7 +214,9 @@ function redirectToUserAccount(userId: string) {
         >
           Block User
         </button>
-        <button class="btn btn-primary" @click="blockUser(user.id)">Invite</button>
+        <button class="btn btn-primary" @click="inviteToGame(user.id)">
+          Invite to game
+        </button>
       </div>
       <button
         v-if="user.isBlocked"
