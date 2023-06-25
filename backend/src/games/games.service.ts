@@ -62,6 +62,10 @@ export class GamesService {
     return this.games;
   }
 
+  getQueue() {
+    return this.queue;
+  }
+
   // Interval, 1 time per 5 seconds
   // @Interval(3000)
   // checkGames() {

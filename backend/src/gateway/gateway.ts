@@ -158,7 +158,14 @@ export class MyGateway implements OnModuleInit {
 	onAcceptInvite(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
 		const user = this.usersService.getUserBySocketId(client.id);
 		const invited = this.usersService.getUser(body.id);
+
 		if (!user || !invited || user.status == Status.INGAME || invited.status == Status.INGAME) return;
 		this.gamesService.createCustomGame(user, invited);
+
+		if (this.gamesService.getQueue().includes(user))
+			this.gamesService.removeFromQueue(user);
+		if (this.gamesService.getQueue().includes(invited))
+			this.gamesService.removeFromQueue(invited);
+
 	}
 }
