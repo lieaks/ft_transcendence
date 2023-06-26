@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import router from '@/router'
@@ -17,7 +17,7 @@ interface Player {
 const players = ref<Player[]>([])
 let currentId = 0
 
-const { onResult, refetch } = useQuery(
+const { onResult } = useQuery(
   gql`
     query leaderboard($skip: Int, $take: Int) {
       leaderboard(skip: $skip, take: $take) {
@@ -33,13 +33,9 @@ const { onResult, refetch } = useQuery(
         }
       }
     }
-  `,
+  `, null,
   {
     fetchPolicy: 'cache-and-network',
-    variables: {
-      skip: 0,
-      take: 10
-    }
   }
 )
 
@@ -59,10 +55,6 @@ onResult((res) => {
       loose: player.gamesLost.length
     }
   })
-})
-
-onMounted(() => {
-  refetch()
 })
 
 function redirectToUserAccount(userId: string) {

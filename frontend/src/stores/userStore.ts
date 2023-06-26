@@ -69,7 +69,7 @@ export const useUserStore = defineStore('user', () => {
           }
         }
       }
-    `,
+    `, null,
     { fetchPolicy: 'cache-and-network' }
   )
   onResult((res) => {
