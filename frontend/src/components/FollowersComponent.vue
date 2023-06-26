@@ -2,7 +2,7 @@
 import router from '@/router'
 import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
 interface Player {
   id: string
@@ -15,7 +15,7 @@ const followers = ref({
   friends: [] as Player[]
 })
 
-const { onResult } = useQuery(
+const { onResult, refetch } = useQuery(
   gql`
     query me {
       me {
@@ -42,6 +42,10 @@ onResult((res) => {
   if (!followersRes) return
   followers.value.friendOf = followersRes.friendOf
   followers.value.friends = followersRes.friends
+})
+
+onMounted(() => {
+  refetch()
 })
 
 function redirectToUserAccount(userId: string) {
