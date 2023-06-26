@@ -6,6 +6,7 @@ export class Game implements IGame {
   id: string;
   status: gameStatus;
   players: IUser[];
+  spectators: IUser[];
   createdAt: Date;
   canvas: { width: number; height: number };
   ball: { x: number; y: number; radius: number; dx: number; dy: number };
@@ -29,6 +30,7 @@ export class Game implements IGame {
   constructor(private readonly prismaService: PrismaService) {
     this.status = gameStatus.WAITING;
     this.players = [];
+	this.spectators = [];
     this.createdAt = new Date();
     this.canvas = {
       width: 1600,
@@ -68,6 +70,15 @@ export class Game implements IGame {
 
   removePlayer(player: IUser): void {
     this.players = this.players.filter((p) => p.id !== player.id);
+  }
+
+  addSpectator(spectator: IUser): void {
+	if (this.players.find((p) => p.id === spectator.id) || this.spectators.find((s) => s.id === spectator.id)) return;
+	this.spectators.push(spectator);
+  }
+
+  removeSpectator(spectator: IUser): void {
+    this.spectators = this.spectators.filter((s) => s.id !== spectator.id);
   }
 
   async create(): Promise<void> {
@@ -125,6 +136,7 @@ export class Game implements IGame {
   startGame(): void {
     this.status = gameStatus.PLAYING;
     this.players.forEach((p) => (p.status = Status.INGAME));
+    this.spectators.forEach((s) => (s.status = Status.INGAME));
     this.emitToPlayers('startGame', { id: this.id });
   }
 
@@ -274,6 +286,9 @@ export class Game implements IGame {
     // console.log(`Emitting ${event} to players of game ${this.id}`);
     for (const player of this.players) {
       player.socket.emit(event, data);
+    }
+    for (const spectator of this.spectators) {
+      spectator.socket.emit(event, data);
     }
   }
 }
