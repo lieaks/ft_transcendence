@@ -177,6 +177,10 @@ function inviteToGame(userId: string) {
   userStore.socket.emit('inviteToGame', { id: userId })
 }
 
+function spectateGame(userId: string) {
+	userStore.socket.emit('spectateGame', { id: userId })
+}
+
 </script>
 
 <template>
@@ -222,8 +226,11 @@ function inviteToGame(userId: string) {
           >
             Block User
           </button>
-          <button v-if="user.status != 'OFFLINE'" class="btn btn-primary" @click="inviteToGame(user.id)">
+          <button v-if="user.status == 'OFFLINE'" class="btn btn-primary" @click="inviteToGame(user.id)">
             Invite to game
+          </button>
+          <button v-if="user.status == 'INGAME'" class="btn btn-primary" @click="spectateGame(user.id)">
+            Spectate game
           </button>
         </div>
         <button

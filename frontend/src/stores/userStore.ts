@@ -117,6 +117,11 @@ export const useUserStore = defineStore('user', () => {
     router.push('/game')
   })
 
+  socket?.on('spectateGame', (data) => {
+    setInQueue(false)
+    setGameId(data.id)
+	  router.push('/game')
+  })
 
   async function setName(newName: string) {
     // TODO: gpl mutate back

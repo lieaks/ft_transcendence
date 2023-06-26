@@ -168,4 +168,18 @@ export class MyGateway implements OnModuleInit {
 			this.gamesService.removeFromQueue(invited);
 
 	}
+
+	@SubscribeMessage('spectateGame')
+	onSpectateGame(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
+		const user = this.usersService.getUserBySocketId(client.id);
+		const player = this.usersService.getUser(body.id);
+		console.log("test1")
+		if (!user || !player) return;
+		const game = this.gamesService.getGames().find(game => game.players.includes(player));
+		console.log("test2")
+		if (!game) return;
+		console.log("test3")
+		game.addSpectator(user);
+		user.socket.emit('spectateGame', {} );
+	}
 }
