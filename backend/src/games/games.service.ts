@@ -46,6 +46,16 @@ export class GamesService {
     this.addGame(game);
   }
 
+  getGameById(id: string) {
+	  return this.games.find((g) => g.id === id);
+  }
+
+  spectateGame(user: IUser, gameId: string) {
+	  const game = this.getGameById(gameId);
+	  if (!game) return;
+    game.addSpectator(user);
+  }
+
   removeFromQueue(user: IUser) {
     this.queue = this.queue.filter((u) => u.id !== user.id);
   }
@@ -60,6 +70,10 @@ export class GamesService {
 
   getGames() {
     return this.games;
+  }
+
+  getQueue() {
+    return this.queue;
   }
 
   // Interval, 1 time per 5 seconds

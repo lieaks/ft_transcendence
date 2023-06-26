@@ -24,4 +24,6 @@ export interface IGame {
   startGame(): void;
   emitToPlayers(event: string, data: any): void;
   movePaddle(player: IUser, direction: string): void;
+  addSpectator(spectator: IUser): void;
+  removeSpectator(spectator: IUser): void;  
 }

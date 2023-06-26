@@ -35,7 +35,8 @@ const user = ref({
     loser: User
   }[],
   isFriend: false,
-  isBlocked: false
+  isBlocked: false,
+  status: ''
 })
 
 const { onResult: onUserResult } = useQuery(
@@ -45,6 +46,7 @@ const { onResult: onUserResult } = useQuery(
         avatar
         name
         experience
+        status
         gamesWon {
           id
         }
@@ -81,6 +83,7 @@ onUserResult((res) => {
   user.value.id = props.userId
   user.value.name = userData.name
   user.value.avatar = avatar
+  user.value.status = userData.status
   user.value.points = userData.experience
   user.value.nb_win = userData.gamesWon.length
   user.value.nb_loose = userData.gamesLost.length
@@ -174,6 +177,10 @@ function inviteToGame(userId: string) {
   userStore.socket.emit('inviteToGame', { id: userId })
 }
 
+function spectateGame(userId: string) {
+	userStore.socket.emit('spectateGame', { id: userId })
+}
+
 </script>
 
 <template>
@@ -182,50 +189,58 @@ function inviteToGame(userId: string) {
 			<img class="w-full md:h-full md:w-auto" :src="user.avatar" alt="Profile picture" />
 		</figure>
 		<div class="card-body">
-			<h2 class="card-title mb-4 font-bold text-2xl">{{ user.name }}</h2>
-			<p>Points: {{ user.points }}</p>
+      <div class="flex justify-between items-center">
+        <h2 class="card-title mb-4 font-bold text-2xl">{{ user.name }}</h2>
+        <div v-if="user.status == 'ONLINE'" className="badge badge-accent">Online</div>
+        <div v-else-if="user.status == 'INGAME'" className="badge badge-warning">In game</div>
+        <div v-else className="badge badge-error">Offline</div>
+      </div>
+      <p>Points: {{ user.points }}</p>
 			<p>
 				Victoires: {{ user.nb_win }} | Defaites: {{ user.nb_loose }}
 			</p>
-    <div
-      v-if="userStore.id && user.id && userStore.id !== user.id"
-      class="flex"
-    >
-      <div v-if="!user.isBlocked">
-        <button
-          v-if="!user.isFriend"
-          class="text-green-500 hover:text-green-700 font-semibold"
-          @click="addFriend(user.id)"
-        >
-          Follow
-        </button>
+      <div
+        v-if="userStore.id && user.id && userStore.id !== user.id"
+        class="flex"
+      >
+        <div v-if="!user.isBlocked">
+          <button
+            v-if="!user.isFriend"
+            class="text-green-500 hover:text-green-700 font-semibold"
+            @click="addFriend(user.id)"
+          >
+            Follow
+          </button>
 
+          <button
+            v-if="user.isFriend"
+            class="text-red-500 hover:text-red-700 mx-3 font-semibold"
+            @click="removeFriend(user.id)"
+          >
+            Unfollow
+          </button>
+
+          <button
+            class="text-white hover:text-gray-700 mx-3 font-semibold"
+            @click="blockUser(user.id)"
+          >
+            Block User
+          </button>
+          <button v-if="user.status == 'OFFLINE'" class="btn btn-primary" @click="inviteToGame(user.id)">
+            Invite to game
+          </button>
+          <button v-if="user.status == 'INGAME'" class="btn btn-primary" @click="spectateGame(user.id)">
+            Spectate game
+          </button>
+        </div>
         <button
-          v-if="user.isFriend"
-          class="text-red-500 hover:text-red-700 mx-3 font-semibold"
-          @click="removeFriend(user.id)"
-        >
-          Unfollow
-        </button>
-        
-        <button
+          v-if="user.isBlocked"
           class="text-white hover:text-gray-700 mx-3 font-semibold"
-          @click="blockUser(user.id)"
+          @click="unblockUser(user.id)"
         >
-          Block User
-        </button>
-        <button class="btn btn-primary" @click="inviteToGame(user.id)">
-          Invite to game
+          Unblock User
         </button>
       </div>
-      <button
-        v-if="user.isBlocked"
-        class="text-white hover:text-gray-700 mx-3 font-semibold"
-        @click="unblockUser(user.id)"
-      >
-        Unblock User
-      </button>
-    </div>
 		</div>
   </div>
 

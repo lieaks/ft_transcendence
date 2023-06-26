@@ -69,7 +69,7 @@ export const useUserStore = defineStore('user', () => {
           }
         }
       }
-    `,
+    `, null,
     { fetchPolicy: 'cache-and-network' }
   )
   onResult((res) => {
@@ -104,8 +104,9 @@ export const useUserStore = defineStore('user', () => {
 
   socket?.on('gameInvite', (data) => {
     const name = data.name
+    const id = data.id
     console.log('gameInvite', data)
-    notifs.notifyGameInvite(name)
+    notifs.notifyGameInvite(name, id)
   })
 
   socket?.on('joinQueue', () => setInQueue(true))
@@ -116,6 +117,11 @@ export const useUserStore = defineStore('user', () => {
     router.push('/game')
   })
 
+  socket?.on('spectateGame', (data) => {
+    setInQueue(false)
+    setGameId(data.id)
+	  router.push('/game')
+  })
 
   async function setName(newName: string) {
     // TODO: gpl mutate back

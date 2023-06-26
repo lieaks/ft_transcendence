@@ -151,6 +151,32 @@ export class MyGateway implements OnModuleInit {
 		const user = this.usersService.getUserBySocketId(client.id);
 		const invited = this.usersService.getUser(invitedId);
 		if (!user || !invited) return;
-		invited.socket.emit('gameInvite', { name: user.name });
+		invited.socket.emit('gameInvite', { name: user.name, id: user.id });
+	}
+
+	@SubscribeMessage('acceptInvite')
+	onAcceptInvite(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
+		const user = this.usersService.getUserBySocketId(client.id);
+		const invited = this.usersService.getUser(body.id);
+
+		if (!user || !invited || user.status == Status.INGAME || invited.status == Status.INGAME) return;
+		this.gamesService.createCustomGame(user, invited);
+
+		if (this.gamesService.getQueue().includes(user))
+			this.gamesService.removeFromQueue(user);
+		if (this.gamesService.getQueue().includes(invited))
+			this.gamesService.removeFromQueue(invited);
+
+	}
+
+	@SubscribeMessage('spectateGame')
+	onSpectateGame(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
+		const user = this.usersService.getUserBySocketId(client.id);
+		const player = this.usersService.getUser(body.id);
+		if (!user || !player) return;
+		const game = this.gamesService.getGames().find(game => game.players.includes(player));
+		if (game) return;
+		game.addSpectator(user);
+		user.socket.emit('spectateGame', {} );
 	}
 }
