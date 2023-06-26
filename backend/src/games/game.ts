@@ -59,7 +59,7 @@ export class Game implements IGame {
       left: 0,
       right: 0,
     };
-    this.scoreLimit = 5;
+    this.scoreLimit = 3;
   }
 
   addPlayer(player: IUser): void {

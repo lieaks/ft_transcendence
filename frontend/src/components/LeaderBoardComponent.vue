@@ -17,7 +17,7 @@ interface Player {
 const players = ref<Player[]>([])
 let currentId = 0
 
-const { onResult } = useQuery(
+const { onResult, refetch } = useQuery(
   gql`
     query leaderboard($skip: Int, $take: Int) {
       leaderboard(skip: $skip, take: $take) {
@@ -59,6 +59,10 @@ onResult((res) => {
       loose: player.gamesLost.length
     }
   })
+})
+
+onMounted(() => {
+  refetch()
 })
 
 function redirectToUserAccount(userId: string) {
