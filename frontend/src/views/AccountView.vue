@@ -54,7 +54,8 @@ const { onResult } = useQuery(
         }
       }
     }
-	`, null,
+  `,
+  null,
   {
     fetchPolicy: 'cache-and-network'
   }
@@ -96,20 +97,18 @@ function redirectToUserAccount(userId: string) {
 </script>
 
 <template>
-	<div class="card md:card-side bg-neutral shadow-xl md:w-3/4 xl:w-/ w-1/2 mx-auto">
-		<figure>
-			<img class="w-full md:h-full md:w-auto" :src="user.avatar" alt="Profile picture" />
-		</figure>
-		<div class="card-body">
-			<h2 class="card-title mb-2 font-bold text-2xl">{{ user.name }}</h2>
-			<p>Points: {{ user.points }}</p>
-			<p>
-				Victoires: {{ user.nb_win }} | Defaites: {{ user.nb_loose }}
-			</p>
-			<div>
-				<FollowersComponent />
-			</div>
-		</div>
+  <div class="card md:card-side bg-neutral shadow-xl md:w-3/4 xl:w-/ w-1/2 mx-auto">
+    <figure>
+      <img class="w-full md:h-full md:w-auto" :src="user.avatar" alt="Profile picture" />
+    </figure>
+    <div class="card-body">
+      <h2 class="card-title mb-2 font-bold text-2xl">{{ user.name }}</h2>
+      <p>Points: {{ user.points }}</p>
+      <p>Victoires: {{ user.nb_win }} | Defaites: {{ user.nb_loose }}</p>
+      <div>
+        <FollowersComponent />
+      </div>
+    </div>
   </div>
 
   <div class="container mx-auto px-4 sm:px-8">

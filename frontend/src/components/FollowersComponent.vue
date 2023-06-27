@@ -31,7 +31,8 @@ const { onResult } = useQuery(
         }
       }
     }
-  `, null,
+  `,
+  null,
   {
     fetchPolicy: 'cache-and-network'
   }

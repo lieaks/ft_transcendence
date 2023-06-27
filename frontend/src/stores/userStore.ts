@@ -5,9 +5,9 @@ import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import router from '@/router'
 import { useRoute } from 'vue-router'
-import * as Notifications from "@/elements/Notifications";
+import * as Notifications from '@/elements/Notifications'
 
-const notifs = Notifications.useNotifications();
+const notifs = Notifications.useNotifications()
 
 interface Player {
   name: string
@@ -69,7 +69,8 @@ export const useUserStore = defineStore('user', () => {
           }
         }
       }
-    `, null,
+    `,
+    null,
     { fetchPolicy: 'cache-and-network' }
   )
   onResult((res) => {
@@ -120,7 +121,7 @@ export const useUserStore = defineStore('user', () => {
   socket?.on('spectateGame', (data) => {
     setInQueue(false)
     setGameId(data.id)
-	  router.push('/game')
+    router.push('/game')
   })
 
   async function setName(newName: string) {

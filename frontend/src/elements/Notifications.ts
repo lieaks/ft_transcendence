@@ -1,62 +1,62 @@
-import { toast, type ToastPosition, type ToastTransition, type ToastType } from 'vue3-toastify';
-import 'vue3-toastify/dist/index.css';
-import { useUserStore } from '@/stores/userStore';
+import { toast, type ToastPosition, type ToastTransition, type ToastType } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
+import { useUserStore } from '@/stores/userStore'
 
 const defaultToastOptions = {
   autoClose: 3500,
   position: 'top-right' as ToastPosition,
   closeOnClick: true,
   pauseOnHover: true,
-  transition: 'Vue-Toastification__bounce' as ToastTransition,
-};
+  transition: 'Vue-Toastification__bounce' as ToastTransition
+}
 
 export const useNotifications = () => {
   const notify = (message: string, type: string, options?: any) => {
     toast(message, {
       ...defaultToastOptions,
       type: type as ToastType,
-      ...options,
-    });
-  };
+      ...options
+    })
+  }
 
   const notifyGameInvite = (name: string, id: string) => {
-    const user = useUserStore();
+    const user = useUserStore()
     notify(`Invited by ${name}`, 'info', {
       icon: '🔔',
       autoClose: 10000,
       type: 'default',
       onClick: () => {
-        user.socket?.emit('acceptInvite', { id });
+        user.socket?.emit('acceptInvite', { id })
       }
-    });
-  };
+    })
+  }
 
   const notifyFollow = (name: string) => {
     notify(`Started following ${name}`, 'info', {
       type: 'info',
-      icon: '✨',
-    });
+      icon: '✨'
+    })
   }
 
   const notifyUnfollow = (name: string) => {
     notify(`Unfollowed ${name}`, 'info', {
       type: 'info',
-      icon: '🗑️',
-    });
+      icon: '🗑️'
+    })
   }
 
   const notifyBlock = (name: string) => {
     notify(`Blocked ${name}`, 'info', {
       type: 'info',
-      icon: '🚫',
-    });
+      icon: '🚫'
+    })
   }
 
   const notifyUnblock = (name: string) => {
     notify(`Unblocked ${name}`, 'info', {
       type: 'info',
-      icon: '🏳️',
-    });
+      icon: '🏳️'
+    })
   }
 
   return {
@@ -64,6 +64,6 @@ export const useNotifications = () => {
     notifyFollow,
     notifyUnfollow,
     notifyBlock,
-    notifyUnblock,
-  };
-};
+    notifyUnblock
+  }
+}

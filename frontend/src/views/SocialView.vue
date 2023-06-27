@@ -22,17 +22,17 @@ const currentRelation: Ref<IRelation> = ref('friends')
       <ul class="menu rounded-box w-full whitespace-nowrap menu-lg">
         <template v-for="relation in relations">
           <li class="my-2">
-						<a
-							:class="{ active: currentRelation === relation.relation }"
-							@click="currentRelation = relation.relation"
-							>
-							{{ relation.name }}
-						</a>
+            <a
+              :class="{ active: currentRelation === relation.relation }"
+              @click="currentRelation = relation.relation"
+            >
+              {{ relation.name }}
+            </a>
           </li>
         </template>
       </ul>
     </div>
-		<div class="w-auto mx-4">
+    <div class="w-auto mx-4">
       <searchComponent :relation="currentRelation" :key="currentRelation" />
     </div>
   </div>

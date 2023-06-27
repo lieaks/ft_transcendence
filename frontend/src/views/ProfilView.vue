@@ -4,8 +4,8 @@ import gql from 'graphql-tag'
 import { useQuery, useMutation } from '@vue/apollo-composable'
 import { computed, ref } from 'vue'
 import { useUserStore } from '@/stores/userStore'
-import * as Notifications from "@/elements/Notifications";
-const notifs = Notifications.useNotifications();
+import * as Notifications from '@/elements/Notifications'
+const notifs = Notifications.useNotifications()
 
 interface User {
   name: string
@@ -140,30 +140,29 @@ function addFriend(id: string) {
   const input = { friendsToAdd: [id] }
   mutate({ input })
   user.value.isFriend = true
-  notifs.notifyFollow(user.value.name);
+  notifs.notifyFollow(user.value.name)
 }
 
 function removeFriend(id: string) {
   const input = { friendsToRemove: [id] }
   mutate({ input })
   user.value.isFriend = false
-  notifs.notifyUnfollow(user.value.name);
+  notifs.notifyUnfollow(user.value.name)
 }
 
 function blockUser(id: string) {
   const input = { usersToBlock: [id] }
-  if (user.value.isFriend)
-    removeFriend(id)
+  if (user.value.isFriend) removeFriend(id)
   mutate({ input })
   user.value.isBlocked = true
-  notifs.notifyBlock(user.value.name);
+  notifs.notifyBlock(user.value.name)
 }
 
 function unblockUser(id: string) {
   const input = { usersToUnblock: [id] }
   mutate({ input })
   user.value.isBlocked = false
-  notifs.notifyUnblock(user.value.name);
+  notifs.notifyUnblock(user.value.name)
 }
 
 function redirectToUserAccount(userId: string) {
@@ -178,17 +177,16 @@ function inviteToGame(userId: string) {
 }
 
 function spectateGame(userId: string) {
-	userStore.socket.emit('spectateGame', { id: userId })
+  userStore.socket.emit('spectateGame', { id: userId })
 }
-
 </script>
 
 <template>
-	<div class="card md:card-side bg-neutral shadow-xl md:w-3/4 xl:w-/ w-1/2 mx-auto">
-		<figure>
-			<img class="w-full md:h-full md:w-auto" :src="user.avatar" alt="Profile picture" />
-		</figure>
-		<div class="card-body">
+  <div class="card md:card-side bg-neutral shadow-xl md:w-3/4 xl:w-/ w-1/2 mx-auto">
+    <figure>
+      <img class="w-full md:h-full md:w-auto" :src="user.avatar" alt="Profile picture" />
+    </figure>
+    <div class="card-body">
       <div class="flex justify-between items-center">
         <h2 class="card-title mb-4 font-bold text-2xl">{{ user.name }}</h2>
         <div v-if="user.status == 'ONLINE'" className="badge badge-accent">Online</div>
@@ -196,13 +194,8 @@ function spectateGame(userId: string) {
         <div v-else className="badge badge-error">Offline</div>
       </div>
       <p>Points: {{ user.points }}</p>
-			<p>
-				Victoires: {{ user.nb_win }} | Defaites: {{ user.nb_loose }}
-			</p>
-      <div
-        v-if="userStore.id && user.id && userStore.id !== user.id"
-        class="flex"
-      >
+      <p>Victoires: {{ user.nb_win }} | Defaites: {{ user.nb_loose }}</p>
+      <div v-if="userStore.id && user.id && userStore.id !== user.id" class="flex">
         <div v-if="!user.isBlocked">
           <button
             v-if="!user.isFriend"
@@ -226,10 +219,18 @@ function spectateGame(userId: string) {
           >
             Block User
           </button>
-          <button v-if="user.status == 'OFFLINE'" class="btn btn-primary" @click="inviteToGame(user.id)">
+          <button
+            v-if="user.status == 'OFFLINE'"
+            class="btn btn-primary"
+            @click="inviteToGame(user.id)"
+          >
             Invite to game
           </button>
-          <button v-if="user.status == 'INGAME'" class="btn btn-primary" @click="spectateGame(user.id)">
+          <button
+            v-if="user.status == 'INGAME'"
+            class="btn btn-primary"
+            @click="spectateGame(user.id)"
+          >
             Spectate game
           </button>
         </div>
@@ -241,7 +242,7 @@ function spectateGame(userId: string) {
           Unblock User
         </button>
       </div>
-		</div>
+    </div>
   </div>
 
   <div v-if="!user.isBlocked" class="container mx-auto px-4 sm:px-8">
