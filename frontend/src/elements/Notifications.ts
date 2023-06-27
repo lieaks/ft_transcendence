@@ -33,37 +33,39 @@ export const useNotifications = () => {
 
   const notifyFollow = (name: string) => {
     notify(`Started following ${name}`, 'info', {
-      type: 'info',
       icon: '✨'
     })
   }
 
   const notifyUnfollow = (name: string) => {
     notify(`Unfollowed ${name}`, 'info', {
-      type: 'info',
       icon: '🗑️'
     })
   }
 
   const notifyBlock = (name: string) => {
     notify(`Blocked ${name}`, 'info', {
-      type: 'info',
       icon: '🚫'
     })
   }
 
   const notifyUnblock = (name: string) => {
     notify(`Unblocked ${name}`, 'info', {
-      type: 'info',
       icon: '🏳️'
     })
   }
+
+  const notifyPermissionDenied = () => {
+    notify('Permission denied', 'error', {
+      icon: '🚫'
+    })
 
   return {
     notifyGameInvite,
     notifyFollow,
     notifyUnfollow,
     notifyBlock,
-    notifyUnblock
+    notifyUnblock,
+    notifyPermissionDenied
   }
 }
