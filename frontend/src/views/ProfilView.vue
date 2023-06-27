@@ -224,7 +224,7 @@ function spectateGame(userId: string) {
             Block User
           </button>
           <button
-            v-if="user.status == 'OFFLINE'"
+            v-if="user.status == 'ONLINE'"
             class="btn btn-primary"
             @click="inviteToGame(user.id)"
           >
