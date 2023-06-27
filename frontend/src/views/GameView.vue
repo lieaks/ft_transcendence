@@ -33,6 +33,18 @@ onMounted(() => {
 
   keydownHandler = (event) => {
     switch (event.key) {
+      case '1':
+        game.bg_color = 'black'
+        break
+
+      case '2':
+        game.bg_color = 'gray'
+        break        
+
+      case '3':
+        game.bg_color = 'green'
+        break
+
       case 'w':
         userStore.socket?.emit('movePaddle', { direction: 'up', gameId: userStore.gameId })
         break
