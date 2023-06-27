@@ -48,15 +48,14 @@ user?.socket.on('newMessage', (newMessage: { channelId: string; message: IMessag
   }
 })
 
-import EditProfilComponent from '@/components/EditProfilComponent.vue'
 </script>
 
 <template>
-	<div class="m-2 p-1 overflow-auto w-full">
+	<div class="pl-4 p-1 overflow-auto w-full">
     <p class="mb-1">available channels:</p>
     <ChannelList :availableChannels="availableChannels" />
   </div>
-	<div class="m-2 p-1 overflow-x-scroll w-full" v-if="joinedChannels.length">
+	<div class="pl-4 p-1 overflow-auto w-full" v-if="joinedChannels.length">
 		<p class="mb-1">joined channels:</p>
     <ul>
       <li v-for="channel in joinedChannels" :key="channel.id" class="inline mr-2">
@@ -70,8 +69,7 @@ import EditProfilComponent from '@/components/EditProfilComponent.vue'
       </li>
     </ul>
   </div>
-	<div class="m-2 my-1 w-full h-full">
+	<div class="pl-4 p-1 w-full h-full">
 		<ChatComponent v-if="joinedChannels.length" :channel="activeChannel || joinedChannels[0]" />
-		<EditProfilComponent />
 	</div>
 </template>
