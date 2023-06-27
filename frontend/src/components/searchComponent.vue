@@ -81,9 +81,25 @@ onResultStatus((res) => {
 		}
 	})
 })
-function redirectToUserAccount(userId: string) {
-	router.push(`/profil/${userId}`)
-}
+
+const onlyOnline = ref(false)
+const reverse = ref(false)
+const regex = ref('')
+const relationsFiltered = computed(() => {
+	let lrelations = relations.value.slice();
+	if (reverse.value) { lrelations.reverse() }
+	lrelations = lrelations.filter((user: IUser) => {
+		if (onlyOnline.value && user.status === 'OFFLINE') return false
+		if (regex.value) {
+			try {
+				const re = new RegExp(regex.value, 'i')
+				if (!re.test(user.name)) return false
+			} catch (e) {}
+		}
+		return true
+	})
+	return lrelations
+})
 </script>
 
 <template>
@@ -99,18 +115,25 @@ function redirectToUserAccount(userId: string) {
 			</thead>
 			<tbody>
 				<tr>
-					<th class="w-1/2">
-						<input type="text" placeholder="number search" class="input input-secondary input-sm">
+					<th>
+						<label class="cursor-pointer label">
+							<span class="label-text mr-2">reverse</span> 
+							<input type="checkbox" class="toggle toggle-sm toggle-accent" v-model="reverse">
+						</label>
 					</th>
-					<th class="w-1/2">
-						<input type="text" placeholder="regex seach" class="input input-secondary input-sm">
+					<th>
+						<input type="text" placeholder="regex seach" class="input input-accent input-sm" v-model="regex">
 					</th>
-					<th class="w-1/2">
-						check box
+					<th>
+						<label class="cursor-pointer label">
+							<span class="label-text mr-2">only online</span> 
+							<input type="checkbox" class="toggle toggle-sm toggle-accent" v-model="onlyOnline">
+						</label>
 					</th>
 				</tr>
-				<tr v-for="(user, index) in relations" :key="user.id">
-					<th>{{index + 1}}</th>
+				<tr v-for="(user, index) in relationsFiltered" :key="user.id">
+					<th v-if="reverse">{{ relationsFiltered.length - index }}</th>
+					<th v-else>{{index + 1}}</th>
           <td>
             <div className="flex items-center space-x-3">
               <div className="avatar">
@@ -123,13 +146,18 @@ function redirectToUserAccount(userId: string) {
                   <a
                     href="#"
                     class="font-semibold text-white hover:underline"
-                    @click.prevent="redirectToUserAccount(user.id)"
+										@click.prevent="router.push(`/profil/${user.id}`)"
                     >{{ user.name }}</a
                   >
                 </div>
               </div>
             </div>
           </td>
+					<td>
+						<div v-if="user.status == 'ONLINE'" class="badge badge-accent">Online</div>
+						<div v-else-if="user.status == 'INGAME'" class="badge badge-warning">In game</div>
+						<div v-else class="badge badge-error">Offline</div>
+					</td>
 				</tr>
 			</tbody>
 		</table>
