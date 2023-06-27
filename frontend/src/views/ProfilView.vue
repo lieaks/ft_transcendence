@@ -105,7 +105,7 @@ onUserResult((res) => {
       )}`,
       id: game.loser.id
     },
-    score: game.winner.name === user.value.name ? game.score : [game.score[1], game.score[0]] ?? []
+    score: game.winner.id === user.value.id ? game.score.slice().sort((a: number, b: number) => b - a) : game.score.slice().sort((a: number, b: number) => a - b)
   }))
 })
 
