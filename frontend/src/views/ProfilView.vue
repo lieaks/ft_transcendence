@@ -214,7 +214,7 @@ function spectateGame(userId: string) {
 
           <button
             v-if="user.isFriend"
-            class="text-red-500 hover:text-red-700 mx-3 font-semibold"
+            class="text-red-500 hover:text-red-700 font-semibold"
             @click="removeFriend(user.id)"
           >
             Unfollow
