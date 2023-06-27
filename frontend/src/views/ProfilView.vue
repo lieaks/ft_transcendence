@@ -29,7 +29,7 @@ const user = ref({
   points: 0,
   nb_win: 0,
   nb_loose: 0,
-	rank: 0,
+  rank: 0,
   gameHistory: [] as {
     score: number[]
     winner: User
@@ -48,7 +48,7 @@ const { onResult: onUserResult } = useQuery(
         name
         experience
         status
-				rank
+        rank
         gamesWon {
           id
         }
@@ -84,7 +84,7 @@ onUserResult((res) => {
   const avatar = `data:image/png;base64,${base64}`
   user.value.id = props.userId
   user.value.name = userData.name
-	user.value.rank = userData.rank
+  user.value.rank = userData.rank
   user.value.avatar = avatar
   user.value.status = userData.status
   user.value.points = userData.experience
@@ -197,7 +197,7 @@ function spectateGame(userId: string) {
         <div v-else className="badge badge-error">Offline</div>
       </div>
       <p>Points: {{ user.points }}</p>
-			<p>Rank: {{ user.rank }}</p>
+      <p>Rank: {{ user.rank }}</p>
       <p>Victoires: {{ user.nb_win }} | Defaites: {{ user.nb_loose }}</p>
       <div v-if="userStore.id && user.id && userStore.id !== user.id" class="flex">
         <div v-if="!user.isBlocked">

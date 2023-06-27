@@ -39,7 +39,7 @@ onMounted(() => {
 
       case '2':
         game.bg_color = 'gray'
-        break        
+        break
 
       case '3':
         game.bg_color = 'green'

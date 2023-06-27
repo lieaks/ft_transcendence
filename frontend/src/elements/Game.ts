@@ -40,14 +40,14 @@ export class Game {
     )
     this.rightScore = new Scoreboard(0, canvas.width / 2 + 100 - 20, 75, 'white', '40px Arial')
     this.leftScore = new Scoreboard(0, canvas.width / 2 - 100, 75, 'white', '40px Arial')
-	this.bg_color = 'black'
+    this.bg_color = 'black'
   }
 
   draw() {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
     this.context.beginPath()
-	this.context.fillStyle = this.bg_color
-	this.context.fillRect(0, 0, this.canvas.width, this.canvas.height)
+    this.context.fillStyle = this.bg_color
+    this.context.fillRect(0, 0, this.canvas.width, this.canvas.height)
     this.drawNet()
     this.ball.draw(this.context)
     this.rightPaddle.draw(this.context)

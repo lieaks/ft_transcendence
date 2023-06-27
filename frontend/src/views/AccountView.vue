@@ -15,7 +15,7 @@ interface User {
 const user = ref({
   name: '',
   id: '',
-	rank: 0,
+  rank: 0,
   avatar: '',
   points: 0,
   nb_win: 0,
@@ -33,7 +33,7 @@ const { onResult } = useQuery(
     query user {
       me {
         avatar
-				rank
+        rank
         name
         id
         experience
@@ -118,7 +118,7 @@ function redirectToUserAccount(userId: string) {
       </div>
       <h2 class="card-title mb-2 font-bold text-2xl">{{ user.name }}</h2>
       <p>Points: {{ user.points }}</p>
-			<p>Rank: {{ user.rank }}</p>
+      <p>Rank: {{ user.rank }}</p>
       <p>Victoires: {{ user.nb_win }} | Defaites: {{ user.nb_loose }}</p>
       <div>
         <FollowersComponent />

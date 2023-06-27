@@ -31,7 +31,7 @@ const GQL_QUERY =
           users {
             id
             name
-						status
+            status
             avatar
           }
         }
@@ -61,7 +61,7 @@ onResult((res) => {
     const avatar = `data:image/png;base64,${base64}`
     return {
       ...user,
-			status: user.status || 'OFFLINE',
+      status: user.status || 'OFFLINE',
       avatar
     }
   })

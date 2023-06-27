@@ -21,19 +21,33 @@ function sendMessage() {
 </script>
 
 <template>
-  <div>
-    channel {{ channel.name }}
-    <ul>
-      <li v-for="message in channel.messages">{{ message.sender.name }}: {{ message.content }}</li>
-    </ul>
-    <div class="inline">
-      <input
-        type="text"
-        class="input input-secondary m-2"
-        placeholder="new message"
-        v-model="newMessage"
-      />
-      <button class="btn btn-secondary m-2" @click="sendMessage()">send</button>
-    </div>
+  <div class="inline-flex w-full h-full">
+		<div class="card bg-neutral items-center shadow-xl p-3 my-2 w-1/3">
+			<h2 class="card-title">{{ channel.name }}</h2>
+			<div>channel parameters</div>
+			<ul class="card bg-neutral-800 shadow-xl p-3 my-2 w-full">
+				<li v-for="user in channel.users" :key="user.id">
+					kick 
+					ban 
+					mute 
+					{{user.name}}
+				</li>
+			</ul>
+		</div>
+		<div>
+			<ul>
+				<li v-for="message in channel.messages">{{ message.sender.name }}: {{ message.content }}</li>
+			</ul>
+			<div class="inline">
+				<input
+					type="text"
+					class="input input-secondary m-2"
+					placeholder="new message"
+					v-model="newMessage"
+					@keyup.enter="sendMessage"
+				/>
+				<button class="btn btn-secondary m-2" @click="sendMessage">send</button>
+			</div>
+		</div>
   </div>
 </template>
