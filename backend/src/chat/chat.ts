@@ -10,6 +10,7 @@ export class Chat implements IChat {
   id: string;
   name: string;
   type: chatType;
+  password?: string;
   createdAt: Date;
   updatedAt: Date;
   messages: IMessage[];
@@ -21,6 +22,7 @@ export class Chat implements IChat {
     this.id = id;
     this.name = name;
     this.type = type;
+    this.password = undefined;
     this.createdAt = new Date();
     this.updatedAt = new Date();
     this.messages = [];
@@ -155,7 +157,10 @@ export class Chat implements IChat {
     });
   }
 
-  addUser(user: IChatUser): void {
+  addUser(user: IChatUser, password?: string): void {
+    if (this.type === chatType.PRIVATE) return;
+    if (this.type === chatType.PROTECTED && password && password !== this.password) return;
+    if (this.password && this.password !== password) return;
     if (this.users.find((u) => u.id === user.id)) return;
     const bannedUser = this.bannedUsers.find((u) => u.id === user.id);
     if (bannedUser) {
@@ -167,6 +172,12 @@ export class Chat implements IChat {
       channelId: this.id,
       user: { id: user.id, name: user.name },
     });
+  }
+
+  setPassword(password: string): void {
+    if (this.type === chatType.PUBLIC)
+      this.type = chatType.PROTECTED;
+    this.password = password;
   }
 
   removeUser(user: IChatUser): void {

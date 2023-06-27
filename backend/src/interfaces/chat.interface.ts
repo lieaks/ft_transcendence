@@ -22,6 +22,7 @@ export interface IChat {
   id: string;
   name: string;
   type: chatType;
+  password?: string;
   createdAt: Date;
   updatedAt: Date;
   messages: IMessage[];
@@ -29,7 +30,7 @@ export interface IChat {
   mutedUsers: IMutedUser[];
   bannedUsers: IBannedUser[];
   addMessage(message: IMessage): void;
-  addUser(user: IChatUser): void;
+  addUser(user: IChatUser, password?: string): void;
   removeUser(user: IUser): void;
   emitToUsers(event: string, data: any): void;
 }
