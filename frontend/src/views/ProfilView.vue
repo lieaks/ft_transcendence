@@ -312,7 +312,7 @@ function spectateGame(userId: string) {
                 >
                   <div class="flex items-center justify-center">
                     <div class="flex-shrink-0 w-10 h-10 hidden sm:table-cell">
-                      <img class="w-full h-full rounded-full" :src="user.avatar" alt="" />
+                      <img class="w-full h-full rounded-full" :src="user.id == game.winner.id ? game.loser.avatar : game.winner.avatar" alt="" />
                     </div>
                     <div class="ml-3">
                       <a
