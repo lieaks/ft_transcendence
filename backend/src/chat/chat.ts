@@ -1,5 +1,5 @@
 import { IChat, IMessage, chatType } from "src/interfaces/chat.interface";
-import { IUser } from "src/interfaces/user.interface";
+import { IChatUser, IBannedUser, IMutedUser, userChatRole } from "src/interfaces/user.interface";
 
 export class Chat implements IChat {
 	id: string;
@@ -8,7 +8,9 @@ export class Chat implements IChat {
 	createdAt: Date;
 	updatedAt: Date;
 	messages: IMessage[];
-	users: IUser[];
+	users: IChatUser[];
+	mutedUsers: IMutedUser[];
+	bannedUsers: IBannedUser[];
 
 	constructor(id: string, name: string, type: chatType) {
 		this.id = id
@@ -18,6 +20,8 @@ export class Chat implements IChat {
 		this.updatedAt = new Date();
 		this.messages = [];
 		this.users = [];
+		this.mutedUsers = [];
+		this.bannedUsers = [];
 	}
 
 	addMessage(message: IMessage): void {
@@ -32,14 +36,15 @@ export class Chat implements IChat {
 		}});
 	}
 
-	addUser(user: IUser): void {
+	addUser(user: IChatUser): void {
 		if (!this.users.find((u) => u.id === user.id)) {
 			this.users.push(user);
 			this.emitToUsers("userJoined", {channelId: this.id, user: { id: user.id, name: user.name } })
+			console.log("user Role: " + user.role)
 		}
 	}
 
-	removeUser(user: IUser): void {
+	removeUser(user: IChatUser): void {
 		if (this.users.find((u) => u.id === user.id)) {
 			this.users = this.users.filter((u) => u.id !== user.id);
 			const { socket, ...userWithoutSocket } = user;

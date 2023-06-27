@@ -17,6 +17,7 @@ import { GamesService } from 'src/games/games.service';
 import { AuthService } from 'src/auth/auth.service';
 import { ChatService } from 'src/chat/chats.service';
 import { chatType, IChat } from 'src/interfaces/chat.interface';
+import { IChatUser, userChatRole } from '../interfaces/user.interface';
 
 function getShortChannels(channels: IChat[]) {
 	return channels.map(c => {
@@ -136,7 +137,11 @@ export class MyGateway implements OnModuleInit {
 		const user = this.usersService.getUserBySocketId(client.id)
 		const chat = this.chatService.getChat(body.id)
 		if (!chat || !user) return
-		chat.addUser(user)
+		const chatUser: IChatUser = {
+			...user,
+			role: userChatRole.MEMBER,
+		}
+		chat.addUser(chatUser)
 	}
 
 	@SubscribeMessage('channelAvailable')

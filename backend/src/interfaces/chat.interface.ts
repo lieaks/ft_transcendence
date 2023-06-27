@@ -1,4 +1,5 @@
 import { IUser } from "./user.interface";
+import { IChatUser, IBannedUser, IMutedUser, userChatRole } from "src/interfaces/user.interface";
 
 export enum chatType {
 	PUBLIC,
@@ -19,9 +20,11 @@ export interface IChat {
 	createdAt: Date;
 	updatedAt: Date;
 	messages: IMessage[];
-	users: IUser[];
+	users: IChatUser[];
+	mutedUsers: IMutedUser[];
+	bannedUsers: IBannedUser[];
 	addMessage(message: IMessage): void;
-	addUser(user: IUser): void;
+	addUser(user: IChatUser): void;
 	removeUser(user: IUser): void;
 	emitToUsers(event: string, data: any): void;
 }
