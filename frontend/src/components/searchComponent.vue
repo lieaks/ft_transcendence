@@ -9,7 +9,7 @@ interface IUser {
   id: string
   name: string
   avatar: string
-  status: 'OFFLINE' | 'ONLINE' | 'INGAME'
+  status?: 'OFFLINE' | 'ONLINE' | 'INGAME'
 }
 
 const props = defineProps({
@@ -59,7 +59,6 @@ onResult((res) => {
     const avatar = `data:image/png;base64,${base64}`
     return {
       ...user,
-      status: user.status || 'OFFLINE',
       avatar
     }
   })
@@ -163,7 +162,6 @@ const relationsFiltered = computed(() => {
               <div>
                 <div class="font-bold">
                   <a
-                    href="#"
                     class="font-semibold text-white hover:underline"
                     @click.prevent="router.push(`/profil/${user.id}`)"
                     >{{ user.name }}</a
