@@ -128,8 +128,16 @@ export class MyGateway implements OnModuleInit {
 	@SubscribeMessage('createChannel')
 	onCreateChannel(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
 		if (!body.name) return
+		const user = this.usersService.getUserBySocketId(client.id)
+		if (!user) return
+		const chatUser: IChatUser = {
+			...user,
+			role: userChatRole.CREATOR,
+		}
 		const newChannel = this.chatService.createChat(body.name, chatType.PUBLIC)
+		if (!newChannel) return
 		this.server.emit('newChannel', getShortChannels([newChannel])[0])
+		newChannel.addUser(chatUser)
 	}
 
 	@SubscribeMessage('joinChannel')

@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { IUser } from '../interfaces/user.interface';
+import { IChatUser, IUser } from '../interfaces/user.interface';
 import { IMessage, IChat, chatType } from "src/interfaces/chat.interface";
 import { Chat } from "./chat";
 
@@ -25,6 +25,7 @@ export class ChatService {
 		if (this.getChatByName(name)) return null;
 		const chat = new Chat(this.generateRandomId(), name, type);
 		this.chats.push(chat);
+		chat.addUser
 		return chat;
 	}
 

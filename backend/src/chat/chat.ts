@@ -25,7 +25,7 @@ export class Chat implements IChat {
 	}
 
 	kickUser(user: IChatUser, kickedBy: IChatUser): void {
-		if (user.role !== userChatRole.ADMIN || kickedBy.role === userChatRole.CREATOR) return;
+		if (user.role === userChatRole.MEMBER || kickedBy.role === userChatRole.CREATOR) return;
 		if (this.users.find((u) => u.id === user.id)) {
       this.removeUser(user);
 			const { socket: userSocket, ...userWithoutSocket } = user;
@@ -35,7 +35,7 @@ export class Chat implements IChat {
 	}
 
   banUser(user: IChatUser, bannedBy: IChatUser, seconds: string): void {
-    if (user.role !== userChatRole.ADMIN || bannedBy.role === userChatRole.CREATOR) return;
+    if (user.role === userChatRole.MEMBER || bannedBy.role === userChatRole.CREATOR) return;
     if (isNaN(Number(seconds))) return;
     const secondsNumber = Number(seconds);
     if (secondsNumber < 0) return;
@@ -55,7 +55,7 @@ export class Chat implements IChat {
   }
 
   muteUser(user: IChatUser, mutedBy: IChatUser, seconds: string): void {
-    if (user.role !== userChatRole.ADMIN || mutedBy.role === userChatRole.CREATOR) return;
+    if (user.role === userChatRole.MEMBER || mutedBy.role === userChatRole.CREATOR) return;
     if (isNaN(Number(seconds))) return;
     const secondsNumber = Number(seconds);
     if (secondsNumber < 0) return;
@@ -74,7 +74,7 @@ export class Chat implements IChat {
   }
 
   unmuteUser(user: IChatUser, unmutedBy: IChatUser): void {
-    if (user.role !== userChatRole.ADMIN) return;
+    if (user.role === userChatRole.MEMBER) return;
     const mutedUser = this.mutedUsers.find((u) => u.id === user.id);
     if (!mutedUser) return;
     this.mutedUsers = this.mutedUsers.filter((u) => u.id !== user.id);
@@ -84,7 +84,7 @@ export class Chat implements IChat {
   }
 
   unbanUser(user: IChatUser, unbannedBy: IChatUser): void {
-    if (user.role !== userChatRole.ADMIN) return;
+    if (user.role === userChatRole.MEMBER) return;
     const bannedUser = this.bannedUsers.find((u) => u.id === user.id);
     if (!bannedUser) return;
     this.bannedUsers = this.bannedUsers.filter((u) => u.id !== user.id);
