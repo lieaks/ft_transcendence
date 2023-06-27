@@ -13,17 +13,14 @@ let activeChannel: Ref<IChannel | undefined> = ref(undefined)
 user.socket.emit('channelAvailable')
 
 user?.socket.on('channelAvailable', (newChannels: IChannel[]) => {
-  console.log('channelAvailable', newChannels)
   availableChannels.value = newChannels
 })
 user?.socket.on('newChannel', (newChannel: IChannel) => {
-  console.log('newChannel', newChannel)
   if (!newChannel) return
   availableChannels.value.push(newChannel)
 })
 
 user?.socket.on('userJoined', (newUser: { channelId: string; user: IUser }) => {
-  console.log('userJoined', newUser)
   if (!newUser) return
   let channel = joinedChannels.value.find((channel) => channel.id === newUser.channelId)
   if (channel) {
@@ -43,7 +40,6 @@ user?.socket.on('userJoined', (newUser: { channelId: string; user: IUser }) => {
 })
 
 user?.socket.on('newMessage', (newMessage: { channelId: string; message: IMessage }) => {
-  console.log('newMessage', newMessage)
   if (!newMessage?.channelId || !newMessage?.message) return
   let channel = joinedChannels.value.find((channel) => channel.id === newMessage.channelId)
   if (channel) {
