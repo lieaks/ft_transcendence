@@ -2,18 +2,19 @@
 import searchComponent from '@/components/searchComponent.vue'
 import { ref, type Ref } from 'vue'
 
-type IRelation = 'blocked' | 'blockedOf' | 'friends' | 'friendOf'
+type IRelation = 'blocked' | 'blockedOf' | 'friends' | 'friendOf' | 'users'
 interface IRelations {
   name: string
   relation: IRelation
 }
 const relations: IRelations[] = [
+  { name: 'Users', relation: 'users' },
   { name: 'Following', relation: 'friends' },
   { name: 'Followers', relation: 'friendOf' },
   { name: 'Blocked', relation: 'blocked' },
   { name: 'Blocked you', relation: 'blockedOf' }
 ]
-const currentRelation: Ref<IRelation> = ref('friends')
+const currentRelation: Ref<IRelation> = ref('users')
 </script>
 
 <template>

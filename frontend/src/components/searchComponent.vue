@@ -15,17 +15,27 @@ interface IUser {
 const props = defineProps({
   relation: {
     required: true,
-    type: String as PropType<'friends' | 'friendOf' | 'blocked' | 'blockedOf'>,
+    type: String as PropType<'friends' | 'friendOf' | 'blocked' | 'blockedOf' | 'users'>,
     validator: (value: string) => {
-      return ['friends', 'friendOf', 'blocked', 'blockedOf'].includes(value)
+      return ['friends', 'friendOf', 'blocked', 'blockedOf', 'users'].includes(value)
     }
   }
 })
 
 const relations: Ref<IUser[]> = ref([])
 
-const { onResult } = useQuery(
-  gql`
+const GQL_QUERY =
+  props.relation === 'users'
+    ? gql`
+        query users {
+          users {
+            id
+            name
+            avatar
+          }
+        }
+      `
+    : gql`
 		query relations {
 			me {
 				id
@@ -36,15 +46,15 @@ const { onResult } = useQuery(
 				}
 			}
 		}
-		`,
-  null,
-  {
-    fetchPolicy: 'cache-and-network'
-  }
-)
+		`
+
+const { onResult } = useQuery(GQL_QUERY, null, {
+  fetchPolicy: 'cache-and-network'
+})
 onResult((res) => {
-  if (!res.data?.me) return
-  relations.value = res.data.me[props.relation].map((user: gqlUser): IUser => {
+  if (!res.data) return
+  const data = props.relation === 'users' ? res.data.users : res.data.me[props.relation]
+  relations.value = data.map((user: gqlUser): IUser => {
     const base64 = btoa(String.fromCharCode(...new Uint8Array(user.avatar?.data)))
     const avatar = `data:image/png;base64,${base64}`
     return {
