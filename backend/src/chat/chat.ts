@@ -94,7 +94,12 @@ export class Chat implements IChat {
   }
 
 	addMessage(message: IMessage): void {
-    if (this.mutedUsers.find((u) => u.id === message.sender.id)) return;
+    const mutedUser = this.mutedUsers.find((u) => u.id === message.sender.id);
+    if (mutedUser)
+    {
+      if (mutedUser.mutedUntil > new Date()) return;
+      else this.mutedUsers = this.mutedUsers.filter((u) => u.id !== message.sender.id);
+    }
 		this.updatedAt = new Date();
 		this.messages.push(message);
 		this.emitToUsers("newMessage", { channelId: this.id, message: {
@@ -107,12 +112,16 @@ export class Chat implements IChat {
 	}
 
 	addUser(user: IChatUser): void {
-    if (this.bannedUsers.find((u) => u.id === user.id)) return;
-		if (!this.users.find((u) => u.id === user.id)) {
-			this.users.push(user);
-			this.emitToUsers("userJoined", {channelId: this.id, user: { id: user.id, name: user.name } })
-			console.log("user Role: " + user.role)
-		}
+    if (this.users.find((u) => u.id === user.id)) return;
+    const bannedUser = this.bannedUsers.find((u) => u.id === user.id);
+    if (bannedUser)
+    {
+      if (bannedUser.bannedUntil > new Date()) return;
+      else this.bannedUsers = this.bannedUsers.filter((u) => u.id !== user.id);
+    }
+		this.users.push(user);
+		this.emitToUsers("userJoined", {channelId: this.id, user: { id: user.id, name: user.name } })
+		console.log("user Role: " + user.role)
 	}
 
 	removeUser(user: IChatUser): void {
