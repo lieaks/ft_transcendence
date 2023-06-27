@@ -24,6 +24,16 @@ export class Chat implements IChat {
 		this.bannedUsers = [];
 	}
 
+	kickUser(user: IChatUser, kickedBy: IChatUser): void {
+		if (user.role !== userChatRole.ADMIN || kickedBy.role === userChatRole.CREATOR) return;
+		if (this.users.find((u) => u.id === user.id)) {
+			this.users = this.users.filter((u) => u.id !== user.id);
+			const { socket: userSocket, ...userWithoutSocket } = user;
+			const { socket: kickedBySocket, ...kickedByWithoutSocket } = kickedBy;
+			this.emitToUsers("userKicked", { channelId: this.id, user: userWithoutSocket, kickedBy: kickedByWithoutSocket })
+		}
+	}
+
 	addMessage(message: IMessage): void {
 		this.updatedAt = new Date();
 		this.messages.push(message);
