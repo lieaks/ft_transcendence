@@ -158,7 +158,6 @@ export class Chat implements IChat {
   }
 
   addUser(user: IChatUser, password?: string): void {
-    if (this.type === chatType.PRIVATE) return;
     if (this.type === chatType.PROTECTED && password && password !== this.password) return;
     if (this.password && this.password !== password) return;
     if (this.users.find((u) => u.id === user.id)) return;

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { IChatUser, IUser } from '../interfaces/user.interface';
+import { IChatUser, IUser, userChatRole } from '../interfaces/user.interface';
 import { IMessage, IChat, chatType } from 'src/interfaces/chat.interface';
 import { Chat } from './chat';
 
@@ -27,6 +27,22 @@ export class ChatService {
     chat.addUser;
     return chat;
   }
+
+  createPrivateChat(user1: IUser, user2: IUser): IChat {
+	  const chat = new Chat(this.generateRandomId(), '', chatType.PRIVATE);
+	  const userChat1: IChatUser = {
+	  	...user1,
+	  	role: userChatRole.MEMBER,
+	  };
+	  const userChat2: IChatUser = {
+	  	...user2,
+	  	role: userChatRole.MEMBER,
+	  };
+	  chat.addUser(userChat1);
+	  chat.addUser(userChat2);
+	  this.chats.push(chat);
+	  return chat;
+	}
 
   removeChat(id: string): void {
     this.chats = this.chats.filter((c) => c.id !== id);

@@ -140,16 +140,24 @@ export class MyGateway implements OnModuleInit {
     newChannel.addUser(chatUser);
   }
 
+  // Store the password in a variable if one is provided
   @SubscribeMessage('joinChannel')
   onJoinChannel(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
     const user = this.usersService.getUserBySocketId(client.id);
     const chat = this.chatService.getChat(body.id);
     if (!chat || !user) return;
-    const chatUser: IChatUser = {
-      ...user,
-      role: userChatRole.MEMBER,
-    };
-    chat.addUser(chatUser);
+    if (chat.type == chatType.PRIVATE) return;
+    const password = body.password;
+	  const chatUser: IChatUser = {
+	  	...user,
+	  	role: userChatRole.MEMBER,
+	  };
+	  if (chat.type === chatType.PROTECTED) {
+      if (!password) return;
+      chat.addUser(chatUser, password);
+    }
+		else
+      chat.addUser(chatUser);
   }
 
   @SubscribeMessage('channelAvailable')
