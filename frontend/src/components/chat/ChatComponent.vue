@@ -26,6 +26,10 @@ function redirectToUserAccount(userId: string) {
     params: { id: userId }
   })
 }
+
+function kickUser(userId: string) {
+  user?.socket.emit('kickUser', { id: userId, channelID: props.channel.id })
+}
 </script>
 
 <template>
@@ -35,7 +39,7 @@ function redirectToUserAccount(userId: string) {
 			<div>channel parameters</div>
 			<ul class="card bg-neutral-800 shadow-xl p-3 my-2 w-full divide-y divide-secondary">
 				<li v-for="user in channel.users" :key="user.id">
-					kick 
+					<a href="#" class="text-red-500" @click.prevent="kickUser(user.id)">kick</a>
 					ban 
 					mute 
 					{{ user.name }}

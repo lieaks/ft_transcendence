@@ -31,22 +31,25 @@ export class Chat implements IChat {
     this.bannedUsers = [];
   }
 
-  kickUser(user: IChatUser, kickedBy: IChatUser): void {
+  kickUser(user: IChatUser, kickedBy: IChatUser): boolean {
     if (
-      user.role === userChatRole.MEMBER ||
-      kickedBy.role === userChatRole.CREATOR
+      user.role === userChatRole.CREATOR ||
+      kickedBy.role === userChatRole.MEMBER
     )
-      return;
+      return false;
     if (this.users.find((u) => u.id === user.id)) {
       this.removeUser(user);
-      const { socket: userSocket, ...userWithoutSocket } = user;
-      const { socket: kickedBySocket, ...kickedByWithoutSocket } = kickedBy;
-      this.emitToUsers('userKicked', {
-        channelId: this.id,
-        user: userWithoutSocket,
-        kickedBy: kickedByWithoutSocket,
-      });
+      // console.log("Users dans le chat : ", this.users)
+      // const { socket: userSocket, ...userWithoutSocket } = user;
+      // const { socket: kickedBySocket, ...kickedByWithoutSocket } = kickedBy;
+      // this.emitToUsers('userKicked', {
+      //   channelId: this.id,
+      //   user: userWithoutSocket,
+      //   kickedBy: kickedByWithoutSocket,
+      // });
+      return true;
     }
+    return false;
   }
 
   banUser(user: IChatUser, bannedBy: IChatUser, seconds: string): void {
@@ -68,14 +71,14 @@ export class Chat implements IChat {
     };
     this.bannedUsers.push(bannedUser);
     this.removeUser(user);
-    const { socket: userSocket, ...userWithoutSocket } = user;
-    const { socket: bannedBySocket, ...bannedByWithoutSocket } = bannedBy;
-    this.emitToUsers('userBanned', {
-      channelId: this.id,
-      user: userWithoutSocket,
-      bannedBy: bannedByWithoutSocket,
-      seconds,
-    });
+    // const { socket: userSocket, ...userWithoutSocket } = user;
+    // const { socket: bannedBySocket, ...bannedByWithoutSocket } = bannedBy;
+    // this.emitToUsers('userBanned', {
+      // channelId: this.id,
+      // user: userWithoutSocket,
+      // bannedBy: bannedByWithoutSocket,
+      // seconds,
+    // });
   }
 
   muteUser(user: IChatUser, mutedBy: IChatUser, seconds: string): void {
@@ -96,14 +99,14 @@ export class Chat implements IChat {
       mutedUntil,
     };
     this.mutedUsers.push(mutedUser);
-    const { socket: userSocket, ...userWithoutSocket } = user;
-    const { socket: mutedBySocket, ...mutedByWithoutSocket } = mutedBy;
-    this.emitToUsers('userMuted', {
-      channelId: this.id,
-      user: userWithoutSocket,
-      mutedBy: mutedByWithoutSocket,
-      seconds,
-    });
+    // const { socket: userSocket, ...userWithoutSocket } = user;
+    // const { socket: mutedBySocket, ...mutedByWithoutSocket } = mutedBy;
+    // this.emitToUsers('userMuted', {
+      // channelId: this.id,
+      // user: userWithoutSocket,
+      // mutedBy: mutedByWithoutSocket,
+      // seconds,
+    // });
   }
 
   unmuteUser(user: IChatUser, unmutedBy: IChatUser): void {
@@ -111,13 +114,13 @@ export class Chat implements IChat {
     const mutedUser = this.mutedUsers.find((u) => u.id === user.id);
     if (!mutedUser) return;
     this.mutedUsers = this.mutedUsers.filter((u) => u.id !== user.id);
-    const { socket: userSocket, ...userWithoutSocket } = user;
-    const { socket: unmutedBySocket, ...unmutedByWithoutSocket } = unmutedBy;
-    this.emitToUsers('userUnmuted', {
-      channelId: this.id,
-      user: userWithoutSocket,
-      unmutedBy: unmutedByWithoutSocket,
-    });
+    // const { socket: userSocket, ...userWithoutSocket } = user;
+    // const { socket: unmutedBySocket, ...unmutedByWithoutSocket } = unmutedBy;
+    // this.emitToUsers('userUnmuted', {
+      // channelId: this.id,
+      // user: userWithoutSocket,
+      // unmutedBy: unmutedByWithoutSocket,
+    // });
   }
 
   unbanUser(user: IChatUser, unbannedBy: IChatUser): void {
@@ -125,13 +128,13 @@ export class Chat implements IChat {
     const bannedUser = this.bannedUsers.find((u) => u.id === user.id);
     if (!bannedUser) return;
     this.bannedUsers = this.bannedUsers.filter((u) => u.id !== user.id);
-    const { socket: userSocket, ...userWithoutSocket } = user;
-    const { socket: unbannedBySocket, ...unbannedByWithoutSocket } = unbannedBy;
-    this.emitToUsers('userUnbanned', {
-      channelId: this.id,
-      user: userWithoutSocket,
-      unbannedBy: unbannedByWithoutSocket,
-    });
+    // const { socket: userSocket, ...userWithoutSocket } = user;
+    // const { socket: unbannedBySocket, ...unbannedByWithoutSocket } = unbannedBy;
+    // this.emitToUsers('userUnbanned', {
+      // channelId: this.id,
+      // user: userWithoutSocket,
+      // unbannedBy: unbannedByWithoutSocket,
+    // });
   }
 
   addMessage(message: IMessage): void {
@@ -183,21 +186,25 @@ export class Chat implements IChat {
     if (user.role === userChatRole.ADMIN) return;
     if (sender.role !== userChatRole.CREATOR) return;
     user.role = userChatRole.ADMIN;
-    const { socket: userSocket, ...userWithoutSocket } = user;
-    const { socket: senderSocket, ...senderWithoutSocket } = sender;
-    this.emitToUsers('userSetAdmin', {
-      channelId: this.id,
-      user: userWithoutSocket,
-      sender: senderWithoutSocket,
-    });
+    // const { socket: userSocket, ...userWithoutSocket } = user;
+    // const { socket: senderSocket, ...senderWithoutSocket } = sender;
+    // this.emitToUsers('userSetAdmin', {
+      // channelId: this.id,
+      // user: userWithoutSocket,
+      // sender: senderWithoutSocket,
+    // });
   }
 
   removeUser(user: IChatUser): void {
     if (this.users.find((u) => u.id === user.id)) {
       this.users = this.users.filter((u) => u.id !== user.id);
-      const { socket, ...userWithoutSocket } = user;
-      this.emitToUsers('userLeft', userWithoutSocket);
+      // const { socket, ...userWithoutSocket } = user;
+      // this.emitToUsers('userLeft', userWithoutSocket);
     }
+  }
+
+  getUserById(id: string): IChatUser | undefined {
+    return this.users.find((u) => u.id === id);
   }
 
   emitToUsers(event: string, data: any): void {

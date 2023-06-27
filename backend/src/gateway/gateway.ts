@@ -210,4 +210,18 @@ export class MyGateway implements OnModuleInit {
     game.addSpectator(user);
     user.socket.emit('spectateGame', {});
   }
+
+  @SubscribeMessage('kickUser')
+  onKickPlayer(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
+    const playerID = body.id;
+    const channelID = body.channelID;
+    if (!playerID || !channelID) return;
+    const chat = this.chatService.getChat(body.channelID);
+    if (!chat) return;
+    const sender = chat.getUserById(this.usersService.getUserBySocketId(client.id).id);
+    const player = chat.getUserById(playerID);
+    if (!sender || !player) return;
+    if (!chat.kickUser(player, sender))
+      client.emit('permissionDenied', {});
+  }  
 }

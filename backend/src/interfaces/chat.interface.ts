@@ -29,8 +29,10 @@ export interface IChat {
   users: IChatUser[];
   mutedUsers: IMutedUser[];
   bannedUsers: IBannedUser[];
+  getUserById(id: string): IChatUser | undefined;
   addMessage(message: IMessage): void;
   addUser(user: IChatUser, password?: string): void;
   removeUser(user: IUser): void;
   emitToUsers(event: string, data: any): void;
+  kickUser(user: IChatUser, kickedBy: IChatUser): boolean;
 }
