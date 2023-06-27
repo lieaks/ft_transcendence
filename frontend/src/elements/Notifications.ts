@@ -59,6 +59,7 @@ export const useNotifications = () => {
     notify('Permission denied', 'error', {
       icon: '🚫'
     })
+  }
 
   return {
     notifyGameInvite,
