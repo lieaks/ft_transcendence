@@ -47,6 +47,8 @@ user?.socket.on('newMessage', (newMessage: { channelId: string; message: IMessag
     channel.messages.push(newMessage.message)
   }
 })
+
+import EditProfilComponent from '@/components/EditProfilComponent.vue'
 </script>
 
 <template>
@@ -61,4 +63,5 @@ user?.socket.on('newMessage', (newMessage: { channelId: string; message: IMessag
     </ul>
   </div>
   <ChatComponent v-if="joinedChannels.length" :channel="activeChannel || joinedChannels[0]" />
+  <EditProfilComponent />
 </template>

@@ -4,6 +4,7 @@ import { useQuery } from '@vue/apollo-composable'
 import { ref } from 'vue'
 import router from '@/router'
 import FollowersComponent from '@/components/FollowersComponent.vue'
+import EditProfilComponent from '@/components/EditProfilComponent.vue'
 
 interface User {
   name: string
@@ -23,7 +24,8 @@ const user = ref({
     score: number[]
     winner: User
     loser: User
-  }[]
+  }[],
+  editing: false
 })
 
 const { onResult } = useQuery(
@@ -99,11 +101,21 @@ function redirectToUserAccount(userId: string) {
 </script>
 
 <template>
+  <EditProfilComponent v-if="user.editing" />
   <div class="card md:card-side bg-neutral shadow-xl md:w-3/4 xl:w-/ w-1/2 mx-auto">
     <figure>
       <img class="w-full md:h-full md:w-auto" :src="user.avatar" alt="Profile picture" />
     </figure>
     <div class="card-body">
+		  <div class="flex justify-between items-center">
+        <h2 class="card-title mb-4 font-bold text-2xl">{{ user.name }}</h2>
+        <button
+          class="bg-[#564F6F] hover:bg-[#3E3756] text-white font-bold py-2 px-4 rounded"
+          @click="user.editing = true"
+        >
+          Edit
+        </button>
+      </div>
       <h2 class="card-title mb-2 font-bold text-2xl">{{ user.name }}</h2>
       <p>Points: {{ user.points }}</p>
 			<p>Rank: {{ user.rank }}</p>
@@ -177,7 +189,7 @@ function redirectToUserAccount(userId: string) {
                 >
                   <div class="flex items-center justify-center">
                     <div class="flex-shrink-0 w-10 h-10 hidden sm:table-cell">
-                      <img class="w-full h-full rounded-full" :src="user.avatar" alt="" />
+                      <img class="w-full h-full rounded-full" :src="game.winner.id == user.id ? game.loser.avatar : game.winner.avatar" alt="" />
                     </div>
                     <div class="ml-3">
                       <a
