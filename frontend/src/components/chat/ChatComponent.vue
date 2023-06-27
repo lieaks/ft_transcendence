@@ -48,9 +48,9 @@ function redirectToUserAccount(userId: string) {
           <a
             href="#"
             class="font-semibold hover:underline"
-            @click.prevent="redirectToUserAccount(user.id)"
+            @click.prevent="redirectToUserAccount(message.sender.id)"
           >
-            {{ user.name }}
+            {{ message.sender.name }}
           </a>
 					: {{ message.content }}
 				</li>
