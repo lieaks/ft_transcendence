@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { IChannel, IUser, IMessage } from '@/interfaces/chat.interfaces'
+import router from '@/router';
 import { useUserStore } from '@/stores/userStore'
 import { ref, type PropType } from 'vue'
 
@@ -18,6 +19,13 @@ function sendMessage() {
   user?.socket.emit('sendMessage', { channelId: props.channel.id, content: newMessage.value })
   newMessage.value = ''
 }
+
+function redirectToUserAccount(userId: string) {
+  router.push({
+    name: 'profil',
+    params: { id: userId }
+  })
+}
 </script>
 
 <template>
@@ -30,13 +38,22 @@ function sendMessage() {
 					kick 
 					ban 
 					mute 
-					{{user.name}}
+					{{ user.name }}
 				</li>
 			</ul>
 		</div>
 		<div>
 			<ul>
-				<li v-for="message in channel.messages">{{ message.sender.name }}: {{ message.content }}</li>
+				<li v-for="message in channel.messages">
+          <a
+            href="#"
+            class="font-semibold hover:underline"
+            @click.prevent="redirectToUserAccount(user.id)"
+          >
+            {{ user.name }}
+          </a>
+					: {{ message.content }}
+				</li>
 			</ul>
 			<div class="inline">
 				<input
