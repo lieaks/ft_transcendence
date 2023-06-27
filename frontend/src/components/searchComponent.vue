@@ -9,7 +9,7 @@ interface IUser {
   id: string
   name: string
   avatar: string
-  status?: 'OFFLINE' | 'ONLINE' | 'INGAME'
+  status: 'OFFLINE' | 'ONLINE' | 'INGAME'
 }
 
 const props = defineProps({
@@ -31,6 +31,7 @@ const GQL_QUERY =
           users {
             id
             name
+						status
             avatar
           }
         }
@@ -42,6 +43,7 @@ const GQL_QUERY =
 				${props.relation} {
 					id
 					name
+					status
 					avatar
 				}
 			}
@@ -59,6 +61,7 @@ onResult((res) => {
     const avatar = `data:image/png;base64,${base64}`
     return {
       ...user,
+			status: user.status || 'OFFLINE',
       avatar
     }
   })
