@@ -121,7 +121,6 @@ export class Chat implements IChat {
     }
 		this.users.push(user);
 		this.emitToUsers("userJoined", {channelId: this.id, user: { id: user.id, name: user.name } })
-		console.log("user Role: " + user.role)
 	}
 
 	removeUser(user: IChatUser): void {
