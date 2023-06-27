@@ -25,5 +25,5 @@ export interface IGame {
   emitToPlayers(event: string, data: any): void;
   movePaddle(player: IUser, direction: string): void;
   addSpectator(spectator: IUser): void;
-  removeSpectator(spectator: IUser): void;  
+  removeSpectator(spectator: IUser): void;
 }

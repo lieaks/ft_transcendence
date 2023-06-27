@@ -47,12 +47,12 @@ export class GamesService {
   }
 
   getGameById(id: string) {
-	  return this.games.find((g) => g.id === id);
+    return this.games.find((g) => g.id === id);
   }
 
   spectateGame(user: IUser, gameId: string) {
-	  const game = this.getGameById(gameId);
-	  if (!game) return;
+    const game = this.getGameById(gameId);
+    if (!game) return;
     game.addSpectator(user);
   }
 

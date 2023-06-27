@@ -30,7 +30,7 @@ export class Game implements IGame {
   constructor(private readonly prismaService: PrismaService) {
     this.status = gameStatus.WAITING;
     this.players = [];
-	this.spectators = [];
+    this.spectators = [];
     this.createdAt = new Date();
     this.canvas = {
       width: 1600,
@@ -73,8 +73,12 @@ export class Game implements IGame {
   }
 
   addSpectator(spectator: IUser): void {
-	if (this.players.find((p) => p.id === spectator.id) || this.spectators.find((s) => s.id === spectator.id)) return;
-	this.spectators.push(spectator);
+    if (
+      this.players.find((p) => p.id === spectator.id) ||
+      this.spectators.find((s) => s.id === spectator.id)
+    )
+      return;
+    this.spectators.push(spectator);
   }
 
   removeSpectator(spectator: IUser): void {
@@ -121,8 +125,8 @@ export class Game implements IGame {
         score: [this.score.left, this.score.right],
       },
     });
-	  winner.addExperience(10);
-	  loser.addExperience(-10);
+    winner.addExperience(10);
+    loser.addExperience(-10);
     this.players[0].socket.emit('finishGame', {
       isWinner: winner.id === this.players[0].id,
       score: [this.score.left, this.score.right],

@@ -38,7 +38,7 @@ import { ChatsModule } from './chat/chats.module';
     ScheduleModule.forRoot(),
     GatewayModule,
     PrismaModule,
-	ChatsModule,
+    ChatsModule,
   ],
   controllers: [HealthController],
   providers: [TestModule],

@@ -2,25 +2,25 @@ import { Socket } from 'socket.io';
 import { Status } from 'src/graphql';
 
 enum userChatRole {
-	ADMIN = "ADMIN",
-	CREATOR = "CREATOR",
-	MEMBER = "MEMBER",
+  ADMIN = 'ADMIN',
+  CREATOR = 'CREATOR',
+  MEMBER = 'MEMBER',
 }
 
 interface IChatUser extends IUser {
-	role: userChatRole;
+  role: userChatRole;
 }
 
 interface IMutedUser extends IChatUser {
-	mutedAt: Date;
-	mutedBy: IChatUser;
-	mutedUntil: Date;
+  mutedAt: Date;
+  mutedBy: IChatUser;
+  mutedUntil: Date;
 }
 
 interface IBannedUser extends IChatUser {
-	bannedAt: Date;
-	bannedBy: IChatUser;
-	bannedUntil: Date;
+  bannedAt: Date;
+  bannedBy: IChatUser;
+  bannedUntil: Date;
 }
 
 export interface IUser {

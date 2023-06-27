@@ -107,29 +107,26 @@ export class UsersResolver {
   }
 
   @Query('isFriend')
-  async isFriend(
-	@Args('id') id: string,
-	@Context() context,
-  ): Promise<boolean> {
-	  const { id: currentUserId } = context.req.user;
-	  const user = await this.PrismaService.user.findUnique({
-	    where: { id: currentUserId },
-			include: { friends: true, }
-	  });
-	  return user.friends.some((friend) => friend.id === id);
+  async isFriend(@Args('id') id: string, @Context() context): Promise<boolean> {
+    const { id: currentUserId } = context.req.user;
+    const user = await this.PrismaService.user.findUnique({
+      where: { id: currentUserId },
+      include: { friends: true },
+    });
+    return user.friends.some((friend) => friend.id === id);
   }
 
   @Query('isBlocked')
   async isBlocked(
-	@Args('id') id: string,
-	@Context() context,
+    @Args('id') id: string,
+    @Context() context,
   ): Promise<boolean> {
-	  const { id: currentUserId } = context.req.user;
-	  const user = await this.PrismaService.user.findUnique({
-	    where: { id: currentUserId },
-			include: { blocked: true, }
-	  });
-	  return user.blocked.some((friend) => friend.id === id);
+    const { id: currentUserId } = context.req.user;
+    const user = await this.PrismaService.user.findUnique({
+      where: { id: currentUserId },
+      include: { blocked: true },
+    });
+    return user.blocked.some((friend) => friend.id === id);
   }
 
   @Mutation('updateUser')
@@ -138,10 +135,15 @@ export class UsersResolver {
     @Context() context,
   ): Promise<User> {
     const { id } = context.req.user;
-	
-	function friendsToIds(friends: string[] = [], currentUserId: string): { id: string }[] {
-		return friends.filter((friendId) => friendId !== currentUserId).map((friendId) => ({ id: friendId }));
-	  }
+
+    function friendsToIds(
+      friends: string[] = [],
+      currentUserId: string,
+    ): { id: string }[] {
+      return friends
+        .filter((friendId) => friendId !== currentUserId)
+        .map((friendId) => ({ id: friendId }));
+    }
     const user = await this.PrismaService.user.update({
       where: { id },
       data: {
