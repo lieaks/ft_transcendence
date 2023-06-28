@@ -84,7 +84,7 @@ export class MyGateway implements OnModuleInit {
       user.status = Status.ONLINE;
       this.usersService.addUser(user);
       client.emit('logged', 'success');
-			this.onChannelAvailable({}, client);
+      this.onChannelAvailable({}, client);
     } catch (error) {
       console.error('login failure:', error);
       client.emit('logged', error);
@@ -126,7 +126,7 @@ export class MyGateway implements OnModuleInit {
     const { content, channelId } = body;
     const user = this.usersService.getUserBySocketId(client.id);
     if (!content || !channelId || !user) return;
-    let chatRoom = this.chatService.getChat(channelId);
+    const chatRoom = this.chatService.getChat(channelId);
     if (!chatRoom) return;
     chatRoom.addMessage({ sender: user, content, createdAt: new Date() });
   }
@@ -153,16 +153,14 @@ export class MyGateway implements OnModuleInit {
     if (!chat || !user) return;
     if (chat.type == chatType.PRIVATE) return;
     const password = body.password;
-	  const chatUser: IChatUser = {
-	  	...user,
-	  	role: userChatRole.MEMBER,
-	  };
-	  if (chat.type === chatType.PROTECTED) {
+    const chatUser: IChatUser = {
+      ...user,
+      role: userChatRole.MEMBER,
+    };
+    if (chat.type === chatType.PROTECTED) {
       if (!password) return;
       chat.addUser(chatUser, password);
-    }
-		else
-      chat.addUser(chatUser);
+    } else chat.addUser(chatUser);
   }
 
   @SubscribeMessage('channelAvailable')
@@ -232,7 +230,9 @@ export class MyGateway implements OnModuleInit {
     if (!playerID || !channelID || !action) return;
     const chat = this.chatService.getChat(channelID);
     if (!chat) return;
-    const sender = chat.getUserById(this.usersService.getUserBySocketId(client.id).id);
+    const sender = chat.getUserById(
+      this.usersService.getUserBySocketId(client.id).id,
+    );
     const player = chat.getUserById(playerID);
     if (!sender || !player) return;
     if ((action == 'mute' || action == 'ban') && !time) return;
@@ -263,23 +263,31 @@ export class MyGateway implements OnModuleInit {
   }
 
   @SubscribeMessage('changePassword')
-  onChangePassword(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
+  onChangePassword(
+    @MessageBody() body: any,
+    @ConnectedSocket() client: Socket,
+  ) {
     const password = body.password;
     const channelID = body.id;
-    if ((!password && password!=="") || !channelID) return;
+    if ((!password && password !== '') || !channelID) return;
     const chat = this.chatService.getChat(body.id);
     if (!chat) return;
-    const user = chat.getUserById(this.usersService.getUserBySocketId(client.id).id);
+    const user = chat.getUserById(
+      this.usersService.getUserBySocketId(client.id).id,
+    );
     if (!user) return;
     if (chat.changePassword(user, password)) {
-			this.server.emit('channelInfo', {channelId: chat.id, type: chat.type});
-		} else {
-			client.emit('permissionDenied', {});
-		}
+      this.server.emit('channelInfo', { channelId: chat.id, type: chat.type });
+    } else {
+      client.emit('permissionDenied', {});
+    }
   }
 
   @SubscribeMessage('createPrivateChat')
-  onCreatePrivateChannel(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
+  onCreatePrivateChannel(
+    @MessageBody() body: any,
+    @ConnectedSocket() client: Socket,
+  ) {
     const user = this.usersService.getUserBySocketId(client.id);
     const invited = this.usersService.getUser(body.id);
     if (!user || !invited) return;
@@ -290,10 +298,11 @@ export class MyGateway implements OnModuleInit {
   onDeleteChannel(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
     const chat = this.chatService.getChat(body.id);
     if (!chat) return;
-    const user = chat.getUserById(this.usersService.getUserBySocketId(client.id).id);
+    const user = chat.getUserById(
+      this.usersService.getUserBySocketId(client.id).id,
+    );
     if (!user) return;
-    if (!chat.deleteChannel(user))
-      client.emit('permissionDenied', {});
+    if (!chat.deleteChannel(user)) client.emit('permissionDenied', {});
     else {
       this.server.emit('channelDeleted', {
         channelId: chat.id,
@@ -305,7 +314,9 @@ export class MyGateway implements OnModuleInit {
   onLeaveChannel(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
     const chat = this.chatService.getChat(body.id);
     if (!chat) return;
-    const user = chat.getUserById(this.usersService.getUserBySocketId(client.id).id);
+    const user = chat.getUserById(
+      this.usersService.getUserBySocketId(client.id).id,
+    );
     if (!user) return;
     if (chat.removeUser(user)) {
       this.server.emit('channelDeleted', {

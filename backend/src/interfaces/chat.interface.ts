@@ -20,7 +20,7 @@ export interface IMessage {
 
 export interface IChat {
   id: string;
-	creatorId: string
+  creatorId: string;
   name: string;
   type: chatType;
   password?: string;

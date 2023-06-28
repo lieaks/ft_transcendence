@@ -2,7 +2,7 @@ import { Socket } from 'socket.io';
 import { Status } from 'src/graphql';
 
 enum userChatRole {
-	CREATOR,
+  CREATOR,
   ADMIN,
   MEMBER,
 }

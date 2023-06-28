@@ -16,12 +16,12 @@ user?.socket.on('channelAvailable', (newChannels: IChannel[]) => {
 })
 user?.socket.on('newChannel', (newChannel: IChannel) => {
   if (!newChannel) return
-  availableChannels.value.push(newChannel)
-})
-
-user?.socket.on('newPrivChannel', (newChannel: IChannel) => {
-  if (!newChannel) return
-  joinedChannels.value.push(newChannel)
+	if (newChannel.type === chatType.PRIVATE) {
+		newChannel.name = newChannel.users?.find((u) => u.id !== user.id)?.name ?? newChannel.name
+		joinedChannels.value.push(newChannel)
+	} else {
+		availableChannels.value.push(newChannel)
+	}
 })
 
 user?.socket.on('userJoined', (newUser: { channelId: string; user: IUser }) => {

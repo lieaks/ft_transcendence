@@ -12,6 +12,13 @@ function getShortChannels(channels: IChat[]) {
     };
   });
 }
+function getShortUser(user: IChatUser) {
+	return {
+		id: user.id,
+		name: user.name,
+		role: user.role,
+	};
+}
 
 @Injectable()
 export class ChatService {
@@ -38,36 +45,35 @@ export class ChatService {
   }
 
   createPrivateChat(user1: IUser, user2: IUser): IChat {
-	  const chat = new Chat(this.generateRandomId(), `Private chat between ${user1.name} and ${user2.name}`, chatType.PRIVATE);
-	  const userChat1: IChatUser = {
-	  	...user1,
-	  	role: userChatRole.MEMBER,
-	  };
-	  const userChat2: IChatUser = {
-	  	...user2,
-	  	role: userChatRole.MEMBER,
-	  };
+    const chat = new Chat(
+      this.generateRandomId(),
+      `${user1.name} <-> ${user2.name}`,
+      chatType.PRIVATE,
+    );
+    const userChat1: IChatUser = {
+      ...user1,
+      role: userChatRole.MEMBER,
+    };
+    const userChat2: IChatUser = {
+      ...user2,
+      role: userChatRole.MEMBER,
+    };
     chat.users.push(userChat1);
     chat.users.push(userChat2);
-    chat.emitToUsers('userJoined', {
-      channelId: chat.id,
-      user: { id: userChat1.id, name: userChat1.name },
-    });
-    chat.emitToUsers('userJoined', {
-      channelId: chat.id,
-      user: { id: userChat2.id, name: userChat2.name },
-    });
-    chat.emitToUsers('newPrivChannel', getShortChannels([chat])[0]);
-	  this.chats.push(chat);
-	  return chat;
-	}
+		chat.emitToUsers('newChannel', {
+			...getShortChannels([chat])[0],
+			users: [getShortUser(userChat1), getShortUser(userChat2)]
+		});
+    this.chats.push(chat);
+    return chat;
+  }
 
   removeChat(id: string): void {
     this.chats = this.chats.filter((c) => c.id !== id);
   }
 
   removeUserFromChannels(user: IUser): IChat[] {
-    let emptyChannels: IChat[] = [];
+    const emptyChannels: IChat[] = [];
 
     for (const chat of this.chats) {
       chat.removeUser(user);
