@@ -91,7 +91,10 @@ onResult((res) => {
       )}`,
       id: game.loser.id
     },
-    score: game.winner.id === userRes.id ? game.score.slice().sort((a: number, b: number) => b - a) : game.score.slice().sort((a: number, b: number) => a - b)
+    score:
+      game.winner.id === userRes.id
+        ? game.score.slice().sort((a: number, b: number) => b - a)
+        : game.score.slice().sort((a: number, b: number) => a - b)
   }))
 })
 
@@ -99,8 +102,8 @@ function redirectToUserAccount(userId: string) {
   router.push(`/profil/${userId}`)
 }
 function logout() {
-	localStorage.removeItem('jwtToken')
-	window.location.href = '/'
+  localStorage.removeItem('jwtToken')
+  window.location.href = '/'
 }
 </script>
 
@@ -110,12 +113,12 @@ function logout() {
       <img class="w-full md:h-full md:w-auto" :src="user.avatar" alt="Profile picture" />
     </figure>
     <div class="card-body">
-		  <div class="flex justify-between items-center">
+      <div class="flex justify-between items-center">
         <h2 class="card-title mb-4 font-bold text-2xl">{{ user.name }}</h2>
-				<div class="inline-block">
-					<button class="btn m-2 btn-error" @click="logout">logout</button>
-					<EditProfilComponent/>
-				</div>
+        <div class="inline-block">
+          <button class="btn m-2 btn-error" @click="logout">logout</button>
+          <EditProfilComponent />
+        </div>
       </div>
       <p>Points: {{ user.points }}</p>
       <p>Rank: {{ user.rank }}</p>
@@ -189,7 +192,11 @@ function logout() {
                 >
                   <div class="flex items-center justify-center">
                     <div class="flex-shrink-0 w-10 h-10 hidden sm:table-cell">
-                      <img class="w-full h-full rounded-full" :src="game.winner.id == user.id ? game.loser.avatar : game.winner.avatar" alt="" />
+                      <img
+                        class="w-full h-full rounded-full"
+                        :src="game.winner.id == user.id ? game.loser.avatar : game.winner.avatar"
+                        alt=""
+                      />
                     </div>
                     <div class="ml-3">
                       <a

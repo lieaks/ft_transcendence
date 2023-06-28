@@ -105,7 +105,10 @@ onUserResult((res) => {
       )}`,
       id: game.loser.id
     },
-    score: game.winner.id === user.value.id ? game.score.slice().sort((a: number, b: number) => b - a) : game.score.slice().sort((a: number, b: number) => a - b)
+    score:
+      game.winner.id === user.value.id
+        ? game.score.slice().sort((a: number, b: number) => b - a)
+        : game.score.slice().sort((a: number, b: number) => a - b)
   }))
 })
 
@@ -324,7 +327,11 @@ function createPrivateChat(userId: string) {
                 >
                   <div class="flex items-center justify-center">
                     <div class="flex-shrink-0 w-10 h-10 hidden sm:table-cell">
-                      <img class="w-full h-full rounded-full" :src="user.id == game.winner.id ? game.loser.avatar : game.winner.avatar" alt="" />
+                      <img
+                        class="w-full h-full rounded-full"
+                        :src="user.id == game.winner.id ? game.loser.avatar : game.winner.avatar"
+                        alt=""
+                      />
                     </div>
                     <div class="ml-3">
                       <a

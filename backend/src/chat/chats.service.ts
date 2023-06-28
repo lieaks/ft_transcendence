@@ -34,7 +34,6 @@ export class ChatService {
     if (this.getChatByName(name)) return null;
     const chat = new Chat(this.generateRandomId(), name, type);
     this.chats.push(chat);
-    chat.addUser;
     return chat;
   }
 

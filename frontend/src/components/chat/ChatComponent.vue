@@ -18,7 +18,8 @@ const props = defineProps({
 
 const isAdmin = computed(() => {
   return props.channel.users?.some(
-    (user) => user.id === userStore.id && (user.role === chatRole.ADMIN || user.role === chatRole.CREATOR)
+    (user) =>
+      user.id === userStore.id && (user.role === chatRole.ADMIN || user.role === chatRole.CREATOR)
   )
 })
 const isCreator = computed(() => {
@@ -45,11 +46,12 @@ function redirectToUserAccount(userId: string) {
 }
 
 function updateUser(userId: string, action: string, time?: number) {
-  userStore?.socket.emit('updateUser', { id: userId, channelID: props.channel.id, time: time, action: action })
-}
-
-function showModal() {
-  modal.value?.showModal()
+  userStore?.socket.emit('updateUser', {
+    id: userId,
+    channelID: props.channel.id,
+    time: time,
+    action: action
+  })
 }
 
 function deleteChannel() {
@@ -85,27 +87,45 @@ function submit() {
           v-model="password"
         />
       </div>
-      <input type="submit" value="Submit" class="btn mt-4" />
+      <div class="inline-flex justify-between w-full p-2 mt-2">
+        <input type="submit" value="Submit" class="btn btn-primary" />
+        <button class="btn btn-warning" v-if="isCreator" @click.prevent="deleteChannel">
+          delete channel
+        </button>
+      </div>
     </form>
     <form method="dialog" class="modal-backdrop">
       <button>close</button>
     </form>
   </dialog>
   <div class="inline-flex w-full h-full">
-		<div class="card bg-neutral items-center shadow-xl p-3 my-2 w-1/2 h-full">
-      <h2 class="card-title">{{ channel.name }}</h2>
-      <a class="text-white hover:underline" v-if="isCreator" @click.prevent="deleteChannel">delete channel</a>
-      <a class="text-white hover:underline" @click.prevent="leaveChannel">leave channel</a>
-      <a class="text-white hover:underline" @click.prevent="showModal">Channel settings</a>
+    <div class="card bg-neutral items-center shadow-xl p-3 my-2 w-1/2 h-full">
+      <div class="inline-flex justify-center items-center w-full">
+        <span class="mx-2 truncate card-title">{{ channel.name }}</span>
+					<button class="btn bg-neutral-800 btn-ghost btn-xs mr-1" @click.prevent="modal?.showModal()">⚙️</button>
+					<button class="btn btn-error btn-xs" @click.prevent="leaveChannel">leave</button>
+      </div>
       <ul class="card bg-neutral-800 shadow-xl p-3 my-2 w-full divide-y divide-secondary">
         <li v-for="user in channel.users" :key="user.id">
-          <div v-if="isAdmin && user.id !== userStore.id" class="w-auto inline-block">
+          <div
+            v-if="isAdmin && user.id !== userStore.id && user.role !== chatRole.CREATOR"
+            class="w-auto inline-block"
+          >
             <a class="btn btn-xs btn-error" @click.prevent="updateUser(user.id, 'kick')">kick</a>
             <a class="btn btn-xs btn-error" @click.prevent="updateUser(user.id, 'ban', 10)">ban</a>
-            <a class="btn btn-xs btn-error" @click.prevent="updateUser(user.id, 'mute', 10)">mute</a>
-            <a class="btn btn-xs btn-error" v-if="isCreator" @click.prevent="updateUser(user.id, 'op')">op</a>
+            <a class="btn btn-xs btn-error" @click.prevent="updateUser(user.id, 'mute', 10)"
+              >mute</a
+            >
+            <a
+              class="btn btn-xs btn-error"
+              v-if="isCreator"
+              @click.prevent="updateUser(user.id, 'op')"
+              >op</a
+            >
           </div>
-          {{ user.name }}
+          <span class="truncate m-1 first:m-0">
+            {{ user.name }}
+          </span>
         </li>
       </ul>
     </div>

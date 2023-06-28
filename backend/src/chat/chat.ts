@@ -17,8 +17,10 @@ export class Chat implements IChat {
   users: IChatUser[];
   mutedUsers: IMutedUser[];
   bannedUsers: IBannedUser[];
+	creatorId: string;
 
-  constructor(id: string, name: string, type: chatType) {
+  constructor(id: string, name: string, type: chatType, creator?: IChatUser) {
+		if (creator) this.creatorId = creator.id;
     this.id = id;
     this.name = name;
     this.type = type;
@@ -187,6 +189,8 @@ export class Chat implements IChat {
       }
       else this.bannedUsers = this.bannedUsers.filter((u) => u.id !== user.id);
     }
+		this.creatorId ??= user.id;
+		if (this.creatorId === user.id) user.role = userChatRole.CREATOR;
     this.users.push(user);
     this.emitToUsers('userJoined', {
       channelId: this.id,
@@ -218,9 +222,9 @@ export class Chat implements IChat {
     return this.users.find((u) => u.id === id);
   }
 
-  sendInfoToEveryone(): void {
+  sendInfoToEveryone(sendMessages = true, sendUsers = true): void {
     for (const user of this.users) {
-      this.sendChannelInfo(user);
+      this.sendChannelInfo(user, sendMessages, sendUsers);
     }
   }
 
@@ -266,7 +270,6 @@ export class Chat implements IChat {
     }
     if (this.type === chatType.PROTECTED)
       this.password = password;
-    this.sendInfoToEveryone();
     return true;
   }
 

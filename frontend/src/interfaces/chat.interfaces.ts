@@ -1,19 +1,19 @@
 export enum chatType {
   PUBLIC,
   PROTECTED,
-  PRIVATE,
+  PRIVATE
 }
 export enum chatRole {
-	CREATOR,
-	ADMIN,
-	MEMBER,
+  CREATOR,
+  ADMIN,
+  MEMBER
 }
 export interface IUser {
   id: string
   name: string
-	role: chatRole
-	blocked: boolean
-	friend: boolean
+  role: chatRole
+  blocked: boolean
+  friend: boolean
 }
 export interface IMessage {
   sender: IUser

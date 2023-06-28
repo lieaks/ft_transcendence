@@ -84,6 +84,7 @@ export class MyGateway implements OnModuleInit {
       user.status = Status.ONLINE;
       this.usersService.addUser(user);
       client.emit('logged', 'success');
+			this.onChannelAvailable({}, client);
     } catch (error) {
       console.error('login failure:', error);
       client.emit('logged', error);
@@ -179,7 +180,7 @@ export class MyGateway implements OnModuleInit {
         }
       }
     }
-    this.server.emit('channelAvailable', getShortChannels(listChannel));
+    client.emit('channelAvailable', getShortChannels(listChannel));
   }
 
   @SubscribeMessage('inviteToGame')
@@ -270,8 +271,11 @@ export class MyGateway implements OnModuleInit {
     if (!chat) return;
     const user = chat.getUserById(this.usersService.getUserBySocketId(client.id).id);
     if (!user) return;
-    if (!chat.changePassword(user, password))
-      client.emit('permissionDenied', {});
+    if (chat.changePassword(user, password)) {
+			this.server.emit('channelInfo', {channelId: chat.id, type: chat.type});
+		} else {
+			client.emit('permissionDenied', {});
+		}
   }
 
   @SubscribeMessage('createPrivateChat')

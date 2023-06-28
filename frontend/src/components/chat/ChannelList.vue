@@ -36,23 +36,29 @@ function showModal(channel: IChannel) {
 function submit() {
   const channel = currentChannel.value
   if (!channel) return
-  const input: any = {};
+  const input: any = {}
   if (password !== '') {
-    input.password = password;
+    input.password = password
   } else {
-    input.password = ""
+    input.password = ''
   }
   user?.socket.emit('joinChannel', { ...channel, ...input })
   modal.value?.close()
 }
-
 </script>
 <template>
   <dialog id="my_modal_2" class="modal" ref="modal">
     <form method="dialog" class="modal-box" @submit.prevent="submit">
       <div class="flex flex-col items-center justify-center">
         <label for="password" class="mb-2">Password:</label>
-        <input type="password" id="password" name="password" v-model="password" />
+        <input
+          type="password"
+          id="password"
+          name="password"
+          class="input input-primary"
+          placeholder="password"
+          v-model="password"
+        />
       </div>
       <input type="submit" value="Submit" class="btn mt-4" />
     </form>
@@ -62,14 +68,14 @@ function submit() {
   </dialog>
   <ul>
     <li v-for="channel in availableChannels" :key="channel.id" class="inline">
-			<div class=" mr-2 indicator">
-				<span v-if="channel.type == chatType.PROTECTED" class="indicator-item">🔐</span>
-				<span v-else-if="channel.type == chatType.PRIVATE" class="indicator-item">🧑‍🤝‍🧑</span>
-				<span v-else class="indicator-item translate-x-[0.2rem] translate-y-[-0.6rem]">🌎</span>
-				<button class="btn btn-sm btn-primary normal-case" @click="joinChannel(channel)">
-					{{ channel.name }}
-				</button>
-			</div>
+      <div class="mr-2 indicator">
+        <span v-if="channel.type == chatType.PROTECTED" class="indicator-item">🔐</span>
+        <span v-else-if="channel.type == chatType.PRIVATE" class="indicator-item">🧑‍🤝‍🧑</span>
+        <span v-else class="indicator-item translate-x-[0.2rem] translate-y-[-0.6rem]">🌎</span>
+        <button class="btn btn-sm btn-primary normal-case" @click="joinChannel(channel)">
+          {{ channel.name }}
+        </button>
+      </div>
     </li>
     <li class="inline">
       <input
