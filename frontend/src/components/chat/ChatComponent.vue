@@ -2,7 +2,7 @@
 import { type IChannel, type IUser, type IMessage, chatRole } from '@/interfaces/chat.interfaces'
 import router from '@/router'
 import { useUserStore } from '@/stores/userStore'
-import { ref, type PropType, type Ref, computed } from 'vue'
+import { ref, type PropType, type Ref, computed, watch, onMounted } from 'vue'
 
 const userStore = useUserStore()
 const newMessage = ref('')
@@ -38,13 +38,6 @@ function sendMessage() {
   newMessage.value = ''
 }
 
-function redirectToUserAccount(userId: string) {
-  router.push({
-    name: 'profil',
-    params: { id: userId }
-  })
-}
-
 function updateUser(userId: string, action: string, time?: number) {
   userStore?.socket.emit('updateUser', {
     id: userId,
@@ -72,6 +65,15 @@ function submit() {
   userStore?.socket.emit('changePassword', { id: props.channel.id, password: password })
   modal.value?.close()
 }
+
+watch(props, () => {
+	const chat = document.getElementById('chat')
+	if (chat) {
+		setTimeout(() => {
+			chat.scrollTop = chat.scrollHeight
+		}, 100);
+	}
+}, { immediate: true })
 </script>
 
 <template>
@@ -98,8 +100,8 @@ function submit() {
       <button>close</button>
     </form>
   </dialog>
-  <div class="inline-flex w-full h-full">
-    <div class="card bg-neutral items-center shadow-xl p-3 my-2 w-1/2 h-full">
+  <div class="inline-flex w-full h-full my-2">
+    <div class="card bg-neutral items-center shadow-xl p-3 w-1/2 h-full">
       <div class="inline-flex justify-center items-center w-full">
         <span class="mx-2 truncate card-title">{{ channel.name }}</span>
 					<button v-if="isAdmin" class="btn bg-neutral-800 btn-ghost btn-xs mr-1" @click.prevent="modal?.showModal()">⚙️</button>
@@ -129,19 +131,23 @@ function submit() {
               >deop</a
             >
           </div>
-          <span class="truncate m-1 first:m-0">
+					<a class="link truncate m-1 first:m-0" @click.prevent="router.push(`/profil/${user.id}`)">
             {{ user.name }}
-          </span>
+          </a>
         </li>
       </ul>
     </div>
-    <div>
-      <ul>
+		<div class="ml-4 shadow-xl bg-neutral rounded-box p-4 h-[60vh]">
+			<ul class="overflow-scroll h-5/6" id="chat">
         <li v-for="message in messages">
-          <a class="link" @click.prevent="redirectToUserAccount(message.sender.id)">
-            {{ message.sender.name }}
-          </a>
-          : {{ message.content }}
+					<div class="chat" :class="[ message.sender.id === userStore.id ? 'chat-end' : 'chat-start' ]">
+						<!-- <a class="link" @click.prevent="router.push(`/profil/${message.sender.id}`)"> -->
+						<!-- 	{{ message.sender.name }} -->
+						<!-- </a> -->
+						<div class="chat-bubble chat-bubble-secondary">
+							{{ message.content }}
+						</div>
+					</div>
         </li>
       </ul>
       <div class="inline">

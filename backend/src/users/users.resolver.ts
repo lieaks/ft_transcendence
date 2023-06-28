@@ -160,6 +160,8 @@ export class UsersResolver {
       },
       include,
     });
+		const userservice = this.UsersService.getUser(id)
+		if (userservice) { userservice.name = input.name }
     return user ? this.getUserWithExtraValues(user) : null;
   }
 
