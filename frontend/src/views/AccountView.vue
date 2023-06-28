@@ -101,7 +101,6 @@ function redirectToUserAccount(userId: string) {
 </script>
 
 <template>
-  <EditProfilComponent v-if="user.editing" />
   <div class="card md:card-side bg-neutral shadow-xl md:w-3/4 xl:w-/ w-1/2 mx-auto">
     <figure>
       <img class="w-full md:h-full md:w-auto" :src="user.avatar" alt="Profile picture" />
@@ -109,14 +108,8 @@ function redirectToUserAccount(userId: string) {
     <div class="card-body">
 		  <div class="flex justify-between items-center">
         <h2 class="card-title mb-4 font-bold text-2xl">{{ user.name }}</h2>
-        <button
-          class="bg-[#564F6F] hover:bg-[#3E3756] text-white font-bold py-2 px-4 rounded"
-          @click="user.editing = true"
-        >
-          Edit
-        </button>
+        <EditProfilComponent/>
       </div>
-      <h2 class="card-title mb-2 font-bold text-2xl">{{ user.name }}</h2>
       <p>Points: {{ user.points }}</p>
       <p>Rank: {{ user.rank }}</p>
       <p>Victoires: {{ user.nb_win }} | Defaites: {{ user.nb_loose }}</p>
