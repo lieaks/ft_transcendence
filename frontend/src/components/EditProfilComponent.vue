@@ -12,6 +12,7 @@
           class="m-2 file-input file-input-bordered file-input-primary w-full max-w-xs"
           v-on:change="updateAvatar"
         />
+				<span class="text-red-500">{{error}}</span>
       </div>
       <div class="flex flex-col items-center justify-center">
         <label for="name" class="mb-2">New name:</label>
@@ -37,11 +38,18 @@
 import gql from 'graphql-tag'
 import { useMutation } from '@vue/apollo-composable'
 import { ref, type Ref } from 'vue'
+import { useUserStore } from '@/stores/userStore';
+import * as Notifications from '@/elements/Notifications'
 
-const { mutate } = useMutation(
+const notifs = Notifications.useNotifications()
+
+const user = useUserStore()
+
+const { mutate, onDone, onError } = useMutation(
   gql`
     mutation UpdateUser($input: UpdateUserInput!) {
       updateUser(input: $input) {
+				id
         name
         avatar
       }
@@ -51,6 +59,7 @@ const { mutate } = useMutation(
 
 let name = ''
 let avatar: string
+const error = ref('')
 const modal: Ref<HTMLDialogElement | null> = ref(null)
 
 function updateAvatar(event: any) {
@@ -58,8 +67,17 @@ function updateAvatar(event: any) {
   const reader = new FileReader()
   reader.readAsArrayBuffer(file)
   reader.onload = () => {
-    const buffer = new Uint8Array(reader.result as ArrayBuffer)
-    avatar = btoa(String.fromCharCode.apply(null, Array.from(buffer)))
+		try {
+			error.value = ''
+			const buffer = new Uint8Array(reader.result as ArrayBuffer)
+			avatar = btoa(String.fromCharCode.apply(null, Array.from(buffer)))
+		} catch (e){
+			if (e instanceof Error && e.message == 'too many arguments provided for a function call') {
+				error.value = 'File too big'
+			} else {
+				error.value = e as any
+			}
+		}
   }
 }
 
@@ -79,6 +97,17 @@ function submit() {
     input: input
   })
   modal.value?.close()
-  window.location.reload()
 }
+
+onDone((res) => {
+	if (res.data.updateUser) {
+		const data = res.data.updateUser
+		user.name = data.name
+    const base64 = btoa(String.fromCharCode(...new Uint8Array(data.avatar.data)))
+    user.avatar = `data:image/png;base64,${base64}`
+	}
+})
+onError((err) => {
+	notifs.notifyError(err.name + ' ' + err.message)
+})
 </script>

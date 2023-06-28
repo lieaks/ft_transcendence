@@ -36,7 +36,7 @@ export const useUserStore = defineStore('user', () => {
   const gameId = ref('')
   const inQueue = ref(false)
 
-  const { onResult, onError, loading } = useQuery(
+  const { onResult, onError, loading, refetch } = useQuery(
     gql`
       query me {
         me {
@@ -171,6 +171,7 @@ export const useUserStore = defineStore('user', () => {
     setName,
     setAvatar,
     setGameId,
-    setInQueue
+    setInQueue,
+		refetch
   }
 })

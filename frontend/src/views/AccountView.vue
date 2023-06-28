@@ -5,6 +5,7 @@ import { ref } from 'vue'
 import router from '@/router'
 import FollowersComponent from '@/components/FollowersComponent.vue'
 import EditProfilComponent from '@/components/EditProfilComponent.vue'
+import { useUserStore } from '@/stores/userStore'
 
 interface User {
   name: string
@@ -12,11 +13,10 @@ interface User {
   avatar: string
 }
 
+const userStore = useUserStore()
+
 const user = ref({
-  name: '',
-  id: '',
   rank: 0,
-  avatar: '',
   points: 0,
   nb_win: 0,
   nb_loose: 0,
@@ -32,10 +32,8 @@ const { onResult } = useQuery(
   gql`
     query user {
       me {
-        avatar
+				id
         rank
-        name
-        id
         experience
         gamesWon {
           id
@@ -68,11 +66,6 @@ const { onResult } = useQuery(
 onResult((res) => {
   const userRes = res.data?.me
   if (!userRes) return
-  const base64 = btoa(String.fromCharCode(...new Uint8Array(userRes.avatar.data)))
-  const avatar = `data:image/png;base64,${base64}`
-  user.value.id = userRes.id
-  user.value.name = userRes.name
-  user.value.avatar = avatar
   user.value.points = userRes.experience
   user.value.nb_win = userRes.gamesWon.length
   user.value.nb_loose = userRes.gamesLost.length
@@ -110,11 +103,11 @@ function logout() {
 <template>
   <div class="card md:card-side bg-neutral shadow-xl md:w-3/4 xl:w-/ w-1/2 mx-auto">
     <figure>
-      <img class="w-full md:h-full md:w-auto" :src="user.avatar" alt="Profile picture" />
+      <img class="w-full md:h-full md:w-auto" :src="userStore.avatar" alt="Profile picture" />
     </figure>
     <div class="card-body">
       <div class="flex justify-between items-center">
-        <h2 class="card-title mb-4 font-bold text-2xl">{{ user.name }}</h2>
+        <h2 class="card-title mb-4 font-bold text-2xl">{{ userStore.name }}</h2>
         <div class="inline-block">
           <button class="btn m-2 btn-error" @click="logout">logout</button>
           <EditProfilComponent />
@@ -142,7 +135,7 @@ function logout() {
                 <th
                   class="px-5 text-white border-b-2 border-[#564F6F] text-center text-xs font-semibold uppercase tracking-wider"
                 >
-                  {{ user.name }}
+                  {{ userStore.name }}
                 </th>
                 <th
                   class="px-5 py-3 border-b-2 border-[#564F6F] text-center text-xs font-semibold text-white uppercase tracking-wider"
@@ -161,18 +154,18 @@ function logout() {
                 <td
                   class="px-5 py-5 border-b text-sm w-2/5"
                   :class="
-                    game.winner.name != user.name
+                    game.winner.name != userStore.name
                       ? 'border-red-400 bg-red-300'
                       : 'border-green-400 bg-green-300'
                   "
                 >
                   <div class="flex items-center justify-center">
                     <div class="flex-shrink-0 w-10 h-10 hidden sm:table-cell">
-                      <img class="v-w-full h-full rounded-full" :src="user.avatar" alt="" />
+                      <img class="v-w-full h-full rounded-full" :src="userStore.avatar" alt="" />
                     </div>
                     <div class="ml-3">
                       <p class="font-semibold text-gray-900 whitespace-no-wrap text-center">
-                        {{ user.name }}
+                        {{ userStore.name }}
                       </p>
                     </div>
                   </div>
@@ -185,7 +178,7 @@ function logout() {
                 <td
                   class="px-5 py-5 border-b text-sm w-2/5"
                   :class="
-                    game.winner.name == user.name
+                    game.winner.name == userStore.name
                       ? 'border-red-400 bg-red-300'
                       : 'border-green-400 bg-green-300'
                   "
@@ -194,7 +187,7 @@ function logout() {
                     <div class="flex-shrink-0 w-10 h-10 hidden sm:table-cell">
                       <img
                         class="w-full h-full rounded-full"
-                        :src="game.winner.id == user.id ? game.loser.avatar : game.winner.avatar"
+                        :src="game.winner.id == userStore.id ? game.loser.avatar : game.winner.avatar"
                         alt=""
                       />
                     </div>
@@ -204,11 +197,11 @@ function logout() {
                         class="font-semibold text-gray-900 hover:underline hover:text-gray-700"
                         @click.prevent="
                           redirectToUserAccount(
-                            user.id == game.winner.id ? game.loser.id : game.winner.id
+                            userStore.id == game.winner.id ? game.loser.id : game.winner.id
                           )
                         "
                       >
-                        {{ user.name == game.winner.name ? game.loser.name : game.winner.name }}
+                        {{ userStore.name == game.winner.name ? game.loser.name : game.winner.name }}
                       </a>
                     </div>
                   </div>
