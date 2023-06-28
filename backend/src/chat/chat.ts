@@ -195,7 +195,7 @@ export class Chat implements IChat {
     this.password = password;
   }
 
-  removeUser(user: IChatUser): void {
+  removeUser(user: IChatUser): boolean {
     if (this.users.find((u) => u.id === user.id)) {
       const userKick = { id: user.id, name: user.name };
       this.emitToUsers('userLeft', {
@@ -203,7 +203,9 @@ export class Chat implements IChat {
         user: userKick,
       });
       this.users = this.users.filter((u) => u.id !== user.id);
+      if (this.users.length === 0) return true;
     }
+    return false;
   }
 
   getUserById(id: string): IChatUser | undefined {

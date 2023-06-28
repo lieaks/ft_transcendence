@@ -56,6 +56,10 @@ function deleteChannel() {
   userStore?.socket.emit('deleteChannel', { id: props.channel.id })
 }
 
+function leaveChannel() {
+  userStore?.socket.emit('leaveChannel', { id: props.channel.id })
+}
+
 function submit() {
   const input: any = {}
   if (password !== '') {
@@ -91,6 +95,7 @@ function submit() {
 		<div class="card bg-neutral items-center shadow-xl p-3 my-2 w-1/2 h-full">
       <h2 class="card-title">{{ channel.name }}</h2>
       <a class="text-white hover:underline" v-if="isCreator" @click.prevent="deleteChannel">delete channel</a>
+      <a class="text-white hover:underline" @click.prevent="leaveChannel">leave channel</a>
       <a class="text-white hover:underline" @click.prevent="showModal">Channel settings</a>
       <ul class="card bg-neutral-800 shadow-xl p-3 my-2 w-full divide-y divide-secondary">
         <li v-for="user in channel.users" :key="user.id">

@@ -296,4 +296,17 @@ export class MyGateway implements OnModuleInit {
       });
     }
   }
+
+  @SubscribeMessage('leaveChannel')
+  onLeaveChannel(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
+    const chat = this.chatService.getChat(body.id);
+    if (!chat) return;
+    const user = chat.getUserById(this.usersService.getUserBySocketId(client.id).id);
+    if (!user) return;
+    if (chat.removeUser(user)) {
+      this.server.emit('channelDeleted', {
+        channelId: chat.id,
+      });
+    }
+  }
 }

@@ -33,7 +33,7 @@ export interface IChat {
   addMessage(message: IMessage): void;
   addUser(user: IChatUser, password?: string): void;
   changePassword(user: IChatUser, password: string): boolean;
-  removeUser(user: IUser): void;
+  removeUser(user: IUser): boolean;
   emitToUsers(event: string, data: any): void;
   kickUser(user: IChatUser, kickedBy: IChatUser): boolean;
   banUser(user: IChatUser, bannedBy: IChatUser, seconds: string): boolean;
