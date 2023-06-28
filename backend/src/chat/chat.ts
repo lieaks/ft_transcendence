@@ -178,7 +178,13 @@ export class Chat implements IChat {
     if (this.users.find((u) => u.id === user.id)) return;
     const bannedUser = this.bannedUsers.find((u) => u.id === user.id);
     if (bannedUser) {
-      if (bannedUser.bannedUntil > new Date()) return;
+      if (bannedUser.bannedUntil > new Date())
+      {
+        bannedUser.socket.emit('errorNotification', {
+          message: `Banned, ${Math.floor((bannedUser.bannedUntil.getTime() - new Date().getTime()) / 1000)} seconds left`,
+        });
+        return;
+      }
       else this.bannedUsers = this.bannedUsers.filter((u) => u.id !== user.id);
     }
     this.users.push(user);

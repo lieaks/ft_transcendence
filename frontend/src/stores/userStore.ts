@@ -115,6 +115,10 @@ export const useUserStore = defineStore('user', () => {
     notifs.notifyPermissionDenied()
   })
 
+  socket?.on('errorNotification', (data) => {
+    notifs.notifyError(data.message)
+  })
+
   socket?.on('joinQueue', () => setInQueue(true))
 
   socket?.on('startGame', (data) => {

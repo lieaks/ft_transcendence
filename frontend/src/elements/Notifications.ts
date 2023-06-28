@@ -61,12 +61,19 @@ export const useNotifications = () => {
     })
   }
 
+  const notifyError = (message: string) => {
+    notify(message, 'error', {
+      icon: '🚫'
+    })
+  }
+
   return {
     notifyGameInvite,
     notifyFollow,
     notifyUnfollow,
     notifyBlock,
     notifyUnblock,
-    notifyPermissionDenied
+    notifyPermissionDenied,
+    notifyError
   }
 }
