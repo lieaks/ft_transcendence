@@ -141,10 +141,10 @@ watch(props, () => {
 			<ul class="overflow-scroll h-5/6" id="chat">
         <li v-for="message in messages">
 					<div class="chat" :class="[ message.sender.id === userStore.id ? 'chat-end' : 'chat-start' ]">
-						<!-- <a class="link" @click.prevent="router.push(`/profil/${message.sender.id}`)"> -->
-						<!-- 	{{ message.sender.name }} -->
-						<!-- </a> -->
-						<div class="chat-bubble chat-bubble-secondary">
+						<a class="link chat-header" @click.prevent="router.push(`/profil/${message.sender.id}`)">
+							{{ message.sender.name }}
+						</a>
+						<div class="chat-bubble chat-bubble-secondary scale-90 text-lg">
 							{{ message.content }}
 						</div>
 					</div>
