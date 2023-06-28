@@ -307,7 +307,13 @@ export class MyGateway implements OnModuleInit {
     if (!user) return;
     if (!chat.changePassword(user, password))
       client.emit('permissionDenied', {});
-    else
-      console.log('Password changed');
+  }
+
+  @SubscribeMessage('createPrivateChat')
+  onCreatePrivateChannel(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
+    const user = this.usersService.getUserBySocketId(client.id);
+    const invited = this.usersService.getUser(body.id);
+    if (!user || !invited) return;
+    this.chatService.createPrivateChat(user, invited);
   }
 }

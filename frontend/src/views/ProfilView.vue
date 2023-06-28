@@ -182,6 +182,10 @@ function inviteToGame(userId: string) {
 function spectateGame(userId: string) {
   userStore.socket.emit('spectateGame', { id: userId })
 }
+
+function createPrivateChat(userId: string) {
+  userStore.socket.emit('createPrivateChat', { id: userId })
+}
 </script>
 
 <template>
@@ -229,6 +233,14 @@ function spectateGame(userId: string) {
             @click="inviteToGame(user.id)"
           >
             Invite to game
+          </button>
+          <!-- create private game -->
+          <button
+            v-if="user.status == 'ONLINE'"
+            class="btn btn-primary"
+            @click="createPrivateChat(user.id)"
+          >
+            Create private chat
           </button>
           <button
             v-if="user.status == 'INGAME'"

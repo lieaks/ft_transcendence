@@ -20,6 +20,12 @@ user?.socket.on('newChannel', (newChannel: IChannel) => {
   availableChannels.value.push(newChannel)
 })
 
+user?.socket.on('newPrivChannel', (newChannel: IChannel) => {
+  if (!newChannel) return
+  joinedChannels.value.push(newChannel)
+})
+
+
 user?.socket.on('userJoined', (newUser: { channelId: string; user: IUser }) => {
   if (!newUser) return
   let channel = joinedChannels.value.find((channel) => channel.id === newUser.channelId)
@@ -57,10 +63,9 @@ user?.socket.on('channelInfo', (channelInfo: { channelId: string; messages: IMes
   if (channel) {
     channel.messages = channelInfo.messages
     channel.users = channelInfo.users
-    // channel.type = channelInfo.type
+    channel.type = channelInfo.type
   }
 })
-
 
 user?.socket.on('newMessage', (newMessage: { channelId: string; message: IMessage }) => {
   if (!newMessage?.channelId || !newMessage?.message) return

@@ -192,19 +192,6 @@ export class Chat implements IChat {
     this.password = password;
   }
 
-  setAdmin(user: IChatUser, sender: IChatUser): void {
-    if (user.role === userChatRole.ADMIN) return;
-    if (sender.role !== userChatRole.CREATOR) return;
-    user.role = userChatRole.ADMIN;
-    // const { socket: userSocket, ...userWithoutSocket } = user;
-    // const { socket: senderSocket, ...senderWithoutSocket } = sender;
-    // this.emitToUsers('userSetAdmin', {
-      // channelId: this.id,
-      // user: userWithoutSocket,
-      // sender: senderWithoutSocket,
-    // });
-  }
-
   removeUser(user: IChatUser): void {
     if (this.users.find((u) => u.id === user.id)) {
       const userKick = { id: user.id, name: user.name };
