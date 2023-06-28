@@ -253,4 +253,19 @@ export class MyGateway implements OnModuleInit {
     if (!chat.muteUser(player, sender, seconds))
       client.emit('permissionDenied', {});
   }
+
+  @SubscribeMessage('changePassword')
+  onChangePassword(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
+    const password = body.password;
+    const channelID = body.id;
+    if ((!password && password!=="") || !channelID) return;
+    const chat = this.chatService.getChat(body.id);
+    if (!chat) return;
+    const user = chat.getUserById(this.usersService.getUserBySocketId(client.id).id);
+    if (!user) return;
+    if (!chat.changePassword(user, password))
+      client.emit('permissionDenied', {});
+    else
+      console.log('Password changed');
+  }
 }

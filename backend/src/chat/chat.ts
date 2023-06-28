@@ -221,6 +221,19 @@ export class Chat implements IChat {
     });
   }
 
+  changePassword(user: IChatUser, password: string): boolean {
+    if (user.role !== userChatRole.CREATOR) return false;
+    if (this.type === chatType.PUBLIC)
+      this.type = chatType.PROTECTED;
+    else if (this.type === chatType.PROTECTED && password === "") {
+      this.password = "";
+      this.type = chatType.PUBLIC;
+    }
+    if (this.type === chatType.PROTECTED)
+      this.password = password;
+    return true;
+  }
+
   emitToUsers(event: string, data: any): void {
     for (const user of this.users) {
       user.socket.emit(event, data);

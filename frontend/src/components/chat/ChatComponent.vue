@@ -2,10 +2,12 @@
 import type { IChannel, IUser, IMessage } from '@/interfaces/chat.interfaces'
 import router from '@/router';
 import { useUserStore } from '@/stores/userStore'
-import { ref, type PropType } from 'vue'
+import { ref, type PropType, type Ref } from 'vue'
 
 const user = useUserStore()
 const newMessage = ref('')
+const modal: Ref<HTMLDialogElement | null> = ref(null)
+let password = ''
 
 const props = defineProps({
   channel: {
@@ -39,13 +41,40 @@ function muteUser(userId: string) {
   user?.socket.emit('muteUser', { id: userId, channelID: props.channel.id, seconds: 10 })
 }
 
+function showModal() {
+  modal.value?.showModal()
+}
+
+function submit() {
+  const input: any = {};
+  if (password !== '') {
+    input.password = password;
+  } else {
+    input.password = ""
+  }
+  user?.socket.emit('changePassword', { id: props.channel.id, password: password })
+  modal.value?.close()
+}
+
 </script>
 
 <template>
+  <dialog id="my_modal_2" class="modal" ref="modal">
+    <form method="dialog" class="modal-box" @submit.prevent="submit">
+      <div class="flex flex-col items-center justify-center">
+        <label for="password" class="mb-2">Password:</label>
+        <input type="password" id="password" name="password" v-model="password" />
+      </div>
+      <input type="submit" value="Submit" class="btn mt-4" />
+    </form>
+    <form method="dialog" class="modal-backdrop">
+      <button>close</button>
+    </form>
+  </dialog>
   <div class="inline-flex w-full h-full">
 		<div class="card bg-neutral items-center shadow-xl p-3 my-2 w-2/5 h-full">
 			<h2 class="card-title">{{ channel.name }}</h2>
-			<div>channel parameters</div>
+      <a href="#" class="text-white hover:underline" @click.prevent="showModal">Channel settings</a>
 			<ul class="card bg-neutral-800 shadow-xl p-3 my-2 w-full divide-y divide-secondary">
 				<li v-for="user in channel.users" :key="user.id">
 					<a href="#" class="text-red-500" @click.prevent="kickUser(user.id)">kick</a>
