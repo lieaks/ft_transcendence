@@ -221,10 +221,7 @@ export class MyGateway implements OnModuleInit {
 
   @SubscribeMessage('updateUser')
   onUpdateUser(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
-    const playerID = body.id;
-    const channelID = body.channelID;
-    const action = body.action;
-    const time = body.time;
+    const { id: playerID, channelID, action, time } = body;
 
     if (!playerID || !channelID || !action) return;
     const chat = this.chatService.getChat(channelID);
