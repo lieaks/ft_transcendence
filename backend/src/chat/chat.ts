@@ -261,6 +261,10 @@ export class Chat implements IChat {
     return true;
   }
 
+  deleteChannel(user: IChatUser): boolean {
+    return (user.role === userChatRole.CREATOR)
+  }
+
   emitToUsers(event: string, data: any): void {
     for (const user of this.users) {
       user.socket.emit(event, data);

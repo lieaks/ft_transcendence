@@ -276,4 +276,19 @@ export class MyGateway implements OnModuleInit {
     if (!user || !invited) return;
     this.chatService.createPrivateChat(user, invited);
   }
+
+  @SubscribeMessage('deleteChannel')
+  onDeleteChannel(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
+    const chat = this.chatService.getChat(body.id);
+    if (!chat) return;
+    const user = chat.getUserById(this.usersService.getUserBySocketId(client.id).id);
+    if (!user) return;
+    if (!chat.deleteChannel(user))
+      client.emit('permissionDenied', {});
+    else {
+      this.server.emit('channelDeleted', {
+        channelId: chat.id,
+      });
+    }
+  }
 }

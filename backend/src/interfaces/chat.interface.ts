@@ -41,4 +41,5 @@ export interface IChat {
   opUser(user: IChatUser, opBy: IChatUser): boolean;
   unmuteUser(user: IChatUser, unmutedBy: IChatUser): boolean;
   deopUser(user: IChatUser, deopBy: IChatUser): boolean;
+  deleteChannel(user: IChatUser): boolean;
 }

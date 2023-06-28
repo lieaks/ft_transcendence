@@ -76,6 +76,13 @@ user?.socket.on('newMessage', (newMessage: { channelId: string; message: IMessag
   }
 })
 
+user?.socket.on('channelDeleted', (channelData: { channelId: string }) => {
+  const channelId = channelData.channelId
+  if (!channelId) return
+  joinedChannels.value = joinedChannels.value.filter((c) => c.id !== channelId)
+  availableChannels.value = availableChannels.value.filter((c) => c.id !== channelId)
+})
+
 </script>
 
 <template>
