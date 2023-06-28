@@ -243,6 +243,7 @@ export class Chat implements IChat {
       createdAt: new Date(),
     };
     this.addMessage(opMessage);
+    this.sendChannelInfo(user, false, true);
     return true;
   }
 
