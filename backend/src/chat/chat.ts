@@ -130,6 +130,7 @@ export class Chat implements IChat {
     };
     user.role = userChatRole.MEMBER;
     this.addMessage(opMessage);
+    this.sendChannelInfo(user, false, true);
     return true;
   }
 
