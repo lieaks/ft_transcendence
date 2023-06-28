@@ -165,6 +165,15 @@ export class MyGateway implements OnModuleInit {
     @ConnectedSocket() client: Socket,
   ) {
     const listChannel = this.chatService.getChats();
+    if (!listChannel) return;
+    for (let i = 0; i < listChannel.length; i++) {
+      if (listChannel[i].type == chatType.PRIVATE) {
+        const user = this.usersService.getUserBySocketId(client.id);
+        if (!user || !listChannel[i].getUserById(user.id)) {
+          listChannel.splice(i, 1);
+        }
+      }
+    }
     this.server.emit('channelAvailable', getShortChannels(listChannel));
   }
 
