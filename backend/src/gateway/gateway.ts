@@ -219,90 +219,44 @@ export class MyGateway implements OnModuleInit {
     user.socket.emit('spectateGame', {});
   }
 
-  @SubscribeMessage('kickUser')
-  onKickPlayer(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
+  @SubscribeMessage('updateUser')
+  onUpdateUser(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
     const playerID = body.id;
     const channelID = body.channelID;
-    if (!playerID || !channelID) return;
-    const chat = this.chatService.getChat(body.channelID);
-    if (!chat) return;
-    const sender = chat.getUserById(this.usersService.getUserBySocketId(client.id).id);
-    const player = chat.getUserById(playerID);
-    if (!sender || !player) return;
-    if (!chat.kickUser(player, sender))
-      client.emit('permissionDenied', {});
-  } 
+    const action = body.action;
+    const time = body.time;
 
-  @SubscribeMessage('banUser')
-  onBanPlayer(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
-    const playerID = body.id;
-    const channelID = body.channelID;
-    const seconds = body.seconds;
-    if (!playerID || !channelID || !seconds) return;
-    const chat = this.chatService.getChat(body.channelID);
+    if (!playerID || !channelID || !action) return;
+    const chat = this.chatService.getChat(channelID);
     if (!chat) return;
     const sender = chat.getUserById(this.usersService.getUserBySocketId(client.id).id);
     const player = chat.getUserById(playerID);
     if (!sender || !player) return;
-    if (!chat.banUser(player, sender, seconds))
-      client.emit('permissionDenied', {});
-  }
-
-  @SubscribeMessage('muteUser')
-  onMutePlayer(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
-    const playerID = body.id;
-    const channelID = body.channelID;
-    const seconds = body.seconds;
-    if (!playerID || !channelID || !seconds) return;
-    const chat = this.chatService.getChat(body.channelID);
-    if (!chat) return;
-    const sender = chat.getUserById(this.usersService.getUserBySocketId(client.id).id);
-    const player = chat.getUserById(playerID);
-    if (!sender || !player) return;
-    if (!chat.muteUser(player, sender, seconds))
-      client.emit('permissionDenied', {});
-  }
-
-  @SubscribeMessage('opUser')
-  onOpPlayer(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
-    const playerID = body.id;
-    const channelID = body.channelID;
-    if (!playerID || !channelID) return;
-    const chat = this.chatService.getChat(body.channelID);
-    if (!chat) return;
-    const sender = chat.getUserById(this.usersService.getUserBySocketId(client.id).id);
-    const player = chat.getUserById(playerID);
-    if (!sender || !player) return;
-    if (!chat.opUser(player, sender))
-      client.emit('permissionDenied', {});
-  }
-
-  @SubscribeMessage('deopUser')
-  onDeopPlayer(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
-    const playerID = body.id;
-    const channelID = body.channelID;
-    if (!playerID || !channelID) return;
-    const chat = this.chatService.getChat(body.channelID);
-    if (!chat) return;
-    const sender = chat.getUserById(this.usersService.getUserBySocketId(client.id).id);
-    const player = chat.getUserById(playerID);
-    if (!sender || !player) return;
-    if (!chat.deopUser(player, sender))
-      client.emit('permissionDenied', {});
-  }
-
-  @SubscribeMessage('unmuteUser')
-  onUnmutePlayer(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
-    const playerID = body.id;
-    const channelID = body.channelID;
-    if (!playerID || !channelID) return;
-    const chat = this.chatService.getChat(body.channelID);
-    if (!chat) return;
-    const sender = chat.getUserById(this.usersService.getUserBySocketId(client.id).id);
-    const player = chat.getUserById(playerID);
-    if (!sender || !player) return;
-    if (!chat.unmuteUser(player, sender))
-      client.emit('permissionDenied', {});
+    if ((action == 'mute' || action == 'ban') && !time) return;
+    let ret = false;
+    switch (action) {
+      case 'mute':
+        ret = chat.muteUser(player, sender, time);
+        break;
+      case 'unmute':
+        ret = chat.unmuteUser(player, sender);
+        break;
+      case 'ban':
+        ret = chat.banUser(player, sender, time);
+        break;
+      case 'kick':
+        ret = chat.kickUser(player, sender);
+        break;
+      case 'op':
+        ret = chat.opUser(player, sender);
+        break;
+      case 'deop':
+        ret = chat.deopUser(player, sender);
+        break;
+      default:
+        break;
+    }
+    if (!ret) client.emit('permissionDenied', {});
   }
 
   @SubscribeMessage('changePassword')

@@ -44,20 +44,8 @@ function redirectToUserAccount(userId: string) {
   })
 }
 
-function kickUser(userId: string) {
-  userStore?.socket.emit('kickUser', { id: userId, channelID: props.channel.id })
-}
-
-function banUser(userId: string) {
-  userStore?.socket.emit('banUser', { id: userId, channelID: props.channel.id, seconds: 10 })
-}
-
-function muteUser(userId: string) {
-  userStore?.socket.emit('muteUser', { id: userId, channelID: props.channel.id, seconds: 10 })
-}
-
-function opUser(userId: string) {
-  userStore?.socket.emit('opUser', { id: userId, channelID: props.channel.id })
+function updateUser(userId: string, action: string, time?: number) {
+  userStore?.socket.emit('updateUser', { id: userId, channelID: props.channel.id, time: time, action: action })
 }
 
 function showModal() {
@@ -102,10 +90,10 @@ function submit() {
       <ul class="card bg-neutral-800 shadow-xl p-3 my-2 w-full divide-y divide-secondary">
         <li v-for="user in channel.users" :key="user.id">
           <div v-if="isAdmin && user.id !== userStore.id" class="w-auto inline-block">
-            <a class="btn btn-xs btn-error" @click.prevent="kickUser(user.id)">kick</a>
-            <a class="btn btn-xs btn-error" @click.prevent="banUser(user.id)">ban</a>
-            <a class="btn btn-xs btn-error" @click.prevent="muteUser(user.id)">mute</a>
-            <a class="btn btn-xs btn-error" v-if="isCreator" @click.prevent="opUser(user.id)">op</a>
+            <a class="btn btn-xs btn-error" @click.prevent="updateUser(user.id, 'kick')">kick</a>
+            <a class="btn btn-xs btn-error" @click.prevent="updateUser(user.id, 'ban', 10)">ban</a>
+            <a class="btn btn-xs btn-error" @click.prevent="updateUser(user.id, 'mute', 10)">mute</a>
+            <a class="btn btn-xs btn-error" v-if="isCreator" @click.prevent="updateUser(user.id, 'op')">op</a>
           </div>
           {{ user.name }}
         </li>
