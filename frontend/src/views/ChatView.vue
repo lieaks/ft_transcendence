@@ -39,6 +39,18 @@ user?.socket.on('userJoined', (newUser: { channelId: string; user: IUser }) => {
   }
 })
 
+user?.socket.on('userLeft', (leftUser: { channelId: string; user: IUser }) => {
+  if (!leftUser) return
+  let channel = joinedChannels.value.find((channel) => channel.id === leftUser.channelId)
+  if (channel) {
+    if (user?.id === leftUser.user.id) {
+      joinedChannels.value = joinedChannels.value.filter((c) => c.id !== leftUser.channelId)
+      availableChannels.value.push(channel)
+    }
+    else channel.users = channel.users.filter((c_user) => c_user.id !== leftUser.user.id)
+  }
+})
+
 user?.socket.on('channelInfo', (channelInfo: { channelId: string; messages: IMessage[]; users: IUser[] }) => {
   if (!channelInfo?.channelId || !channelInfo?.messages || !channelInfo?.users) return
   let channel = joinedChannels.value.find((channel) => channel.id === channelInfo.channelId)
@@ -47,6 +59,7 @@ user?.socket.on('channelInfo', (channelInfo: { channelId: string; messages: IMes
     channel.users = channelInfo.users
   }
 })
+
 
 user?.socket.on('newMessage', (newMessage: { channelId: string; message: IMessage }) => {
   if (!newMessage?.channelId || !newMessage?.message) return

@@ -38,15 +38,13 @@ export class Chat implements IChat {
     )
       return false;
     if (this.users.find((u) => u.id === user.id)) {
+      const kickMessage: IMessage = {
+        sender: kickedBy,
+        content: `kicked ${user.name} from the chat`,
+        createdAt: new Date(),
+      };
+      this.addMessage(kickMessage);
       this.removeUser(user);
-      // console.log("Users dans le chat : ", this.users)
-      // const { socket: userSocket, ...userWithoutSocket } = user;
-      // const { socket: kickedBySocket, ...kickedByWithoutSocket } = kickedBy;
-      // this.emitToUsers('userKicked', {
-      //   channelId: this.id,
-      //   user: userWithoutSocket,
-      //   kickedBy: kickedByWithoutSocket,
-      // });
       return true;
     }
     return false;
@@ -146,6 +144,7 @@ export class Chat implements IChat {
           (u) => u.id !== message.sender.id,
         );
     }
+    if (!this.users.find((u) => u.id === message.sender.id)) return;
     this.updatedAt = new Date();
     this.messages.push(message);
     this.emitToUsers('newMessage', {
@@ -198,9 +197,12 @@ export class Chat implements IChat {
 
   removeUser(user: IChatUser): void {
     if (this.users.find((u) => u.id === user.id)) {
+      const userKick = { id: user.id, name: user.name };
+      this.emitToUsers('userLeft', {
+        channelId: this.id,
+        user: userKick,
+      });
       this.users = this.users.filter((u) => u.id !== user.id);
-      // const { socket, ...userWithoutSocket } = user;
-      // this.emitToUsers('userLeft', userWithoutSocket);
     }
   }
 

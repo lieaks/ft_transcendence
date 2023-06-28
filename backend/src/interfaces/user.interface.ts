@@ -5,6 +5,7 @@ enum userChatRole {
   ADMIN = 'ADMIN',
   CREATOR = 'CREATOR',
   MEMBER = 'MEMBER',
+  SERVER = 'SERVER',
 }
 
 interface IChatUser extends IUser {
