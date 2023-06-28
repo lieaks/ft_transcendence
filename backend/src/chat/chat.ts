@@ -228,6 +228,18 @@ export class Chat implements IChat {
     });
   }
 
+  opUser(user: IChatUser, opBy: IChatUser): boolean {
+    if (user.role === userChatRole.CREATOR || opBy.role !== userChatRole.CREATOR) return false;
+    user.role = userChatRole.ADMIN;
+    const opMessage: IMessage = {
+      sender: opBy,
+      content: `opped ${user.name}`,
+      createdAt: new Date(),
+    };
+    this.addMessage(opMessage);
+    return true;
+  }
+
   changePassword(user: IChatUser, password: string): boolean {
     if (user.role !== userChatRole.CREATOR) return false;
     if (this.type === chatType.PUBLIC)

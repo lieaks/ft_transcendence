@@ -38,4 +38,5 @@ export interface IChat {
   kickUser(user: IChatUser, kickedBy: IChatUser): boolean;
   banUser(user: IChatUser, bannedBy: IChatUser, seconds: string): boolean;
   muteUser(user: IChatUser, mutedBy: IChatUser, seconds: string): boolean;
+  opUser(user: IChatUser, opBy: IChatUser): boolean;
 }
