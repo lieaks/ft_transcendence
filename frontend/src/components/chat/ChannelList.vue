@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import type { IChannel, IUser, IMessage } from '@/interfaces/chat.interfaces'
+import { type IChannel, type IUser, type IMessage, chatType } from '@/interfaces/chat.interfaces'
 import { useUserStore } from '@/stores/userStore'
-import { ref, type PropType } from 'vue'
+import { ref, type PropType, type Ref } from 'vue'
 
 const user = useUserStore()
 const newChannelName = ref('')
+const modal: Ref<HTMLDialogElement | null> = ref(null)
+let password = ''
+let currentChannel: Ref<IChannel | undefined> = ref(undefined)
 
 defineProps({
   availableChannels: {
@@ -14,14 +17,49 @@ defineProps({
 })
 
 function joinChannel(channel: IChannel) {
-  user?.socket.emit('joinChannel', { ...channel })
+  if (channel.type == chatType.PROTECTED) {
+    showModal(channel)
+  } else {
+    user?.socket.emit('joinChannel', { ...channel })
+  }
 }
 function createChannel() {
   user?.socket.emit('createChannel', { name: newChannelName.value })
   newChannelName.value = ''
 }
+
+function showModal(channel: IChannel) {
+  currentChannel.value = channel
+  modal.value?.showModal()
+}
+
+function submit() {
+  const channel = currentChannel.value
+  if (!channel) return
+  const input: any = {};
+  if (password !== '') {
+    input.password = password;
+  } else {
+    input.password = ""
+  }
+  user?.socket.emit('joinChannel', { ...channel, ...input })
+  modal.value?.close()
+}
+
 </script>
 <template>
+  <dialog id="my_modal_2" class="modal" ref="modal">
+    <form method="dialog" class="modal-box" @submit.prevent="submit">
+      <div class="flex flex-col items-center justify-center">
+        <label for="password" class="mb-2">Password:</label>
+        <input type="password" id="password" name="password" v-model="password" />
+      </div>
+      <input type="submit" value="Submit" class="btn mt-4" />
+    </form>
+    <form method="dialog" class="modal-backdrop">
+      <button>close</button>
+    </form>
+  </dialog>
   <ul>
     <li v-for="channel in availableChannels" :key="channel.id" class="inline">
       <button class="btn btn-sm btn-primary mr-2 normal-case" @click="joinChannel(channel)">
