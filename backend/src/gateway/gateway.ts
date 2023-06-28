@@ -222,5 +222,20 @@ export class MyGateway implements OnModuleInit {
     if (!sender || !player) return;
     if (!chat.kickUser(player, sender))
       client.emit('permissionDenied', {});
-  }  
+  } 
+
+  @SubscribeMessage('banUser')
+  onBanPlayer(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
+    const playerID = body.id;
+    const channelID = body.channelID;
+    const seconds = body.seconds;
+    if (!playerID || !channelID || !seconds) return;
+    const chat = this.chatService.getChat(body.channelID);
+    if (!chat) return;
+    const sender = chat.getUserById(this.usersService.getUserBySocketId(client.id).id);
+    const player = chat.getUserById(playerID);
+    if (!sender || !player) return;
+    if (!chat.banUser(player, sender, seconds))
+      client.emit('permissionDenied', {});
+  }
 }

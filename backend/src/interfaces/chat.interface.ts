@@ -35,4 +35,5 @@ export interface IChat {
   removeUser(user: IUser): void;
   emitToUsers(event: string, data: any): void;
   kickUser(user: IChatUser, kickedBy: IChatUser): boolean;
+  banUser(user: IChatUser, bannedBy: IChatUser, seconds: string): boolean;
 }

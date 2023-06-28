@@ -50,15 +50,15 @@ export class Chat implements IChat {
     return false;
   }
 
-  banUser(user: IChatUser, bannedBy: IChatUser, seconds: string): void {
+  banUser(user: IChatUser, bannedBy: IChatUser, seconds: string): boolean {
     if (
-      user.role === userChatRole.MEMBER ||
-      bannedBy.role === userChatRole.CREATOR
+      user.role === userChatRole.CREATOR ||
+      bannedBy.role === userChatRole.MEMBER
     )
-      return;
-    if (isNaN(Number(seconds))) return;
+      return false;
+    if (isNaN(Number(seconds))) return false;
     const secondsNumber = Number(seconds);
-    if (secondsNumber < 0) return;
+    if (secondsNumber < 0) return false;
     const bannedUntil = new Date();
     bannedUntil.setSeconds(bannedUntil.getSeconds() + secondsNumber);
     const bannedUser: IBannedUser = {
@@ -68,15 +68,14 @@ export class Chat implements IChat {
       bannedUntil,
     };
     this.bannedUsers.push(bannedUser);
+    const banMessage: IMessage = {
+      sender: bannedBy,
+      content: `banned ${user.name} from the chat`,
+      createdAt: new Date(),
+    };
+    this.addMessage(banMessage);
     this.removeUser(user);
-    // const { socket: userSocket, ...userWithoutSocket } = user;
-    // const { socket: bannedBySocket, ...bannedByWithoutSocket } = bannedBy;
-    // this.emitToUsers('userBanned', {
-      // channelId: this.id,
-      // user: userWithoutSocket,
-      // bannedBy: bannedByWithoutSocket,
-      // seconds,
-    // });
+    return true;
   }
 
   muteUser(user: IChatUser, mutedBy: IChatUser, seconds: string): void {
@@ -165,6 +164,7 @@ export class Chat implements IChat {
     if (this.users.find((u) => u.id === user.id)) return;
     const bannedUser = this.bannedUsers.find((u) => u.id === user.id);
     if (bannedUser) {
+      console.log("seconds left: ", (bannedUser.bannedUntil.getTime() - new Date().getTime()) / 1000);
       if (bannedUser.bannedUntil > new Date()) return;
       else this.bannedUsers = this.bannedUsers.filter((u) => u.id !== user.id);
     }
