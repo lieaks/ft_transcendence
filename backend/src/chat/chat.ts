@@ -123,8 +123,8 @@ export class Chat implements IChat {
   }
 
   deopUser(user: IChatUser, deopBy: IChatUser): boolean {
-    if (deopBy.role === userChatRole.MEMBER) return false;
-    if (user.role !== userChatRole.CREATOR) return false;
+    if (deopBy.role !== userChatRole.CREATOR) return false;
+    if (user.role !== userChatRole.ADMIN) return false;
     const opMessage: IMessage = {
       sender: deopBy,
       content: `deoped ${user.name} from the chat`,
@@ -132,7 +132,7 @@ export class Chat implements IChat {
     };
     user.role = userChatRole.MEMBER;
     this.addMessage(opMessage);
-    this.sendChannelInfo(user, false, true);
+    this.sendInfoToEveryone(false, true);
     return true;
   }
 
@@ -256,7 +256,7 @@ export class Chat implements IChat {
       createdAt: new Date(),
     };
     this.addMessage(opMessage);
-    this.sendChannelInfo(user, false, true);
+    this.sendInfoToEveryone(false, true);
     return true;
   }
 

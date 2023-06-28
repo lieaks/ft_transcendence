@@ -118,9 +118,15 @@ function submit() {
             >
             <a
               class="btn btn-xs btn-error"
-              v-if="isCreator"
+              v-if="isCreator && user.role !== chatRole.ADMIN"
               @click.prevent="updateUser(user.id, 'op')"
               >op</a
+            >
+            <a
+              class="btn btn-xs btn-error"
+              v-if="isCreator && user.role === chatRole.ADMIN"
+              @click.prevent="updateUser(user.id, 'deop')"
+              >deop</a
             >
           </div>
           <span class="truncate m-1 first:m-0">
