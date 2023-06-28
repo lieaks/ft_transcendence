@@ -1,12 +1,10 @@
 <template>
-  <div class="flex justify-center">
-    <button
-      class="bg-[#564F6F] hover:bg-[#3E3756] text-white font-bold py-2 px-4 rounded"
-      @click="showModal"
-    >
-      Edit
-    </button>
-  </div>
+	<button
+		class="bg-neutral-700 hover:bg-neutral-800 btn"
+		@click="showModal"
+	>
+		Edit
+	</button>
   <dialog id="my_modal_2" class="modal" ref="modal">
     <form method="dialog" class="modal-box" @submit.prevent="submit">
       <div class="flex flex-col items-center justify-center">

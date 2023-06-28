@@ -98,6 +98,10 @@ onResult((res) => {
 function redirectToUserAccount(userId: string) {
   router.push(`/profil/${userId}`)
 }
+function logout() {
+	localStorage.removeItem('jwtToken')
+	window.location.href = '/'
+}
 </script>
 
 <template>
@@ -108,7 +112,10 @@ function redirectToUserAccount(userId: string) {
     <div class="card-body">
 		  <div class="flex justify-between items-center">
         <h2 class="card-title mb-4 font-bold text-2xl">{{ user.name }}</h2>
-        <EditProfilComponent/>
+				<div class="inline-block">
+					<button class="btn m-2 btn-error" @click="logout">logout</button>
+					<EditProfilComponent/>
+				</div>
       </div>
       <p>Points: {{ user.points }}</p>
       <p>Rank: {{ user.rank }}</p>
