@@ -240,14 +240,14 @@ function createPrivateChat(userId: string) {
           <!-- create private game -->
           <button
             v-if="user.status == 'ONLINE'"
-            class="btn btn-primary"
+            class="btn btn-primary m-2"
             @click="createPrivateChat(user.id)"
           >
             Create private chat
           </button>
           <button
             v-if="user.status == 'INGAME'"
-            class="btn btn-primary"
+            class="btn btn-primary m-2"
             @click="spectateGame(user.id)"
           >
             Spectate game
