@@ -66,10 +66,18 @@ export class ChatService {
   removeChat(id: string): void {
     this.chats = this.chats.filter((c) => c.id !== id);
   }
-  removeUserFromChannels(user: IUser): void {
+
+  removeUserFromChannels(user: IUser): IChat[] {
+    let emptyChannels: IChat[] = [];
+
     for (const chat of this.chats) {
       chat.removeUser(user);
+      if (!chat.users.length) {
+        emptyChannels.push(chat);
+        this.removeChat(chat.id);
+      }
     }
+    return emptyChannels;
   }
   generateRandomId(): string {
     let id = '';

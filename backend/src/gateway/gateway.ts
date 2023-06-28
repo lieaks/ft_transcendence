@@ -52,7 +52,12 @@ export class MyGateway implements OnModuleInit {
         const user = this.usersService.getUserBySocketId(socket.id);
         if (!user) return;
         this.gamesService.removeFromQueue(user);
-        this.chatService.removeUserFromChannels(user);
+        const emptyChannels = this.chatService.removeUserFromChannels(user);
+        for (const channel of emptyChannels) {
+          this.server.emit('channelDeleted', {
+            channelId: channel.id,
+          });
+        }
         this.usersService.removeUser(user.id);
         this.connectedSockets.delete(socket);
         console.log(
