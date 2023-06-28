@@ -105,33 +105,45 @@ export class Chat implements IChat {
     return true
   }
 
-  unmuteUser(user: IChatUser, unmutedBy: IChatUser): void {
-    if (user.role === userChatRole.MEMBER) return;
+  unmuteUser(user: IChatUser, unmutedBy: IChatUser): boolean {
+    if (unmutedBy.role === userChatRole.MEMBER) return false;
     const mutedUser = this.mutedUsers.find((u) => u.id === user.id);
-    if (!mutedUser) return;
+    if (!mutedUser) return false;
     this.mutedUsers = this.mutedUsers.filter((u) => u.id !== user.id);
-    // const { socket: userSocket, ...userWithoutSocket } = user;
-    // const { socket: unmutedBySocket, ...unmutedByWithoutSocket } = unmutedBy;
-    // this.emitToUsers('userUnmuted', {
-      // channelId: this.id,
-      // user: userWithoutSocket,
-      // unmutedBy: unmutedByWithoutSocket,
-    // });
+    const unmuteMessage: IMessage = {
+      sender: unmutedBy,
+      content: `unmuted ${user.name} from the chat`,
+      createdAt: new Date(),
+    };
+    this.addMessage(unmuteMessage);
+    return true;
   }
 
-  unbanUser(user: IChatUser, unbannedBy: IChatUser): void {
-    if (user.role === userChatRole.MEMBER) return;
-    const bannedUser = this.bannedUsers.find((u) => u.id === user.id);
-    if (!bannedUser) return;
-    this.bannedUsers = this.bannedUsers.filter((u) => u.id !== user.id);
-    // const { socket: userSocket, ...userWithoutSocket } = user;
-    // const { socket: unbannedBySocket, ...unbannedByWithoutSocket } = unbannedBy;
-    // this.emitToUsers('userUnbanned', {
-      // channelId: this.id,
-      // user: userWithoutSocket,
-      // unbannedBy: unbannedByWithoutSocket,
-    // });
+  deopUser(user: IChatUser, deopBy: IChatUser): boolean {
+    if (deopBy.role === userChatRole.MEMBER) return false;
+    if (user.role !== userChatRole.CREATOR) return false;
+    const opMessage: IMessage = {
+      sender: deopBy,
+      content: `deoped ${user.name} from the chat`,
+      createdAt: new Date(),
+    };
+    this.addMessage(opMessage);
+    return true;
   }
+
+  // unbanUser(user: IChatUser, unbannedBy: IChatUser): void {
+  //   if (user.role === userChatRole.MEMBER) return;
+  //   const bannedUser = this.bannedUsers.find((u) => u.id === user.id);
+  //   if (!bannedUser) return;
+  //   this.bannedUsers = this.bannedUsers.filter((u) => u.id !== user.id);
+  //   // const { socket: userSocket, ...userWithoutSocket } = user;
+  //   // const { socket: unbannedBySocket, ...unbannedByWithoutSocket } = unbannedBy;
+  //   // this.emitToUsers('userUnbanned', {
+  //     // channelId: this.id,
+  //     // user: userWithoutSocket,
+  //     // unbannedBy: unbannedByWithoutSocket,
+  //   // });
+  // }
 
   addMessage(message: IMessage): void {
     const mutedUser = this.mutedUsers.find((u) => u.id === message.sender.id);

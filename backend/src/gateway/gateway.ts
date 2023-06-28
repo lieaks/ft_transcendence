@@ -268,6 +268,34 @@ export class MyGateway implements OnModuleInit {
       client.emit('permissionDenied', {});
   }
 
+  @SubscribeMessage('deopUser')
+  onDeopPlayer(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
+    const playerID = body.id;
+    const channelID = body.channelID;
+    if (!playerID || !channelID) return;
+    const chat = this.chatService.getChat(body.channelID);
+    if (!chat) return;
+    const sender = chat.getUserById(this.usersService.getUserBySocketId(client.id).id);
+    const player = chat.getUserById(playerID);
+    if (!sender || !player) return;
+    if (!chat.deopUser(player, sender))
+      client.emit('permissionDenied', {});
+  }
+
+  @SubscribeMessage('unmuteUser')
+  onUnmutePlayer(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
+    const playerID = body.id;
+    const channelID = body.channelID;
+    if (!playerID || !channelID) return;
+    const chat = this.chatService.getChat(body.channelID);
+    if (!chat) return;
+    const sender = chat.getUserById(this.usersService.getUserBySocketId(client.id).id);
+    const player = chat.getUserById(playerID);
+    if (!sender || !player) return;
+    if (!chat.unmuteUser(player, sender))
+      client.emit('permissionDenied', {});
+  }
+
   @SubscribeMessage('changePassword')
   onChangePassword(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
     const password = body.password;
