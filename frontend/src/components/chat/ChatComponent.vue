@@ -102,7 +102,7 @@ function submit() {
     <div class="card bg-neutral items-center shadow-xl p-3 my-2 w-1/2 h-full">
       <div class="inline-flex justify-center items-center w-full">
         <span class="mx-2 truncate card-title">{{ channel.name }}</span>
-					<button class="btn bg-neutral-800 btn-ghost btn-xs mr-1" @click.prevent="modal?.showModal()">⚙️</button>
+					<button v-if="isAdmin" class="btn bg-neutral-800 btn-ghost btn-xs mr-1" @click.prevent="modal?.showModal()">⚙️</button>
 					<button class="btn btn-error btn-xs" @click.prevent="leaveChannel">leave</button>
       </div>
       <ul class="card bg-neutral-800 shadow-xl p-3 my-2 w-full divide-y divide-secondary">
