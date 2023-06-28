@@ -87,7 +87,7 @@ user?.socket.on('newMessage', (newMessage: { channelId: string; message: IMessag
 		<p class="mb-1">joined channels:</p>
     <ul>
       <li v-for="channel in joinedChannels" :key="channel.id" class="inline mr-2">
-				<div class=" mr-2 indicator">
+				<div class="mr-2 indicator">
 					<span v-if="channel.type == chatType.PROTECTED" class="indicator-item">🔐</span>
 					<span v-else-if="channel.type == chatType.PRIVATE" class="indicator-item">🧑‍🤝‍🧑</span>
 					<span v-else class="indicator-item translate-x-[0.2rem] translate-y-[-0.6rem]">🌎</span>

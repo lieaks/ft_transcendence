@@ -10,8 +10,8 @@ services:
       - vite-build
       - backend
       - postgres
-    # volumes:
-    #   - vite-build:/usr/share/nginx/html
+    volumes:
+      - vite-build:/usr/share/nginx/html
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost/"]
@@ -24,8 +24,8 @@ services:
     build:
       context: .
       dockerfile: ./docker/vite-build.dockerfile
-    # volumes:
-    #   - vite-build:/var/www/vitejs/dist
+    volumes:
+      - vite-build:/var/www/vitejs/dist
 
   backend:
     container_name: backend
@@ -56,7 +56,7 @@ services:
       - 5432:5432
     env_file:
       - ./docker/backend.env
-    # volumes:
+    volumes:
       # - ./db:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
@@ -90,5 +90,5 @@ networks:
   frontend:
     driver: bridge
 
-# volumes:
-#   vite-build:
+volumes:
+  vite-build:
