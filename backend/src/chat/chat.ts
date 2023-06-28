@@ -208,6 +208,12 @@ export class Chat implements IChat {
     return this.users.find((u) => u.id === id);
   }
 
+  sendInfoToEveryone(): void {
+    for (const user of this.users) {
+      this.sendChannelInfo(user);
+    }
+  }
+
   sendChannelInfo(user: IChatUser): void {
     const messages = this.messages.map((m) => ({
       sender: { id: m.sender.id, name: m.sender.name },
@@ -218,6 +224,7 @@ export class Chat implements IChat {
       channelId: this.id,
       messages,
       users,
+      type: this.type,
     });
   }
 
@@ -231,6 +238,7 @@ export class Chat implements IChat {
     }
     if (this.type === chatType.PROTECTED)
       this.password = password;
+    this.sendInfoToEveryone();
     return true;
   }
 

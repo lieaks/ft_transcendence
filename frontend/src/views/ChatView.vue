@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import ChatComponent from '@/components/chat/ChatComponent.vue'
 import ChannelList from '@/components/chat/ChannelList.vue'
-import type { IChannel, IUser, IMessage } from '@/interfaces/chat.interfaces'
+import type { IChannel, IUser, IMessage, chatType } from '@/interfaces/chat.interfaces'
 import { useUserStore } from '@/stores/userStore'
 import { ref, type Ref } from 'vue'
 
@@ -51,12 +51,13 @@ user?.socket.on('userLeft', (leftUser: { channelId: string; user: IUser }) => {
   }
 })
 
-user?.socket.on('channelInfo', (channelInfo: { channelId: string; messages: IMessage[]; users: IUser[] }) => {
-  if (!channelInfo?.channelId || !channelInfo?.messages || !channelInfo?.users) return
+user?.socket.on('channelInfo', (channelInfo: { channelId: string; messages: IMessage[]; users: IUser[]; type: chatType }) => {
+  if (!channelInfo?.channelId || !channelInfo?.messages || !channelInfo?.users || !channelInfo?.type) return
   let channel = joinedChannels.value.find((channel) => channel.id === channelInfo.channelId)
   if (channel) {
     channel.messages = channelInfo.messages
     channel.users = channelInfo.users
+    channel.type = channelInfo.type
   }
 })
 
