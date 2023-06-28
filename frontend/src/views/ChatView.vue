@@ -13,7 +13,7 @@ let activeChannel: Ref<IChannel | undefined> = ref(undefined)
 user.socket.emit('channelAvailable')
 
 user?.socket.on('channelAvailable', (newChannels: IChannel[]) => {
-  availableChannels.value = newChannels
+  availableChannels.value = newChannels.filter((channel) => !joinedChannels.value.some((c) => c.id === channel.id))
 })
 user?.socket.on('newChannel', (newChannel: IChannel) => {
   if (!newChannel) return
