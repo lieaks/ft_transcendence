@@ -1,7 +1,7 @@
 export enum chatType {
-  PUBLIC,
-  PROTECTED,
-  PRIVATE
+  PUBLIC = "PUBLIC",
+  PROTECTED = "PROTECTED",
+  PRIVATE = "PRIVATE"
 }
 export interface IUser {
   id: string

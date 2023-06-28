@@ -57,7 +57,7 @@ user?.socket.on('channelInfo', (channelInfo: { channelId: string; messages: IMes
   if (channel) {
     channel.messages = channelInfo.messages
     channel.users = channelInfo.users
-    channel.type = channelInfo.type
+    // channel.type = channelInfo.type
   }
 })
 
