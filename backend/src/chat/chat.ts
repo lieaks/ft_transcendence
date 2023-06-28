@@ -78,15 +78,15 @@ export class Chat implements IChat {
     return true;
   }
 
-  muteUser(user: IChatUser, mutedBy: IChatUser, seconds: string): void {
+  muteUser(user: IChatUser, mutedBy: IChatUser, seconds: string): boolean {
     if (
-      user.role === userChatRole.MEMBER ||
-      mutedBy.role === userChatRole.CREATOR
+      user.role === userChatRole.CREATOR ||
+      mutedBy.role === userChatRole.MEMBER
     )
-      return;
-    if (isNaN(Number(seconds))) return;
+      return false;
+    if (isNaN(Number(seconds))) return false;
     const secondsNumber = Number(seconds);
-    if (secondsNumber < 0) return;
+    if (secondsNumber < 0) return false;
     const mutedUntil = new Date();
     mutedUntil.setSeconds(mutedUntil.getSeconds() + secondsNumber);
     const mutedUser: IMutedUser = {
@@ -95,15 +95,14 @@ export class Chat implements IChat {
       mutedBy,
       mutedUntil,
     };
+    const muteMessage: IMessage = {
+      sender: mutedBy,
+      content: `muted ${user.name} from the chat`,
+      createdAt: new Date(),
+    };
+    this.addMessage(muteMessage);
     this.mutedUsers.push(mutedUser);
-    // const { socket: userSocket, ...userWithoutSocket } = user;
-    // const { socket: mutedBySocket, ...mutedByWithoutSocket } = mutedBy;
-    // this.emitToUsers('userMuted', {
-      // channelId: this.id,
-      // user: userWithoutSocket,
-      // mutedBy: mutedByWithoutSocket,
-      // seconds,
-    // });
+    return true
   }
 
   unmuteUser(user: IChatUser, unmutedBy: IChatUser): void {

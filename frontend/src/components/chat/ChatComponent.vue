@@ -35,6 +35,10 @@ function banUser(userId: string) {
   user?.socket.emit('banUser', { id: userId, channelID: props.channel.id, seconds: 10 })
 }
 
+function muteUser(userId: string) {
+  user?.socket.emit('muteUser', { id: userId, channelID: props.channel.id, seconds: 10 })
+}
+
 </script>
 
 <template>
@@ -46,7 +50,7 @@ function banUser(userId: string) {
 				<li v-for="user in channel.users" :key="user.id">
 					<a href="#" class="text-red-500" @click.prevent="kickUser(user.id)">kick</a>
           <a href="#" class="text-red-500" @click.prevent="banUser(user.id)">ban</a>
-					mute 
+          <a href="#" class="text-red-500" @click.prevent="muteUser(user.id)">mute</a>
 					{{ user.name }}
 				</li>
 			</ul>
