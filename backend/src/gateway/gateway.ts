@@ -140,7 +140,6 @@ export class MyGateway implements OnModuleInit {
     newChannel.addUser(chatUser);
   }
 
-  // Store the password in a variable if one is provided
   @SubscribeMessage('joinChannel')
   onJoinChannel(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
     const user = this.usersService.getUserBySocketId(client.id);

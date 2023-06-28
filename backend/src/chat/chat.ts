@@ -174,6 +174,7 @@ export class Chat implements IChat {
       channelId: this.id,
       user: { id: user.id, name: user.name },
     });
+    this.sendChannelInfo(user);
   }
 
   setPassword(password: string): void {
@@ -205,6 +206,19 @@ export class Chat implements IChat {
 
   getUserById(id: string): IChatUser | undefined {
     return this.users.find((u) => u.id === id);
+  }
+
+  sendChannelInfo(user: IChatUser): void {
+    const messages = this.messages.map((m) => ({
+      sender: { id: m.sender.id, name: m.sender.name },
+      content: m.content,
+    }));
+    const users = this.users.map((u) => ({ id: u.id, name: u.name }));
+    user.socket.emit('channelInfo', {
+      channelId: this.id,
+      messages,
+      users,
+    });
   }
 
   emitToUsers(event: string, data: any): void {

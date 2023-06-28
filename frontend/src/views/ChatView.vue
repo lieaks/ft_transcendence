@@ -39,6 +39,15 @@ user?.socket.on('userJoined', (newUser: { channelId: string; user: IUser }) => {
   }
 })
 
+user?.socket.on('channelInfo', (channelInfo: { channelId: string; messages: IMessage[]; users: IUser[] }) => {
+  if (!channelInfo?.channelId || !channelInfo?.messages || !channelInfo?.users) return
+  let channel = joinedChannels.value.find((channel) => channel.id === channelInfo.channelId)
+  if (channel) {
+    channel.messages = channelInfo.messages
+    channel.users = channelInfo.users
+  }
+})
+
 user?.socket.on('newMessage', (newMessage: { channelId: string; message: IMessage }) => {
   if (!newMessage?.channelId || !newMessage?.message) return
   let channel = joinedChannels.value.find((channel) => channel.id === newMessage.channelId)
