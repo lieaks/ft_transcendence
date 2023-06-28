@@ -128,6 +128,7 @@ export class Chat implements IChat {
       content: `deoped ${user.name} from the chat`,
       createdAt: new Date(),
     };
+    user.role = userChatRole.MEMBER;
     this.addMessage(opMessage);
     return true;
   }
