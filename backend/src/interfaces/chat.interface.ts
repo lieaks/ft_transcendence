@@ -7,9 +7,9 @@ import {
 } from 'src/interfaces/user.interface';
 
 export enum chatType {
-  PUBLIC = "PUBLIC",
-  PROTECTED = "PROTECTED",
-  PRIVATE = "PRIVATE"
+  PUBLIC,
+  PROTECTED,
+  PRIVATE,
 }
 
 export interface IMessage {

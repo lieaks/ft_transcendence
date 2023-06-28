@@ -62,9 +62,14 @@ function submit() {
   </dialog>
   <ul>
     <li v-for="channel in availableChannels" :key="channel.id" class="inline">
-      <button class="btn btn-sm btn-primary mr-2 normal-case" @click="joinChannel(channel)">
-        {{ channel.name }}
-      </button>
+			<div class=" mr-2 indicator">
+				<span v-if="channel.type == chatType.PROTECTED" class="indicator-item">🔐</span>
+				<span v-else-if="channel.type == chatType.PRIVATE" class="indicator-item">🧑‍🤝‍🧑</span>
+				<span v-else class="indicator-item translate-x-[0.2rem] translate-y-[-0.6rem]">🌎</span>
+				<button class="btn btn-sm btn-primary normal-case" @click="joinChannel(channel)">
+					{{ channel.name }}
+				</button>
+			</div>
     </li>
     <li class="inline">
       <input

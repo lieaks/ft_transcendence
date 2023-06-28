@@ -34,6 +34,7 @@ export class Chat implements IChat {
   kickUser(user: IChatUser, kickedBy: IChatUser): boolean {
     if (
       user.role === userChatRole.CREATOR ||
+			(user.role === userChatRole.ADMIN && kickedBy.role !== userChatRole.CREATOR) ||
       kickedBy.role === userChatRole.MEMBER
     )
       return false;
@@ -213,16 +214,21 @@ export class Chat implements IChat {
     }
   }
 
-  sendChannelInfo(user: IChatUser): void {
+  sendChannelInfo(user: IChatUser, sendMessages = true, sendUsers = true): void {
     const messages = this.messages.map((m) => ({
       sender: { id: m.sender.id, name: m.sender.name },
       content: m.content,
     }));
-    const users = this.users.map((u) => ({ id: u.id, name: u.name }));
+		const users = this.users.map((u) => ({
+				id: u.id,
+				name: u.name,
+				role: u.role,
+			})
+		);
     user.socket.emit('channelInfo', {
       channelId: this.id,
-      messages,
-      users,
+      messages: sendMessages ? messages : undefined,
+      users: sendUsers ? users : undefined,
       type: this.type,
     });
   }

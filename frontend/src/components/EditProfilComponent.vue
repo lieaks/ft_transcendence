@@ -9,11 +9,11 @@
     <form method="dialog" class="modal-box" @submit.prevent="submit">
       <div class="flex flex-col items-center justify-center">
         <label for="avatar" class="mb-2">New avatar:</label>
-        <input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg" v-on:change="updateAvatar" />
+				<input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg" class="m-2 file-input file-input-bordered file-input-primary w-full max-w-xs" v-on:change="updateAvatar" />
       </div>
       <div class="flex flex-col items-center justify-center">
         <label for="name" class="mb-2">New name:</label>
-        <input type="text" id="name" name="name" v-model="name" maxlength="20" />
+        <input type="text" id="name" name="name" v-model="name" class="input input-primary" placeholder="name" maxlength="20" />
       </div>
       <input type="submit" value="Submit" class="btn mt-4" />
     </form>

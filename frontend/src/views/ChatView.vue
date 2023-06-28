@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import ChatComponent from '@/components/chat/ChatComponent.vue'
 import ChannelList from '@/components/chat/ChannelList.vue'
-import type { IChannel, IUser, IMessage, chatType } from '@/interfaces/chat.interfaces'
+import { type IChannel, type IUser, type IMessage, chatType } from '@/interfaces/chat.interfaces'
 import { useUserStore } from '@/stores/userStore'
 import { ref, type Ref } from 'vue'
 
@@ -58,13 +58,13 @@ user?.socket.on('userLeft', (leftUser: { channelId: string; user: IUser }) => {
 })
 
 user?.socket.on('channelInfo', (channelInfo: { channelId: string; messages: IMessage[]; users: IUser[]; type: chatType }) => {
-  if (!channelInfo?.channelId || !channelInfo?.messages || !channelInfo?.users || !channelInfo?.type) return
+  if (!channelInfo?.channelId) return
   let channel = joinedChannels.value.find((channel) => channel.id === channelInfo.channelId)
-  if (channel) {
-    channel.messages = channelInfo.messages
-    channel.users = channelInfo.users
-    channel.type = channelInfo.type
-  }
+  if (!channel) return
+	channel.messages = channelInfo.messages || channel.messages
+	channel.users = channelInfo.users || channel.users
+	console.log('channel info', channelInfo)
+	channel.type = channelInfo.type || channel.type
 })
 
 user?.socket.on('newMessage', (newMessage: { channelId: string; message: IMessage }) => {
@@ -87,13 +87,18 @@ user?.socket.on('newMessage', (newMessage: { channelId: string; message: IMessag
 		<p class="mb-1">joined channels:</p>
     <ul>
       <li v-for="channel in joinedChannels" :key="channel.id" class="inline mr-2">
-        <button
-          class="btn btn-sm btn-secondary normal-case"
-          :class="{ 'outline outline-offset-1': channel === (activeChannel || joinedChannels[0]) }"
-          @click="activeChannel = channel"
-        >
-          {{ channel.name }}
-        </button>
+				<div class=" mr-2 indicator">
+					<span v-if="channel.type == chatType.PROTECTED" class="indicator-item">🔐</span>
+					<span v-else-if="channel.type == chatType.PRIVATE" class="indicator-item">🧑‍🤝‍🧑</span>
+					<span v-else class="indicator-item translate-x-[0.2rem] translate-y-[-0.6rem]">🌎</span>
+					<button
+						class="btn btn-sm btn-secondary normal-case"
+						:class="{ 'outline outline-offset-1': channel === (activeChannel || joinedChannels[0]) }"
+						@click="activeChannel = channel"
+					>
+						{{ channel.name }}
+					</button>
+				</div>
       </li>
     </ul>
   </div>

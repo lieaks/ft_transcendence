@@ -2,10 +2,9 @@ import { Socket } from 'socket.io';
 import { Status } from 'src/graphql';
 
 enum userChatRole {
-  ADMIN = 'ADMIN',
-  CREATOR = 'CREATOR',
-  MEMBER = 'MEMBER',
-  SERVER = 'SERVER',
+	CREATOR,
+  ADMIN,
+  MEMBER,
 }
 
 interface IChatUser extends IUser {
