@@ -15,7 +15,7 @@
       </div>
       <div class="flex flex-col items-center justify-center">
         <label for="name" class="mb-2">New name:</label>
-        <input type="text" id="name" name="name" v-model="name" />
+        <input type="text" id="name" name="name" v-model="name" maxlength="20" />
       </div>
       <input type="submit" value="Submit" class="btn mt-4" />
     </form>
