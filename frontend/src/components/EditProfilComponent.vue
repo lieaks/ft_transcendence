@@ -71,5 +71,6 @@ function submit() {
     input: input
   })
   modal.value?.close()
+  window.location.reload();
 }
 </script>
