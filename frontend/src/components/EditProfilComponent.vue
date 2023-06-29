@@ -26,6 +26,17 @@
           maxlength="20"
         />
       </div>
+      <button class="btn btn-primary" @click="enable2fa">Enable 2FA</button>
+      <button class="btn btn-primary" @click="disable2FAInput">Disable 2FA</button>
+      <input
+        type="text"
+        id="code"
+        name="code"
+        v-model="code"
+        class="input input-primary"
+        placeholder="2FA code"
+        maxlength="6"
+      />
       <input type="submit" value="Submit" class="btn mt-4" />
     </form>
     <form method="dialog" class="modal-backdrop">
@@ -40,6 +51,7 @@ import { useMutation } from '@vue/apollo-composable'
 import { ref, type Ref } from 'vue'
 import { useUserStore } from '@/stores/userStore';
 import * as Notifications from '@/elements/Notifications'
+import QrcodeVue from 'qrcode.vue'
 
 const notifs = Notifications.useNotifications()
 
@@ -57,7 +69,32 @@ const { mutate, onDone, onError } = useMutation(
   `
 )
 
+const { mutate: enable2fa, onDone: onDone2fa } = useMutation(
+  gql`
+    mutation enable2FA {
+      enable2FA
+    }
+  `
+)
+
+const { mutate: disable2fa, onDone: onDoneDisable2fa, onError: onErrorDisable2fa   } = useMutation(
+  gql`
+    mutation Disable2FA($code: String!) {
+      disable2FA(code: $code)
+    }
+  `
+)
+
+function disable2FAInput() {
+  disable2fa({
+    variables: {
+      code: code
+    }
+  })
+}
+
 let name = ''
+let code = ''
 let avatar: string
 const error = ref('')
 const modal: Ref<HTMLDialogElement | null> = ref(null)
@@ -109,5 +146,24 @@ onDone((res) => {
 })
 onError((err) => {
 	notifs.notifyError(err.name + ' ' + err.message)
+})
+
+onDone2fa((res) => {
+  if (res.data.enable2FA) {
+    notifs.notifyError('2FA code: ' + res.data.enable2FA)
+    console.log(res.data.enable2FA)
+  }
+})
+
+onDoneDisable2fa((res) => {
+  if (res.data.disable2FA) {
+    notifs.notifyError('2FA disabled')
+  } else {
+    notifs.notifyError('2FA not disabled')
+  }
+})
+
+onErrorDisable2fa((err) => {
+  notifs.notifyError(err.name + ' ' + err.message)
 })
 </script>
