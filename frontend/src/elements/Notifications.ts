@@ -67,6 +67,11 @@ export const useNotifications = () => {
     })
   }
 
+  const notifySuccess = (message: string) => {
+    notify(message, 'success', {
+      icon: '✅'
+    })
+
   return {
     notifyGameInvite,
     notifyFollow,
@@ -74,6 +79,7 @@ export const useNotifications = () => {
     notifyBlock,
     notifyUnblock,
     notifyPermissionDenied,
-    notifyError
+    notifyError,
+    notifySuccess
   }
 }
