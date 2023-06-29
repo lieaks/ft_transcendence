@@ -7,6 +7,8 @@ import { ref, type Ref } from 'vue'
 
 const user = useUserStore()
 
+user?.socket.emit('channelAvailable');
+
 let availableChannels: Ref<IChannel[]> = ref([] as IChannel[])
 let joinedChannels: Ref<IChannel[]> = ref([] as IChannel[])
 let activeChannel: Ref<IChannel | undefined> = ref(undefined)
