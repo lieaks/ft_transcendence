@@ -71,6 +71,7 @@ export const useNotifications = () => {
     notify(message, 'success', {
       icon: '✅'
     })
+	}
 
   return {
     notifyGameInvite,
