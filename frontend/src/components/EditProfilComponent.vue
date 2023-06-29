@@ -26,8 +26,10 @@
           maxlength="20"
         />
       </div>
-      <button class="btn btn-primary" @click="enable2fa">Enable 2FA</button>
-      <button class="btn btn-primary" @click="disable2FAInput">Disable 2FA</button>
+      <div class="flex justify-center w-full p-2 mt-2">
+        <button class="btn btn-primary mx-2" @click="enable2fa">Enable 2FA</button>
+        <button class="btn btn-primary" @click="disable2FAInput">Disable 2FA</button>
+      </div>
       <input
         type="text"
         id="code"
@@ -150,8 +152,9 @@ onError((err) => {
 
 onDone2fa((res) => {
   if (res.data.enable2FA) {
-    notifs.notifyError('2FA code: ' + res.data.enable2FA)
+    // notifs.notifyError('2FA code: ' + res.data.enable2FA)
     console.log(res.data.enable2FA)
+    window.alert('2FA code: ' + res.data.enable2FA)
   }
 })
 
