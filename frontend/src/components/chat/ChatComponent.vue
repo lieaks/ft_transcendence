@@ -8,6 +8,7 @@ const userStore = useUserStore()
 const newMessage = ref('')
 const modal: Ref<HTMLDialogElement | null> = ref(null)
 let password = ''
+let time = 0
 
 const props = defineProps({
   channel: {
@@ -114,8 +115,8 @@ watch(props, () => {
             class="w-auto inline-block"
           >
             <a class="btn btn-xs btn-error" @click.prevent="updateUser(user.id, 'kick')">kick</a>
-            <a class="btn btn-xs btn-error" @click.prevent="updateUser(user.id, 'ban', 10)">ban</a>
-            <a class="btn btn-xs btn-error" @click.prevent="updateUser(user.id, 'mute', 10)"
+            <a class="btn btn-xs btn-error" @click.prevent="updateUser(user.id, 'ban', time)">ban</a>
+            <a class="btn btn-xs btn-error" @click.prevent="updateUser(user.id, 'mute', time)"
               >mute</a
             >
             <a
@@ -130,6 +131,12 @@ watch(props, () => {
               @click.prevent="updateUser(user.id, 'deop')"
               >deop</a
             >
+            <input
+              type="number"
+              class="input input-secondary w-32 m-1"
+              v-model="time"
+              placeholder="seconds"
+            />
           </div>
 					<a class="link truncate m-1 first:m-0" @click.prevent="router.push(`/profil/${user.id}`)">
             {{ user.name }}

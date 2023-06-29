@@ -74,7 +74,7 @@ export class Chat implements IChat {
     this.bannedUsers.push(bannedUser);
     const banMessage: IMessage = {
       sender: bannedBy,
-      content: `banned ${user.name} from the chat`,
+      content: `banned ${user.name} for ${seconds} seconds`,
       createdAt: new Date(),
     };
     this.addMessage(banMessage);
@@ -101,7 +101,7 @@ export class Chat implements IChat {
     };
     const muteMessage: IMessage = {
       sender: mutedBy,
-      content: `muted ${user.name} from the chat`,
+      content: `muted ${user.name} for ${seconds} seconds`,
       createdAt: new Date(),
     };
     this.addMessage(muteMessage);
