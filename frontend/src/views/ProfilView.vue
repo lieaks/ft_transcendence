@@ -93,23 +93,23 @@ onUserResult((res) => {
   user.value.nb_loose = userData.gamesLost.length
   user.value.gameHistory = userData.gameHistory.map((game: any) => ({
     winner: {
-      name: game.winner.name,
+			name: game.winner?.name,
       avatar: `data:image/png;base64,${btoa(
-        String.fromCharCode(...new Uint8Array(game.winner.avatar.data))
+String.fromCharCode(...new Uint8Array(game.winner?.avatar.data))
       )}`,
-      id: game.winner.id
+      id: game.winner?.id
     },
     loser: {
-      name: game.loser.name,
+			name: game.loser?.name,
       avatar: `data:image/png;base64,${btoa(
-        String.fromCharCode(...new Uint8Array(game.loser.avatar.data))
+        String.fromCharCode(...new Uint8Array(game.loser?.avatar.data))
       )}`,
-      id: game.loser.id
+      id: game.loser?.id
     },
     score:
-      game.winner.id === user.value.id
-        ? game.score.slice().sort((a: number, b: number) => b - a)
-        : game.score.slice().sort((a: number, b: number) => a - b)
+			game.winner?.id === user.value?.id
+        ? game.score?.slice().sort((a: number, b: number) => b - a)
+        : game.score?.slice().sort((a: number, b: number) => a - b)
   }))
 })
 
