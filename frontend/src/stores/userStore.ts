@@ -96,22 +96,22 @@ export const useUserStore = defineStore('user', () => {
     socket?.emit('login', { jwtToken: localStorage.getItem('jwtToken') })
   })
   socket?.on('logged', (data) => {
-    if (data === 'success') {
-      console.log('socket logged in')
-    } else {
-      console.log('socket login failed')
-    }
+    // if (data === 'success') {
+    //   console.log('socket logged in')
+    // } else {
+    //   console.log('socket login failed')
+    // }
   })
 
   socket?.on('gameInvite', (data) => {
     const name = data.name
     const id = data.id
-    console.log('gameInvite', data)
+    // console.log('gameInvite', data)
     notifs.notifyGameInvite(name, id)
   })
 
   socket?.on('permissionDenied', (data) => {
-    console.log('permissionDenied', data)
+    // console.log('permissionDenied', data)
     notifs.notifyPermissionDenied()
   })
 
@@ -146,7 +146,7 @@ export const useUserStore = defineStore('user', () => {
   function setGameId(id: string) {
     // TODO: remove if not used
     gameId.value = id
-    console.log(`Game id set to ${id}`)
+    // console.log(`Game id set to ${id}`)
   }
 
   function setInQueue(val: boolean) {

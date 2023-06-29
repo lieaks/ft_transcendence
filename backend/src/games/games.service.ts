@@ -26,7 +26,7 @@ export class GamesService {
     if (!user) return false;
     if (this.queue.find((u) => u.id === user.id)) return false;
     this.queue.push(user);
-    console.log('Queue:', this.queue.length);
+    // console.log('Queue:', this.queue.length);
     if (this.queue.length >= 2) {
       const game = new Game(this.prismaService);
       game.addPlayer(this.queue[0]);

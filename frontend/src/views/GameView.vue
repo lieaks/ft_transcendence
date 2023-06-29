@@ -84,11 +84,11 @@ onMounted(() => {
     game.draw()
   }, 1000 / 60)
 
-  console.log('mounted')
+  // console.log('mounted')
 })
 
 onBeforeRouteLeave((to, from, next) => {
-  console.log('leaving')
+  // console.log('leaving')
   document.removeEventListener('keydown', keydownHandler)
   next()
 })

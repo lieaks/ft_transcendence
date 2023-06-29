@@ -48,7 +48,7 @@ export class MyGateway implements OnModuleInit {
   onModuleInit() {
     this.server.on('connection', (socket) => {
       socket.on('disconnect', (reason) => {
-        console.log('disconnected because of ' + reason);
+        // console.log('disconnected because of ' + reason);
         const user = this.usersService.getUserBySocketId(socket.id);
         if (!user) return;
         this.gamesService.removeFromQueue(user);
@@ -60,12 +60,12 @@ export class MyGateway implements OnModuleInit {
         }
         this.usersService.removeUser(user.id);
         this.connectedSockets.delete(socket);
-        console.log(
-          'disconnected from socket with id:' + this.connectedSockets.size,
-        );
+        // console.log(
+        //   'disconnected from socket with id:' + this.connectedSockets.size,
+        // );
       });
       this.connectedSockets.set(socket, this.connectedSockets.size + 1);
-      console.log('connected to socket with id:' + this.connectedSockets.size);
+      // console.log('connected to socket with id:' + this.connectedSockets.size);
     });
   }
 
@@ -100,7 +100,7 @@ export class MyGateway implements OnModuleInit {
     ) {
       client.emit('joinQueue', {});
     }
-    console.log('Added to queue');
+    // console.log('Added to queue');
   }
 
   @SubscribeMessage('leaveQueue')
@@ -108,7 +108,7 @@ export class MyGateway implements OnModuleInit {
     this.gamesService.removeFromQueue(
       this.usersService.getUserBySocketId(client.id),
     );
-    console.log('Removed from queue');
+    // console.log('Removed from queue');
   }
 
   @SubscribeMessage('movePaddle')

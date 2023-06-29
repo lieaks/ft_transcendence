@@ -11,7 +11,7 @@ export class UsersService {
   private users: IUser[] = [];
 
   async addUser(user: IUser) {
-    console.log('adding user: ', user.id);
+    // console.log('adding user: ', user.id);
     if (this.getUser(user.id)) return;
 		const dbuser = await this.prismaService.user.findUnique({
 			where: {
