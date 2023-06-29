@@ -155,7 +155,7 @@ onDone2fa((res) => {
 
 onDoneDisable2fa((res) => {
   if (res.data.disable2FA) {
-    notifs.notifySucess('2FA disabled')
+		notifs.notifySuccess('2FA disabled')
   } else {
 		notifs.notifyError('Wrong 2FA code')
   }
