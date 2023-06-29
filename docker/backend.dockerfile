@@ -9,5 +9,6 @@ COPY ./docker/backend-start.sh .
 COPY ./docker/backend.env .env
 
 RUN npm ci @nestjs/cli
+RUN apk add --no-cache curl
 
 CMD [ "sh", "backend-start.sh" ]

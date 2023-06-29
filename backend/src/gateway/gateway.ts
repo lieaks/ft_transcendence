@@ -70,7 +70,7 @@ export class MyGateway implements OnModuleInit {
   }
 
   @SubscribeMessage('login')
-  onLogin(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
+  async onLogin(@MessageBody() body: any, @ConnectedSocket() client: Socket) {
     const { jwtToken } = body;
     try {
       if (!jwtToken) throw 'no jwttoken provided';
@@ -82,7 +82,7 @@ export class MyGateway implements OnModuleInit {
 
       user.socket = client;
       user.status = Status.ONLINE;
-      this.usersService.addUser(user);
+      await this.usersService.addUser(user);
       client.emit('logged', 'success');
       this.onChannelAvailable({}, client);
     } catch (error) {

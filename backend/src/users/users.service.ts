@@ -10,9 +10,18 @@ export class UsersService {
 
   private users: IUser[] = [];
 
-  addUser(user: IUser) {
+  async addUser(user: IUser) {
     console.log('adding user: ', user.id);
     if (this.getUser(user.id)) return;
+		const dbuser = await this.prismaService.user.findUnique({
+			where: {
+				id: user.id
+			},
+			include: {
+				blocked: true,
+			}
+		});
+		user.blockedIds = dbuser.blocked.map(b => b.id)
     this.users.push(user);
     return user;
   }

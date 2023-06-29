@@ -5,6 +5,7 @@ WORKDIR /var/www/vitejs
 COPY ./frontend .
 COPY ./docker/frontend.env .env
 
+RUN apk add --no-cache curl
 RUN npm ci --production=false
 RUN npm run build
 

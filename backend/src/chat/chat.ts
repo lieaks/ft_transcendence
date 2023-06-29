@@ -156,16 +156,16 @@ export class Chat implements IChat {
     if (!this.users.find((u) => u.id === message.sender.id)) return;
     this.updatedAt = new Date();
     this.messages.push(message);
-    this.emitToUsers('newMessage', {
-      channelId: this.id,
-      message: {
-        sender: {
-          id: message.sender.id,
-          name: message.sender.name,
-        },
-        content: message.content,
-      },
-    });
+		this.emitToUsers('newMessage', {
+				channelId: this.id,
+				message: {
+					sender: {
+						id: message.sender.id,
+						name: message.sender.name,
+					},
+					content: message.content,
+				},
+		}, message.sender.id);
   }
 
   addUser(user: IChatUser, password?: string): void {
@@ -195,7 +195,7 @@ export class Chat implements IChat {
     this.emitToUsers('userJoined', {
       channelId: this.id,
       user: { id: user.id, name: user.name },
-    });
+    }, user.id);
     this.sendChannelInfo(user);
   }
 
@@ -210,7 +210,7 @@ export class Chat implements IChat {
       this.emitToUsers('userLeft', {
         channelId: this.id,
         user: userKick,
-      });
+      }, user.id)
       this.users = this.users.filter((u) => u.id !== user.id);
       if (this.users.length === 0) return true;
     }
@@ -281,8 +281,9 @@ export class Chat implements IChat {
     return user.role === userChatRole.CREATOR;
   }
 
-  emitToUsers(event: string, data: any): void {
+  emitToUsers(event: string, data: any, idToBlock?: string): void {
     for (const user of this.users) {
+			if (user.blockedIds.includes(idToBlock)) continue;
       user.socket.emit(event, data);
     }
   }

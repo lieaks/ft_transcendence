@@ -163,6 +163,7 @@ export class UsersResolver {
     const userservice = this.UsersService.getUser(id);
     if (userservice) {
       userservice.name = input.name;
+			userservice.blockedIds = user.blocked.map((user) => user.id);
     }
     return user ? this.getUserWithExtraValues(user) : null;
   }

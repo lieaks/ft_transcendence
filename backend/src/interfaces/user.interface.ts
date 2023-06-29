@@ -28,6 +28,7 @@ export interface IUser {
   name?: string;
   socket: Socket;
   status: Status;
+	blockedIds?: string[]
 
   addExperience(exp: number): Promise<number>;
   getStatus(): Promise<Status>;
