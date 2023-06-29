@@ -69,6 +69,7 @@ onResult((res) => {
   user.value.points = userRes.experience
   user.value.nb_win = userRes.gamesWon.length
   user.value.nb_loose = userRes.gamesLost.length
+  user.value.rank = userRes.rank
   user.value.gameHistory = userRes.gameHistory.map((game: any) => ({
     winner: {
       name: game.winner.name,
