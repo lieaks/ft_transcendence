@@ -21,7 +21,7 @@ export class UsersService {
 				blocked: true,
 			}
 		});
-		user.blockedIds = dbuser.blocked.map(b => b.id)
+		user.blockedIds = dbuser?.blocked.map(b => b.id)
     this.users.push(user);
     return user;
   }
