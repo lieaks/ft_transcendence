@@ -38,6 +38,11 @@ services:
       - frontend
     ports: 
       - 8080:8080
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   backend:
     container_name: backend
