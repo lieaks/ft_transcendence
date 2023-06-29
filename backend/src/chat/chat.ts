@@ -195,7 +195,7 @@ export class Chat implements IChat {
     this.emitToUsers('userJoined', {
       channelId: this.id,
       user: { id: user.id, name: user.name },
-    }, user.id);
+    });
     this.sendChannelInfo(user);
   }
 
@@ -210,7 +210,7 @@ export class Chat implements IChat {
       this.emitToUsers('userLeft', {
         channelId: this.id,
         user: userKick,
-      }, user.id)
+      })
       this.users = this.users.filter((u) => u.id !== user.id);
       if (this.users.length === 0) return true;
     }
@@ -283,7 +283,10 @@ export class Chat implements IChat {
 
   emitToUsers(event: string, data: any, idToBlock?: string): void {
     for (const user of this.users) {
-			if (user.blockedIds.includes(idToBlock)) continue;
+			if (user.blockedIds.includes(idToBlock)) {
+				console.log('not sending message bc user blocked this sender')
+				continue;
+			}
       user.socket.emit(event, data);
     }
   }

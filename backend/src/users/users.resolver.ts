@@ -7,6 +7,7 @@ import { User, UpdateUserInput, Status } from 'src/graphql';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UsersService } from './users.service';
 import { AuthService } from '../auth/auth.service';
+import { ChatService } from 'src/chat/chats.service';
 
 const include = {
   friends: true,
@@ -25,6 +26,7 @@ export class UsersResolver {
     private readonly PrismaService: PrismaService,
     private readonly UsersService: UsersService,
     private readonly AuthService: AuthService,
+		private readonly ChatService: ChatService,
   ) {}
 
   async getUserWithExtraValues(user: User): Promise<User> {
@@ -160,11 +162,12 @@ export class UsersResolver {
       },
       include,
     });
-    const userservice = this.UsersService.getUser(id);
-    if (userservice) {
-      userservice.name = input.name;
-			userservice.blockedIds = user.blocked.map((user) => user.id);
+    const userFromUserService = this.UsersService.getUser(id);
+    if (userFromUserService) { 
+			userFromUserService.name = input.name;
+			userFromUserService.blockedIds = user.blocked.map((user) => user.id);
     }
+		this.ChatService.updateUser(userFromUserService);
     return user ? this.getUserWithExtraValues(user) : null;
   }
 

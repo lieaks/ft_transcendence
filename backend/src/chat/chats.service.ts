@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { IChatUser, IUser, userChatRole } from '../interfaces/user.interface';
 import { IMessage, IChat, chatType } from 'src/interfaces/chat.interface';
+import { UsersService } from '../users/users.service';
 import { Chat } from './chat';
 
 function getShortChannels(channels: IChat[]) {
@@ -22,7 +23,7 @@ function getShortUser(user: IChatUser) {
 
 @Injectable()
 export class ChatService {
-  constructor() {}
+  constructor() { }
 
   private chats: IChat[] = [];
 
@@ -95,4 +96,15 @@ export class ChatService {
     } while (this.getChat(id));
     return id;
   }
+
+	updateUser(user: IUser) {
+		for (const chat of this.chats) {
+			const cuser = chat.users.find((u) => u.id === user.id)
+			if (cuser) {
+				console.log('updating user', user.name);
+				cuser.name = user.name;
+				cuser.blockedIds = user.blockedIds;
+			}
+		};
+	}
 }
