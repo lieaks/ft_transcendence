@@ -154,7 +154,14 @@ export class Chat implements IChat {
   addMessage(message: IMessage): void {
     const mutedUser = this.mutedUsers.find((u) => u.id === message.sender.id);
     if (mutedUser) {
-      if (mutedUser.mutedUntil > new Date()) return;
+      if (mutedUser.mutedUntil > new Date()) {
+        mutedUser.socket.emit('errorNotification', {
+          message: `Muted, ${Math.floor(
+            (mutedUser.mutedUntil.getTime() - new Date().getTime()) / 1000,
+          )} seconds left`,
+        });
+        return;
+      }
       else
         this.mutedUsers = this.mutedUsers.filter(
           (u) => u.id !== message.sender.id,
