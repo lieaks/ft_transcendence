@@ -48,6 +48,7 @@ const { onResult: onUserResult } = useQuery(
         name
         experience
         status
+				id
         rank
         gamesWon {
           id

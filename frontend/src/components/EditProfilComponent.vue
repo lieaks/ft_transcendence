@@ -27,18 +27,18 @@
         />
       </div>
       <div class="flex justify-center w-full p-2 mt-2">
-        <button class="btn btn-primary mx-2" @click="enable2fa">Enable 2FA</button>
-        <button class="btn btn-primary" @click="disable2FAInput">Disable 2FA</button>
+        <button class="btn btn-primary" @click="enable2fa">Enable 2FA</button>
+        <button class="btn btn-primary mx-2" @click="disable2FAInput">Disable 2FA</button>
+				<input
+					type="text"
+					id="code"
+					name="code"
+					v-model="code"
+					class="input input-primary"
+					placeholder="2FA code"
+					maxlength="6"
+				/>
       </div>
-      <input
-        type="text"
-        id="code"
-        name="code"
-        v-model="code"
-        class="input input-primary"
-        placeholder="2FA code"
-        maxlength="6"
-      />
       <input type="submit" value="Submit" class="btn mt-4" />
     </form>
     <form method="dialog" class="modal-backdrop">
@@ -53,7 +53,6 @@ import { useMutation } from '@vue/apollo-composable'
 import { ref, type Ref } from 'vue'
 import { useUserStore } from '@/stores/userStore';
 import * as Notifications from '@/elements/Notifications'
-import QrcodeVue from 'qrcode.vue'
 
 const notifs = Notifications.useNotifications()
 
@@ -88,11 +87,7 @@ const { mutate: disable2fa, onDone: onDoneDisable2fa, onError: onErrorDisable2fa
 )
 
 function disable2FAInput() {
-  disable2fa({
-    variables: {
-      code: code
-    }
-  })
+  disable2fa({ code })
 }
 
 let name = ''
@@ -160,9 +155,9 @@ onDone2fa((res) => {
 
 onDoneDisable2fa((res) => {
   if (res.data.disable2FA) {
-    notifs.notifyError('2FA disabled')
+    notifs.notifySucess('2FA disabled')
   } else {
-    notifs.notifyError('2FA not disabled')
+		notifs.notifyError('Wrong 2FA code')
   }
 })
 
