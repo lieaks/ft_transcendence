@@ -137,20 +137,6 @@ export class Chat implements IChat {
     return true;
   }
 
-  // unbanUser(user: IChatUser, unbannedBy: IChatUser): void {
-  //   if (user.role === userChatRole.MEMBER) return;
-  //   const bannedUser = this.bannedUsers.find((u) => u.id === user.id);
-  //   if (!bannedUser) return;
-  //   this.bannedUsers = this.bannedUsers.filter((u) => u.id !== user.id);
-  //   // const { socket: userSocket, ...userWithoutSocket } = user;
-  //   // const { socket: unbannedBySocket, ...unbannedByWithoutSocket } = unbannedBy;
-  //   // this.emitToUsers('userUnbanned', {
-  //     // channelId: this.id,
-  //     // user: userWithoutSocket,
-  //     // unbannedBy: unbannedByWithoutSocket,
-  //   // });
-  // }
-
   addMessage(message: IMessage): void {
     const mutedUser = this.mutedUsers.find((u) => u.id === message.sender.id);
     if (mutedUser) {
